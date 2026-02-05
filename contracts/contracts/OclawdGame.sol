@@ -97,7 +97,7 @@ contract OclawdGame is ERC721URIStorage, Ownable {
     mapping(uint256 => address) public stationOwner;
 
     mapping(uint256 => uint256) public resourcePrices;
-    mapping(address => uint256) public xpToNextLevel;
+    mapping(uint256 => uint256) public xpToNextLevel;
 
     uint256 private _nextTokenId;
 
