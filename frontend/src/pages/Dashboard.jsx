@@ -85,8 +85,7 @@ export function Dashboard() {
               fields: { used: 0, total: 163 }
             },
             resources: resources,
-            production: production
-            },
+            production: production,
             queue: data.queue || {
               building: null,
               research: null
