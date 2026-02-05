@@ -99,6 +99,8 @@ contract OclawdGame is ERC721URIStorage, Ownable {
     mapping(uint256 => uint256) public resourcePrices;
     mapping(address => uint256) public xpToNextLevel;
 
+    uint256 private _nextTokenId;
+
     // ========== CONSTRUCTOR ==========
 
     constructor(
@@ -121,7 +123,7 @@ contract OclawdGame is ERC721URIStorage, Ownable {
         require(msg.value >= MIN_SHIP_MINT_PRICE, "Insufficient payment");
         require(shipCount[to] < MAX_SHIPS_PER_PLAYER, "Max ships reached");
 
-        uint256 tokenId = totalSupply();
+        uint256 tokenId = _nextTokenId++;
         _mint(to, tokenId);
 
         // Set ship type and stats based on rarity
@@ -182,7 +184,7 @@ contract OclawdGame is ERC721URIStorage, Ownable {
         require(msg.value >= STATION_BUILD_PRICE, "Insufficient payment");
         require(stationCount[to] < MAX_STATIONS_PER_PLAYER, "Max stations reached");
 
-        uint256 tokenId = totalSupply();
+        uint256 tokenId = _nextTokenId++;
         _mint(to, tokenId);
 
         // Set station type and stats
@@ -218,6 +220,7 @@ contract OclawdGame is ERC721URIStorage, Ownable {
      * @param stationTokenId The NFT token ID of the station
      */
     function mineResource(address player, uint256 stationTokenId) external {
+        require(msg.sender == player, "Caller must be player");
         require(ownerOf(stationTokenId) == player, "Not station owner");
         require(playerStats[player].miningPower > 0, "No mining power");
 
@@ -236,23 +239,24 @@ contract OclawdGame is ERC721URIStorage, Ownable {
      * @param from The sender address
      * @param to The receiver address
      * @param amount The amount to trade
-     * @param resourceToken The resource token address
+     * @param _resourceToken The resource token address
      */
     function tradeResource(
         address from,
         address to,
         uint256 amount,
-        address resourceToken
+        address _resourceToken
     ) external {
+        require(msg.sender == from, "Caller must be sender");
         require(from != address(0) && to != address(0), "Invalid addresses");
-        require(resourceToken != address(0), "Invalid token");
+        require(_resourceToken != address(0), "Invalid token");
 
-        resourceToken.safeTransferFrom(from, to, amount);
+        IERC20(_resourceToken).safeTransferFrom(from, to, amount);
 
         playerStats[from].reputation = (playerStats[from].reputation * 9999) / 10000;
         playerStats[to].reputation += 10;
 
-        emit ResourceTraded(from, to, resourceToken, amount);
+        emit ResourceTraded(from, to, _resourceToken, amount);
     }
 
     // ========== PLAYER STATS ==========

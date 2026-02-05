@@ -1,6 +1,6 @@
-const { config } = require("hardhat");
+require("@nomicfoundation/hardhat-toolbox");
 
-config.setupAll({
+module.exports = {
   networks: {
     hardhat: {
       chainId: 31337,
@@ -44,6 +44,4 @@ config.setupAll({
     cache: "./cache",
     artifacts: "./artifacts",
   },
-});
-
-module.exports = config;
+};

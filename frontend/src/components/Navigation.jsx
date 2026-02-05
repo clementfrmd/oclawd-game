@@ -1,6 +1,72 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Settings, Users } from 'lucide-react';
+import { Search, Settings, Users, ShoppingCart, Wallet } from 'lucide-react';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
+
+function ConnectWallet() {
+  const { address, isConnected } = useAccount();
+  const { connect, connectors } = useConnect();
+  const { disconnect } = useDisconnect();
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  if (isConnected) {
+    return (
+      <div className="relative">
+        <button
+          onClick={() => setShowDropdown(!showDropdown)}
+          className="flex items-center space-x-2 px-3 py-2 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 transition-colors"
+        >
+          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span className="text-sm font-mono">
+            {address?.slice(0, 6)}...{address?.slice(-4)}
+          </span>
+        </button>
+        {showDropdown && (
+          <div className="absolute right-0 mt-2 w-48 glass rounded-lg py-2 shadow-xl">
+            <button
+              onClick={() => {
+                disconnect();
+                setShowDropdown(false);
+              }}
+              className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-white/10"
+            >
+              Disconnect Wallet
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setShowDropdown(!showDropdown)}
+        className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg hover:opacity-90 transition-opacity"
+      >
+        <Wallet className="w-4 h-4" />
+        <span className="text-sm font-medium">Connect</span>
+      </button>
+      {showDropdown && (
+        <div className="absolute right-0 mt-2 w-56 glass rounded-lg py-2 shadow-xl">
+          {connectors.map((connector) => (
+            <button
+              key={connector.uid}
+              onClick={() => {
+                connect({ connector });
+                setShowDropdown(false);
+              }}
+              className="w-full text-left px-4 py-2 text-sm hover:bg-white/10 flex items-center space-x-2"
+            >
+              <Wallet className="w-4 h-4" />
+              <span>{connector.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function Navigation() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -9,7 +75,7 @@ export function Navigation() {
     { path: '/', icon: Search, label: 'Dashboard' },
     { path: '/galaxy', icon: Users, label: 'Galaxy' },
     { path: '/fleet', icon: Settings, label: 'Fleet' },
-    { path: '/marketplace', icon: Settings, label: 'Marketplace' },
+    { path: '/marketplace', icon: ShoppingCart, label: 'Marketplace' },
   ];
 
   return (
@@ -44,6 +110,8 @@ export function Navigation() {
               );
             })}
           </div>
+
+          <ConnectWallet />
         </div>
       </div>
     </nav>

@@ -48,7 +48,7 @@ contract OclawdNFT is ERC721URIStorage, Ownable {
 
     mapping(uint256 => ShipData) public ships;
     mapping(uint256 => uint256) public mintingCosts;
-    mapping(Rarity => uint256) public baseMintingCosts;
+    mapping(uint256 => uint256) public baseMintingCosts;
 
     uint256 public nextTokenId = 0;
 
@@ -199,14 +199,12 @@ contract OclawdNFT is ERC721URIStorage, Ownable {
     // ========== ADMIN FUNCTIONS ==========
 
     /**
-     * @dev Set base minting costs for each rarity
-     * @param cost The cost multiplier
+     * @dev Set base minting costs for each ship type
+     * @param shipType The ship type
+     * @param cost The cost for that ship type
      */
-    function setBaseMintingCosts(uint256 cost) external onlyOwner {
-        baseMintingCosts[Rarity.Common] = COMMON_COST;
-        baseMintingCosts[Rarity.Rare] = RARE_COST;
-        baseMintingCosts[Rarity.Epic] = EPIC_COST;
-        baseMintingCosts[Rarity.Legendary] = LEGENDARY_COST;
+    function setBaseMintingCost(uint256 shipType, uint256 cost) external onlyOwner {
+        baseMintingCosts[shipType] = cost;
     }
 
     /**
@@ -235,19 +233,20 @@ contract OclawdNFT is ERC721URIStorage, Ownable {
     }
 
     /**
-     * @dev Update all stats for a ship type
-     * @param shipType The ship type (0: Fighter, 1: Transport, 2: Cruiser, 3: Battleship)
+     * @dev Update stats for specific ships by token ID (batch)
+     * @param tokenIds Array of token IDs to update
      * @param attackPower Base attack power
      * @param defensePower Base defense power
      * @param speed Base speed
      */
     function setShipTypeStats(
-        uint8 shipType,
+        uint256[] calldata tokenIds,
         uint8 attackPower,
         uint8 defensePower,
         uint8 speed
     ) external onlyOwner {
-        for (uint256 tokenId = 1; tokenId <= nextTokenId; tokenId++) {
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            uint256 tokenId = tokenIds[i];
             if (ships[tokenId].rarity != Rarity.Legendary) {
                 uint8 rarityMultiplier = uint8(ships[tokenId].rarity) + 1;
                 ships[tokenId].attackPower = attackPower * rarityMultiplier;
