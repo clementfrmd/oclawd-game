@@ -5,6 +5,9 @@ import { Landing } from './pages/Landing';
 import { Dashboard } from './pages/Dashboard';
 import { Galaxy } from './pages/Galaxy';
 import { Fleet } from './pages/Fleet';
+import { Facilities } from './pages/Facilities';
+import { Research } from './pages/Research';
+import { Defense } from './pages/Defense';
 import { Marketplace } from './pages/Marketplace';
 
 function App() {
@@ -17,9 +20,9 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/galaxy" element={<Galaxy />} />
           <Route path="/fleet" element={<Fleet />} />
-          <Route path="/facilities" element={<ComingSoon title="Facilities" />} />
-          <Route path="/research" element={<ComingSoon title="Research" />} />
-          <Route path="/defense" element={<ComingSoon title="Defense" />} />
+          <Route path="/facilities" element={<Facilities />} />
+          <Route path="/research" element={<Research />} />
+          <Route path="/defense" element={<Defense />} />
           <Route path="/marketplace" element={<Marketplace />} />
         </Routes>
       </div>
