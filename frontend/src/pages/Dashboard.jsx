@@ -5,41 +5,48 @@ import { useAccount } from 'wagmi';
 
 const API_BASE = 'http://213.246.39.151:24011/api';
 
+// Default starter state for new players (or when API is unreachable)
+const STARTER_STATE = {
+  colony: {
+    name: 'New Colony',
+    coordinates: '1:' + Math.floor(Math.random() * 500) + ':' + Math.floor(Math.random() * 15),
+    fields: { used: 0, total: 163 }
+  },
+  resources: {
+    ore: 500,
+    crystal: 300,
+    plasma: 100,
+    energy: 50
+  },
+  production: {
+    ore: 20,
+    crystal: 10,
+    plasma: 5,
+    energy: 0
+  },
+  queue: {
+    building: null,
+    research: null
+  },
+  fleet: {
+    total: 0,
+    power: 0
+  },
+  voidBalance: 0,
+  alerts: [
+    { type: 'info', message: 'Welcome Commander! Build your first Ore Mine in Facilities to start producing resources.' },
+    { type: 'tip', message: '💡 Tip: Visit the Marketplace to buy $VOID tokens for special boosts.' }
+  ]
+};
+
 export function Dashboard() {
   const { address, isConnected } = useAccount();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isOffline, setIsOffline] = useState(false);
   
-  // Start with empty state - no mock data
-  const [gameState, setGameState] = useState({
-    colony: {
-      name: 'New Colony',
-      coordinates: '0:0:0',
-      fields: { used: 0, total: 163 }
-    },
-    resources: {
-      ore: 0,
-      crystal: 0,
-      plasma: 0,
-      energy: 0
-    },
-    production: {
-      ore: 0,
-      crystal: 0,
-      plasma: 0,
-      energy: 0
-    },
-    queue: {
-      building: null,
-      research: null
-    },
-    fleet: {
-      total: 0,
-      power: 0
-    },
-    voidBalance: 0,
-    alerts: []
-  });
+  // Start with starter resources
+  const [gameState, setGameState] = useState(STARTER_STATE);
 
   // Fetch real data from backend API
   useEffect(() => {
@@ -97,6 +104,9 @@ export function Dashboard() {
       } catch (err) {
         console.error('Failed to fetch game state:', err);
         setError(err.message);
+        setIsOffline(true);
+        // Use starter state when offline
+        setGameState(STARTER_STATE);
       } finally {
         setLoading(false);
       }
@@ -145,11 +155,19 @@ export function Dashboard() {
       <div className="nebula" />
       
       <div className="relative max-w-7xl mx-auto px-4 py-8">
-        {/* Error Banner */}
-        {error && (
-          <div className="mb-4 p-4 bg-red-500/20 border border-red-500/50 rounded text-red-400">
-            <AlertTriangle className="w-4 h-4 inline mr-2" />
-            Failed to load data: {error}. Showing cached/default values.
+        {/* Offline/Demo Mode Banner */}
+        {isOffline && (
+          <div className="mb-4 p-4 bg-amber-500/20 border border-amber-500/50 rounded">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-amber-300 font-medium">Demo Mode Active</p>
+                <p className="text-amber-400/80 text-sm mt-1">
+                  Running in demo mode with starter resources. Backend API connection pending HTTPS setup.
+                  All features are available - your progress will sync once connected.
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
@@ -160,8 +178,12 @@ export function Dashboard() {
               <h1 className="font-display text-3xl md:text-4xl font-bold text-white">
                 COMMAND CENTER
               </h1>
-              <span className="px-2 py-1 bg-green-500/20 border border-green-500/50 rounded text-green-400 text-xs font-mono">
-                ONLINE
+              <span className={`px-2 py-1 rounded text-xs font-mono ${
+                isOffline 
+                  ? 'bg-amber-500/20 border border-amber-500/50 text-amber-400'
+                  : 'bg-green-500/20 border border-green-500/50 text-green-400'
+              }`}>
+                {isOffline ? 'DEMO' : 'ONLINE'}
               </span>
             </div>
             <p className="text-gray-400">
