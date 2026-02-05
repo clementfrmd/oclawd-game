@@ -96,7 +96,7 @@ export function Fleet() {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-4 py-2 rounded font-medium whitespace-nowrap transition-all ${
                 selectedCategory === cat.id
-                  ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50'
+                  ? 'bg-cyan-500/20 text-accent border border-cyan-500/50'
                   : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10'
               }`}
             >
@@ -131,7 +131,7 @@ export function Fleet() {
                     return (
                       <span key={id} className="mr-4">
                         <span className="text-white">{count}x</span>{' '}
-                        <span className="text-cyan-400">{vessel?.name}</span>
+                        <span className="text-accent">{vessel?.name}</span>
                       </span>
                     );
                   })}
@@ -185,7 +185,7 @@ function VesselCard({ vessel, owned, buildCount, onBuildChange }) {
           <div className="text-gray-500 text-xs">DEF</div>
         </div>
         <div className="text-center p-2 bg-black/30 rounded">
-          <div className="text-cyan-400 font-mono">{vessel.speed >= 1000000 ? 'MAX' : vessel.speed}</div>
+          <div className="text-accent font-mono">{vessel.speed >= 1000000 ? 'MAX' : vessel.speed}</div>
           <div className="text-gray-500 text-xs">SPD</div>
         </div>
         <div className="text-center p-2 bg-black/30 rounded">
@@ -231,7 +231,7 @@ function VesselCard({ vessel, owned, buildCount, onBuildChange }) {
         </button>
         <button
           onClick={() => onBuildChange(10)}
-          className="px-3 py-2 bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 rounded hover:bg-cyan-500/30 text-sm"
+          className="px-3 py-2 bg-cyan-500/20 text-accent border border-cyan-500/50 rounded hover:bg-cyan-500/30 text-sm"
         >
           +10
         </button>

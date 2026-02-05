@@ -17,23 +17,23 @@ export function Landing() {
         
         <div className="text-center z-10 max-w-4xl">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full mb-8">
-            <span className="w-2 h-2 bg-cyan-400 rounded-full pulse-glow" />
-            <span className="text-cyan-400 text-sm font-mono uppercase tracking-wider">Now Live on Base Sepolia</span>
+          <div className="badge badge-primary mb-8">
+            <span className="status-online" />
+            <span className="font-mono">Now Live on Base Sepolia</span>
           </div>
           
           {/* Title */}
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight">
             <span className="text-white">VOID</span>
             <br />
-            <span className="text-glow-cyan">CONQUEST</span>
+            <span className="text-accent">CONQUEST</span>
           </h1>
           
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-gray-400 mb-4 max-w-2xl mx-auto">
             Command your fleet. Build your empire. Conquer the void.
           </p>
-          <p className="text-lg text-cyan-400/80 mb-12">
+          <p className="text-lg text-accent/80 mb-12">
             The first space strategy game where <span className="text-white font-semibold">humans</span> and <span className="text-white font-semibold">AI agents</span> compete together.
           </p>
           
@@ -77,7 +77,7 @@ export function Landing() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
-              FORGE YOUR <span className="text-glow-orange">EMPIRE</span>
+              FORGE YOUR <span className="text-accent-secondary">EMPIRE</span>
             </h2>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
               Build, research, and conquer in a persistent universe powered by blockchain technology.
@@ -131,7 +131,7 @@ export function Landing() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6">
-                THE <span className="text-glow-purple">$VOID</span> TOKEN
+                THE <span className="text-accent-tertiary">$VOID</span> TOKEN
               </h2>
               <p className="text-gray-400 text-lg mb-8">
                 Power your empire with $VOID. Spend tokens for powerful in-game advantages that can turn the tide of war.
@@ -171,7 +171,7 @@ export function Landing() {
                   <div className="text-6xl mb-4">💎</div>
                   <h3 className="font-display text-2xl text-white mb-2">$VOID Token</h3>
                   <p className="text-gray-400 mb-6">Base Sepolia Network</p>
-                  <div className="font-mono text-sm text-cyan-400 bg-black/30 p-3 rounded break-all">
+                  <div className="font-mono text-sm text-accent bg-black/30 p-3 rounded break-all">
                     0x7c010025DD07414E447de1958BfEfE3d1DE553e3
                   </div>
                 </div>
@@ -189,7 +189,7 @@ export function Landing() {
       <section className="relative py-24 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-6">
-            READY TO <span className="text-glow-cyan">CONQUER</span>?
+            READY TO <span className="text-accent">CONQUER</span>?
           </h2>
           <p className="text-gray-400 text-lg mb-8">
             Connect your wallet and start building your galactic empire today.
@@ -208,9 +208,9 @@ export function Landing() {
             <span className="font-display text-xl font-bold">VOID CONQUEST</span>
           </div>
           <div className="flex gap-6 text-gray-400">
-            <a href="https://github.com/clementfrmd/oclawd-game" target="_blank" rel="noopener" className="hover:text-cyan-400 transition-colors">GitHub</a>
-            <a href="https://sepolia.basescan.org/address/0x2E93692fD8a859A8882B5B0fc3753D97A29b92Ea" target="_blank" rel="noopener" className="hover:text-cyan-400 transition-colors">Contracts</a>
-            <a href="https://farcaster.xyz/~/conversations/0x3e1e0ec7152de752eae47ee3c0a4c2e18bf8e142" target="_blank" rel="noopener" className="hover:text-cyan-400 transition-colors">Farcaster</a>
+            <a href="https://github.com/clementfrmd/oclawd-game" target="_blank" rel="noopener" className="hover:text-accent transition-colors">GitHub</a>
+            <a href="https://sepolia.basescan.org/address/0x2E93692fD8a859A8882B5B0fc3753D97A29b92Ea" target="_blank" rel="noopener" className="hover:text-accent transition-colors">Contracts</a>
+            <a href="https://farcaster.xyz/~/conversations/0x3e1e0ec7152de752eae47ee3c0a4c2e18bf8e142" target="_blank" rel="noopener" className="hover:text-accent transition-colors">Farcaster</a>
           </div>
           <div className="text-gray-500 text-sm">
             Built for OpenWork Hackathon 2026
@@ -232,7 +232,7 @@ function FeatureCard({ icon: Icon, title, description, color }) {
   };
   
   const iconColors = {
-    cyan: 'text-cyan-400',
+    cyan: 'text-accent',
     purple: 'text-purple-400',
     orange: 'text-orange-400',
     red: 'text-red-400',

@@ -54,8 +54,8 @@ export function Dashboard() {
               )}
             </div>
             <p className="text-gray-400">
-              Colony: <span className="text-cyan-400 font-mono">{gameState.colony.name}</span> • 
-              Coordinates: <span className="text-cyan-400 font-mono">{gameState.colony.coordinates}</span>
+              Colony: <span className="text-accent font-mono">{gameState.colony.name}</span> • 
+              Coordinates: <span className="text-accent font-mono">{gameState.colony.coordinates}</span>
             </p>
           </div>
           
@@ -108,7 +108,7 @@ export function Dashboard() {
             {/* Active Queues */}
             <div className="panel p-6">
               <h2 className="font-display text-xl text-white mb-4 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-cyan-400" />
+                <Clock className="w-5 h-5 text-accent" />
                 ACTIVE CONSTRUCTION
               </h2>
               <div className="space-y-3">
@@ -188,7 +188,7 @@ export function Dashboard() {
                 </div>
                 <div className="flex justify-between items-center mt-4">
                   <span className="text-gray-400">Coordinates</span>
-                  <span className="font-mono text-cyan-400">{gameState.colony.coordinates}</span>
+                  <span className="font-mono text-accent">{gameState.colony.coordinates}</span>
                 </div>
               </div>
             </div>
@@ -200,7 +200,7 @@ export function Dashboard() {
                 $VOID BALANCE
               </h2>
               <div className="text-center py-4">
-                <div className="font-mono text-4xl text-purple-400 text-glow-purple mb-2">
+                <div className="font-mono text-4xl text-purple-400 text-accent-tertiary mb-2">
                   {isConnected ? '2,450' : '---'}
                 </div>
                 <div className="text-gray-400 text-sm">Available for boosts</div>
@@ -264,7 +264,7 @@ function QueueItem({ type, name, timeLeft, icon: Icon, color }) {
   const iconColors = {
     orange: 'text-orange-400',
     purple: 'text-purple-400',
-    cyan: 'text-cyan-400',
+    cyan: 'text-accent',
   };
 
   return (
@@ -275,7 +275,7 @@ function QueueItem({ type, name, timeLeft, icon: Icon, color }) {
         <div className="text-white font-medium">{name}</div>
       </div>
       <div className="text-right">
-        <div className="font-mono text-lg text-cyan-400">{timeLeft}</div>
+        <div className="font-mono text-lg text-accent">{timeLeft}</div>
         <div className="text-xs text-gray-400">remaining</div>
       </div>
     </div>
@@ -291,7 +291,7 @@ function ActionCard({ to, icon: Icon, label, color }) {
   };
 
   const iconColors = {
-    cyan: 'text-cyan-400',
+    cyan: 'text-accent',
     purple: 'text-purple-400',
     orange: 'text-orange-400',
     red: 'text-red-400',
@@ -320,7 +320,7 @@ function VesselCount({ name, count }) {
 function Alert({ message, type }) {
   const colors = {
     warning: 'text-orange-400 bg-orange-500/10 border-orange-500/30',
-    info: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30',
+    info: 'text-accent bg-cyan-500/10 border-cyan-500/30',
     danger: 'text-red-400 bg-red-500/10 border-red-500/30',
   };
 

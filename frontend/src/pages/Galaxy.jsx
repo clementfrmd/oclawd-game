@@ -47,7 +47,7 @@ export function Galaxy() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
             <h1 className="font-display text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
-              <Globe className="w-8 h-8 text-cyan-400" />
+              <Globe className="w-8 h-8 text-accent" />
               GALAXY MAP
             </h1>
             <p className="text-gray-400 mt-1">
@@ -75,7 +75,7 @@ export function Galaxy() {
               <button onClick={() => navigateGalaxy(-1)} className="p-2 hover:bg-white/10 rounded">
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <span className="font-mono text-cyan-400 w-8 text-center">{coordinates.galaxy}</span>
+              <span className="font-mono text-accent w-8 text-center">{coordinates.galaxy}</span>
               <button onClick={() => navigateGalaxy(1)} className="p-2 hover:bg-white/10 rounded">
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -92,7 +92,7 @@ export function Galaxy() {
                 type="number"
                 value={coordinates.system}
                 onChange={(e) => setCoordinates(prev => ({ ...prev, system: Math.max(1, Math.min(499, parseInt(e.target.value) || 1)) }))}
-                className="font-mono text-cyan-400 bg-black/30 border border-white/10 rounded w-16 text-center py-1"
+                className="font-mono text-accent bg-black/30 border border-white/10 rounded w-16 text-center py-1"
               />
               <button onClick={() => navigateSystem(1)} className="p-2 hover:bg-white/10 rounded">
                 <ChevronRight className="w-4 h-4" />
@@ -227,7 +227,7 @@ function PlanetRow({ planet, galaxy, system }) {
         {isYours ? (
           <span className="text-green-400 text-sm">Your Colony</span>
         ) : isColonizable ? (
-          <button className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 rounded hover:bg-cyan-500/30">
+          <button className="px-3 py-1 text-xs bg-cyan-500/20 text-accent border border-cyan-500/50 rounded hover:bg-cyan-500/30">
             Colonize
           </button>
         ) : (

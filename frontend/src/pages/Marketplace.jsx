@@ -31,7 +31,7 @@ export function Marketplace() {
               onClick={() => setActiveTab(tab)}
               className={`px-6 py-3 rounded font-medium capitalize transition-all ${
                 activeTab === tab
-                  ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50'
+                  ? 'bg-cyan-500/20 text-accent border border-cyan-500/50'
                   : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10'
               }`}
             >
@@ -87,7 +87,7 @@ function ResourceMarket() {
       {/* Trade Panel */}
       <div className="panel p-6">
         <h2 className="font-display text-xl text-white mb-4 flex items-center gap-2">
-          <ArrowUpDown className="w-5 h-5 text-cyan-400" />
+          <ArrowUpDown className="w-5 h-5 text-accent" />
           TRADE
         </h2>
         
@@ -110,7 +110,7 @@ function ResourceMarket() {
           
           <div className="flex justify-center">
             <div className="w-10 h-10 bg-cyan-500/20 rounded-full flex items-center justify-center">
-              <ArrowUpDown className="w-5 h-5 text-cyan-400" />
+              <ArrowUpDown className="w-5 h-5 text-accent" />
             </div>
           </div>
           
@@ -158,7 +158,7 @@ function BoostMarket() {
   };
 
   const iconColorClasses = {
-    cyan: 'text-cyan-400',
+    cyan: 'text-accent',
     orange: 'text-orange-400',
     green: 'text-green-400',
     purple: 'text-purple-400',
@@ -176,7 +176,7 @@ function BoostMarket() {
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <div className="font-mono text-3xl text-purple-400 text-glow-purple">2,450</div>
+              <div className="font-mono text-3xl text-purple-400 text-accent-tertiary">2,450</div>
               <div className="text-gray-400 text-sm">$VOID available</div>
             </div>
             <button className="btn-secondary py-2 px-4">
@@ -242,7 +242,7 @@ function VesselMarket() {
         {listings.map((listing, i) => (
           <div key={i} className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition-colors">
             <div className="col-span-3">
-              <span className="text-cyan-400">{listing.seller}</span>
+              <span className="text-accent">{listing.seller}</span>
             </div>
             <div className="col-span-3 text-white">{listing.vessel}</div>
             <div className="col-span-2 font-mono text-white">{listing.quantity}</div>

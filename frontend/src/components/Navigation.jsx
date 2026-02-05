@@ -16,7 +16,7 @@ function ConnectWallet() {
           onClick={() => setShowDropdown(!showDropdown)}
           className="flex items-center gap-2 px-4 py-2 bg-green-500/20 border border-green-500/50 rounded text-green-400 hover:bg-green-500/30 transition-all"
         >
-          <span className="w-2 h-2 bg-green-400 rounded-full pulse-glow" />
+          <span className="w-2 h-2 bg-green-400 rounded-full pulse-subtle" />
           <span className="font-mono text-sm">
             {address?.slice(0, 6)}...{address?.slice(-4)}
           </span>
@@ -58,7 +58,7 @@ function ConnectWallet() {
               }}
               className="w-full text-left px-4 py-3 text-sm hover:bg-white/10 flex items-center gap-3 transition-colors"
             >
-              <Wallet className="w-4 h-4 text-cyan-400" />
+              <Wallet className="w-4 h-4 text-accent" />
               <span>{connector.name}</span>
             </button>
           ))}
@@ -90,7 +90,7 @@ export function Navigation() {
           <Link to="/" className="flex items-center gap-3">
             <span className="text-3xl">🌌</span>
             <span className="font-display text-2xl font-bold text-white">
-              VOID <span className="text-cyan-400">CONQUEST</span>
+              VOID <span className="text-accent">CONQUEST</span>
             </span>
           </Link>
           <div className="flex items-center gap-4">
@@ -114,7 +114,7 @@ export function Navigation() {
             <Link to="/" className="flex items-center gap-2">
               <span className="text-2xl">🌌</span>
               <span className="font-display text-xl font-bold hidden sm:block">
-                VOID <span className="text-cyan-400">CONQUEST</span>
+                VOID <span className="text-accent">CONQUEST</span>
               </span>
             </Link>
 
@@ -129,7 +129,7 @@ export function Navigation() {
                     to={item.path}
                     className={`flex items-center gap-2 px-4 py-2 rounded transition-all ${
                       isActive
-                        ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50'
+                        ? 'bg-cyan-500/20 text-accent border border-cyan-500/50'
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }`}
                   >
@@ -169,7 +169,7 @@ export function Navigation() {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center gap-3 px-4 py-3 rounded transition-all ${
                       isActive
-                        ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50'
+                        ? 'bg-cyan-500/20 text-accent border border-cyan-500/50'
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }`}
                   >
