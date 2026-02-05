@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="courierHull" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6a6a60"/>
+      <stop offset="100%" style="stop-color:#4a4a40"/>
+    </linearGradient>
+  </defs>
+  <!-- Compact hull -->
+  <path d="M32 8 L42 14 L46 26 L46 42 L40 52 L32 56 L24 52 L18 42 L18 26 L22 14 Z" fill="url(#courierHull)" stroke="#7a7a70" stroke-width="1"/>
+  <!-- Cockpit -->
+  <ellipse cx="32" cy="18" rx="6" ry="5" fill="#1a2a30" stroke="#4a5a60" stroke-width="0.5"/>
+  <!-- Cargo bay indicators -->
+  <rect x="24" y="28" width="16" height="14" fill="#3a3a30" stroke="#5a5a50" stroke-width="0.5"/>
+  <line x1="28" y1="28" x2="28" y2="42" stroke="#4a4a40" stroke-width="0.5"/>
+  <line x1="32" y1="28" x2="32" y2="42" stroke="#4a4a40" stroke-width="0.5"/>
+  <line x1="36" y1="28" x2="36" y2="42" stroke="#4a4a40" stroke-width="0.5"/>
+  <!-- Side thrusters -->
+  <ellipse cx="18" cy="34" rx="2" ry="4" fill="#5a5a50"/>
+  <ellipse cx="46" cy="34" rx="2" ry="4" fill="#5a5a50"/>
+  <!-- Engine -->
+  <ellipse cx="32" cy="54" rx="4" ry="2" fill="#5a8a6a" opacity="0.8"/>
+</svg>

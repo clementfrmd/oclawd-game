@@ -152,7 +152,7 @@ export function Fleet() {
         <div className="stars-bg" />
         <div className="nebula" />
         <div className="relative text-center">
-          <Loader2 className="w-12 h-12 text-cyan-400 animate-spin mx-auto mb-4" />
+          <Loader2 className="w-12 h-12 text-sky-400 animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Loading fleet data...</p>
         </div>
       </div>
@@ -218,9 +218,18 @@ export function Fleet() {
           <div className="flex items-center justify-between">
             <span className="text-gray-400">Available Resources:</span>
             <div className="flex gap-4">
-              <span className="text-amber-400">⛏️ {resources.ore.toLocaleString()}</span>
-              <span className="text-blue-400">💎 {resources.crystal.toLocaleString()}</span>
-              <span className="text-purple-400">🔮 {resources.plasma.toLocaleString()}</span>
+              <span className="flex items-center gap-1 text-amber-500">
+                <img src="/assets/resources/ore.svg" alt="Ore" className="w-5 h-5" />
+                {resources.ore.toLocaleString()}
+              </span>
+              <span className="flex items-center gap-1 text-sky-500">
+                <img src="/assets/resources/crystal.svg" alt="Crystal" className="w-5 h-5" />
+                {resources.crystal.toLocaleString()}
+              </span>
+              <span className="flex items-center gap-1 text-violet-500">
+                <img src="/assets/resources/plasma.svg" alt="Plasma" className="w-5 h-5" />
+                {resources.plasma.toLocaleString()}
+              </span>
             </div>
           </div>
         </div>
@@ -233,7 +242,7 @@ export function Fleet() {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-4 py-2 rounded font-medium whitespace-nowrap transition-all ${
                 selectedCategory === cat.id
-                  ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50'
+                  ? 'bg-sky-600/20 text-sky-400 border border-sky-600/50'
                   : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10'
               }`}
             >
@@ -269,7 +278,7 @@ export function Fleet() {
 
         {/* Build Summary */}
         {Object.values(buildQueue).some(v => v > 0) && (
-          <div className="fixed bottom-0 left-0 right-0 bg-black/90 border-t border-cyan-500/30 p-4 backdrop-blur-xl">
+          <div className="fixed bottom-0 left-0 right-0 bg-black/90 border-t border-sky-600/30 p-4 backdrop-blur-xl">
             <div className="max-w-7xl mx-auto">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex-1">
@@ -282,20 +291,23 @@ export function Fleet() {
                         return (
                           <span key={id} className="bg-white/10 px-2 py-1 rounded text-sm">
                             <span className="text-white">{count}x</span>{' '}
-                            <span className="text-cyan-400">{vessel?.name}</span>
+                            <span className="text-sky-400">{vessel?.name}</span>
                           </span>
                         );
                       })}
                   </div>
                   <div className="flex gap-4 mt-2 text-sm">
-                    <span className={buildQueueCost.ore > resources.ore ? 'text-red-400' : 'text-amber-400'}>
-                      ⛏️ {buildQueueCost.ore.toLocaleString()}
+                    <span className={`flex items-center gap-1 ${buildQueueCost.ore > resources.ore ? 'text-red-400' : 'text-amber-500'}`}>
+                      <img src="/assets/resources/ore.svg" alt="Ore" className="w-4 h-4" />
+                      {buildQueueCost.ore.toLocaleString()}
                     </span>
-                    <span className={buildQueueCost.crystal > resources.crystal ? 'text-red-400' : 'text-blue-400'}>
-                      💎 {buildQueueCost.crystal.toLocaleString()}
+                    <span className={`flex items-center gap-1 ${buildQueueCost.crystal > resources.crystal ? 'text-red-400' : 'text-sky-500'}`}>
+                      <img src="/assets/resources/crystal.svg" alt="Crystal" className="w-4 h-4" />
+                      {buildQueueCost.crystal.toLocaleString()}
                     </span>
-                    <span className={buildQueueCost.plasma > resources.plasma ? 'text-red-400' : 'text-purple-400'}>
-                      🔮 {buildQueueCost.plasma.toLocaleString()}
+                    <span className={`flex items-center gap-1 ${buildQueueCost.plasma > resources.plasma ? 'text-red-400' : 'text-violet-500'}`}>
+                      <img src="/assets/resources/plasma.svg" alt="Plasma" className="w-4 h-4" />
+                      {buildQueueCost.plasma.toLocaleString()}
                     </span>
                   </div>
                 </div>
@@ -368,7 +380,7 @@ function VesselCard({ vessel, owned, buildCount, onBuildChange, resources }) {
           <div className="text-gray-500 text-xs">DEF</div>
         </div>
         <div className="text-center p-2 bg-black/30 rounded">
-          <div className="text-cyan-400 font-mono">{vessel.speed >= 1000000 ? 'MAX' : vessel.speed}</div>
+          <div className="text-sky-400 font-mono">{vessel.speed >= 1000000 ? 'MAX' : vessel.speed}</div>
           <div className="text-gray-500 text-xs">SPD</div>
         </div>
         <div className="text-center p-2 bg-black/30 rounded">
@@ -380,18 +392,21 @@ function VesselCard({ vessel, owned, buildCount, onBuildChange, resources }) {
       {/* Cost */}
       <div className="flex gap-3 mb-4 text-sm">
         {vessel.cost.ore > 0 && (
-          <span className={vessel.cost.ore > resources.ore ? 'text-red-400' : 'text-amber-400'}>
-            ⛏️ {vessel.cost.ore.toLocaleString()}
+          <span className={`flex items-center gap-1 ${vessel.cost.ore > resources.ore ? 'text-red-400' : 'text-amber-500'}`}>
+            <img src="/assets/resources/ore.svg" alt="Ore" className="w-4 h-4" />
+            {vessel.cost.ore.toLocaleString()}
           </span>
         )}
         {vessel.cost.crystal > 0 && (
-          <span className={vessel.cost.crystal > resources.crystal ? 'text-red-400' : 'text-blue-400'}>
-            💎 {vessel.cost.crystal.toLocaleString()}
+          <span className={`flex items-center gap-1 ${vessel.cost.crystal > resources.crystal ? 'text-red-400' : 'text-sky-500'}`}>
+            <img src="/assets/resources/crystal.svg" alt="Crystal" className="w-4 h-4" />
+            {vessel.cost.crystal.toLocaleString()}
           </span>
         )}
         {vessel.cost.plasma > 0 && (
-          <span className={vessel.cost.plasma > resources.plasma ? 'text-red-400' : 'text-purple-400'}>
-            🔮 {vessel.cost.plasma.toLocaleString()}
+          <span className={`flex items-center gap-1 ${vessel.cost.plasma > resources.plasma ? 'text-red-400' : 'text-violet-500'}`}>
+            <img src="/assets/resources/plasma.svg" alt="Plasma" className="w-4 h-4" />
+            {vessel.cost.plasma.toLocaleString()}
           </span>
         )}
       </div>
@@ -423,7 +438,7 @@ function VesselCard({ vessel, owned, buildCount, onBuildChange, resources }) {
           onClick={() => onBuildChange(10)}
           className={`px-3 py-2 border rounded text-sm ${
             canAffordOne 
-              ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/50 hover:bg-cyan-500/30' 
+              ? 'bg-sky-600/20 text-sky-400 border-sky-600/50 hover:bg-sky-600/30' 
               : 'bg-white/5 text-gray-500 border-white/10 cursor-not-allowed'
           }`}
           disabled={!canAffordOne}

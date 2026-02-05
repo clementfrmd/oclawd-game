@@ -28,15 +28,15 @@ export function Marketplace() {
         </div>
 
         {/* Economy Info Banner */}
-        <div className="panel p-4 mb-6 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border-cyan-500/30">
+        <div className="panel p-4 mb-6 bg-gradient-to-r from-sky-600/10 to-purple-500/10 border-sky-600/30">
           <div className="flex items-start gap-3">
-            <Coins className="w-5 h-5 text-cyan-400 mt-0.5" />
+            <Coins className="w-5 h-5 text-sky-400 mt-0.5" />
             <div className="text-sm">
-              <p className="text-cyan-400 font-medium mb-1">How the Economy Works</p>
+              <p className="text-sky-400 font-medium mb-1">How the Economy Works</p>
               <p className="text-gray-400">
                 <strong className="text-white">Resources</strong> (Ore, Crystal, Plasma) are <strong className="text-green-400">produced by your facilities</strong>, not purchased. 
                 Only <strong className="text-purple-400">$VOID</strong> can be bought with ETH. 
-                Trade resources <strong className="text-cyan-400">player-to-player</strong> on the marketplace.
+                Trade resources <strong className="text-sky-400">player-to-player</strong> on the marketplace.
               </p>
             </div>
           </div>
@@ -57,7 +57,7 @@ export function Marketplace() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-4 py-3 rounded font-medium transition-all ${
                   activeTab === tab.id
-                    ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50'
+                    ? 'bg-sky-600/20 text-sky-400 border border-sky-600/50'
                     : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10'
                 }`}
               >
@@ -190,7 +190,7 @@ function VoidPurchase({ address, isConnected }) {
         <div className="panel p-6">
           <h2 className="font-display text-xl text-white mb-4">Your $VOID Balance</h2>
           <div className="text-center py-6">
-            <div className="font-mono text-5xl text-purple-400 text-glow-purple mb-2">
+            <div className="font-mono text-5xl text-purple-400 text-highlight-tertiary mb-2">
               {isConnected ? voidBalance.toLocaleString() : '---'}
             </div>
             <div className="text-gray-400">$VOID available</div>
@@ -201,7 +201,7 @@ function VoidPurchase({ address, isConnected }) {
           <h3 className="font-display text-lg text-white mb-3">What is $VOID?</h3>
           <ul className="space-y-2 text-sm text-gray-400">
             <li className="flex items-start gap-2">
-              <Shield className="w-4 h-4 text-cyan-400 mt-0.5" />
+              <Shield className="w-4 h-4 text-sky-400 mt-0.5" />
               <span>Activate protective shields and boosts</span>
             </li>
             <li className="flex items-start gap-2">
@@ -277,7 +277,7 @@ function ResourceMarket({ address, isConnected }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+        <Loader2 className="w-8 h-8 text-sky-400 animate-spin" />
       </div>
     );
   }
@@ -347,7 +347,7 @@ function ResourceMarket({ address, isConnected }) {
       <div className="lg:col-span-2 panel overflow-hidden">
         <div className="p-4 bg-black/30 border-b border-white/10">
           <h2 className="font-display text-xl text-white flex items-center gap-2">
-            <Users className="w-5 h-5 text-cyan-400" />
+            <Users className="w-5 h-5 text-sky-400" />
             PLAYER LISTINGS
           </h2>
           <p className="text-gray-400 text-sm mt-1">Buy resources from other players using $VOID</p>
@@ -375,7 +375,7 @@ function ResourceMarket({ address, isConnected }) {
             listings.map((listing, i) => (
               <div key={i} className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition-colors">
                 <div className="col-span-3">
-                  <span className="text-cyan-400">{listing.seller}</span>
+                  <span className="text-sky-400">{listing.seller}</span>
                 </div>
                 <div className="col-span-3 flex items-center gap-2">
                   <span>{resourceIcons[listing.resource]}</span>
@@ -437,7 +437,7 @@ function BoostMarket({ address, isConnected }) {
   }, [address, isConnected]);
 
   const colorClasses = {
-    cyan: 'border-cyan-500/30 hover:border-cyan-500/50',
+    cyan: 'border-sky-600/30 hover:border-sky-600/50',
     orange: 'border-orange-500/30 hover:border-orange-500/50',
     green: 'border-green-500/30 hover:border-green-500/50',
     purple: 'border-purple-500/30 hover:border-purple-500/50',
@@ -445,7 +445,7 @@ function BoostMarket({ address, isConnected }) {
   };
 
   const iconColorClasses = {
-    cyan: 'text-cyan-400',
+    cyan: 'text-sky-400',
     orange: 'text-orange-400',
     green: 'text-green-400',
     purple: 'text-purple-400',
@@ -475,7 +475,7 @@ function BoostMarket({ address, isConnected }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+        <Loader2 className="w-8 h-8 text-sky-400 animate-spin" />
       </div>
     );
   }
@@ -491,7 +491,7 @@ function BoostMarket({ address, isConnected }) {
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <div className="font-mono text-3xl text-purple-400 text-glow-purple">
+              <div className="font-mono text-3xl text-purple-400 text-highlight-tertiary">
                 {isConnected ? voidBalance.toLocaleString() : '---'}
               </div>
               <div className="text-gray-400 text-sm">$VOID available</div>
@@ -567,7 +567,7 @@ function VesselMarket({ address, isConnected }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+        <Loader2 className="w-8 h-8 text-sky-400 animate-spin" />
       </div>
     );
   }
@@ -604,7 +604,7 @@ function VesselMarket({ address, isConnected }) {
           listings.map((listing, i) => (
             <div key={i} className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition-colors">
               <div className="col-span-3">
-                <span className="text-cyan-400">{listing.seller}</span>
+                <span className="text-sky-400">{listing.seller}</span>
               </div>
               <div className="col-span-3 text-white">{listing.vessel}</div>
               <div className="col-span-2 font-mono text-white">{listing.quantity}</div>

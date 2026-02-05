@@ -116,7 +116,7 @@ export function Dashboard() {
         <div className="stars-bg" />
         <div className="nebula" />
         <div className="relative text-center">
-          <Loader2 className="w-12 h-12 text-cyan-400 animate-spin mx-auto mb-4" />
+          <Loader2 className="w-12 h-12 text-sky-400 animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Loading command center...</p>
         </div>
       </div>
@@ -130,7 +130,7 @@ export function Dashboard() {
         <div className="stars-bg" />
         <div className="nebula" />
         <div className="relative text-center panel p-8">
-          <Rocket className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
+          <Rocket className="w-16 h-16 text-sky-400 mx-auto mb-4" />
           <h2 className="font-display text-2xl text-white mb-2">Connect Your Wallet</h2>
           <p className="text-gray-400 mb-4">Connect your wallet to access the Command Center</p>
         </div>
@@ -165,8 +165,8 @@ export function Dashboard() {
               </span>
             </div>
             <p className="text-gray-400">
-              Colony: <span className="text-cyan-400 font-mono">{gameState.colony.name}</span> • 
-              Coordinates: <span className="text-cyan-400 font-mono">{gameState.colony.coordinates}</span>
+              Colony: <span className="text-sky-400 font-mono">{gameState.colony.name}</span> • 
+              Coordinates: <span className="text-sky-400 font-mono">{gameState.colony.coordinates}</span>
             </p>
           </div>
           
@@ -219,7 +219,7 @@ export function Dashboard() {
             {/* Active Queues */}
             <div className="panel p-6">
               <h2 className="font-display text-xl text-white mb-4 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-cyan-400" />
+                <Clock className="w-5 h-5 text-sky-400" />
                 ACTIVE CONSTRUCTION
               </h2>
               <div className="space-y-3">
@@ -286,7 +286,7 @@ export function Dashboard() {
                 <div className="text-center py-8 text-gray-500">
                   <Rocket className="w-12 h-12 mx-auto mb-2 opacity-30" />
                   <p>No vessels in fleet</p>
-                  <Link to="/fleet" className="text-cyan-400 text-sm hover:underline">Build your first ship →</Link>
+                  <Link to="/fleet" className="text-sky-400 text-sm hover:underline">Build your first ship →</Link>
                 </div>
               )}
             </div>
@@ -312,7 +312,7 @@ export function Dashboard() {
                 </div>
                 <div className="flex justify-between items-center mt-4">
                   <span className="text-gray-400">Coordinates</span>
-                  <span className="font-mono text-cyan-400">{gameState.colony.coordinates}</span>
+                  <span className="font-mono text-sky-400">{gameState.colony.coordinates}</span>
                 </div>
               </div>
             </div>
@@ -324,7 +324,7 @@ export function Dashboard() {
                 $VOID BALANCE
               </h2>
               <div className="text-center py-4">
-                <div className="font-mono text-4xl text-purple-400 text-glow-purple mb-2">
+                <div className="font-mono text-4xl text-purple-400 text-highlight-tertiary mb-2">
                   {gameState.voidBalance.toLocaleString()}
                 </div>
                 <div className="text-gray-400 text-sm">Available for boosts</div>
@@ -359,12 +359,12 @@ export function Dashboard() {
   );
 }
 
-function ResourceDisplay({ name, value, production, color, icon, isEnergy }) {
+function ResourceDisplay({ name, value, production, color, iconSrc, isEnergy }) {
   const colors = {
-    ore: 'from-amber-600 to-amber-500',
-    crystal: 'from-blue-500 to-blue-400',
-    plasma: 'from-purple-500 to-purple-400',
-    energy: 'from-green-500 to-green-400',
+    ore: 'from-amber-700 to-amber-600',
+    crystal: 'from-sky-700 to-sky-600',
+    plasma: 'from-violet-700 to-violet-600',
+    energy: 'from-emerald-700 to-emerald-600',
   };
 
   // Calculate fill based on a reasonable max (for display purposes)
@@ -373,11 +373,13 @@ function ResourceDisplay({ name, value, production, color, icon, isEnergy }) {
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-2xl">{icon}</span>
+      <div className="w-8 h-8 flex-shrink-0">
+        <img src={iconSrc} alt={name} className="w-full h-full object-contain" />
+      </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2">
           <span className="font-mono text-lg text-white">{value.toLocaleString()}</span>
-          <span className={`text-xs ${isEnergy ? (production >= 0 ? 'text-green-400' : 'text-red-400') : 'text-green-400'}`}>
+          <span className={`text-xs ${isEnergy ? (production >= 0 ? 'text-emerald-500' : 'text-red-500') : 'text-emerald-500'}`}>
             {isEnergy ? (production >= 0 ? `+${production}` : production) : `+${production}/h`}
           </span>
         </div>
@@ -393,13 +395,13 @@ function QueueItem({ type, name, timeLeft, icon: Icon, color }) {
   const colors = {
     orange: 'border-orange-500/50 bg-orange-500/10',
     purple: 'border-purple-500/50 bg-purple-500/10',
-    cyan: 'border-cyan-500/50 bg-cyan-500/10',
+    cyan: 'border-sky-600/50 bg-sky-600/10',
   };
 
   const iconColors = {
     orange: 'text-orange-400',
     purple: 'text-purple-400',
-    cyan: 'text-cyan-400',
+    cyan: 'text-sky-400',
   };
 
   return (
@@ -410,7 +412,7 @@ function QueueItem({ type, name, timeLeft, icon: Icon, color }) {
         <div className="text-white font-medium">{name}</div>
       </div>
       <div className="text-right">
-        <div className="font-mono text-lg text-cyan-400">{timeLeft}</div>
+        <div className="font-mono text-lg text-sky-400">{timeLeft}</div>
         <div className="text-xs text-gray-400">remaining</div>
       </div>
     </div>
@@ -419,14 +421,14 @@ function QueueItem({ type, name, timeLeft, icon: Icon, color }) {
 
 function ActionCard({ to, icon: Icon, label, color }) {
   const colors = {
-    cyan: 'hover:border-cyan-500/50 hover:bg-cyan-500/10',
+    cyan: 'hover:border-sky-600/50 hover:bg-sky-600/10',
     purple: 'hover:border-purple-500/50 hover:bg-purple-500/10',
     orange: 'hover:border-orange-500/50 hover:bg-orange-500/10',
     red: 'hover:border-red-500/50 hover:bg-red-500/10',
   };
 
   const iconColors = {
-    cyan: 'text-cyan-400',
+    cyan: 'text-sky-400',
     purple: 'text-purple-400',
     orange: 'text-orange-400',
     red: 'text-red-400',
@@ -446,7 +448,7 @@ function ActionCard({ to, icon: Icon, label, color }) {
 function Alert({ message, type }) {
   const colors = {
     warning: 'text-orange-400 bg-orange-500/10 border-orange-500/30',
-    info: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30',
+    info: 'text-sky-400 bg-sky-600/10 border-sky-600/30',
     danger: 'text-red-400 bg-red-500/10 border-red-500/30',
   };
 

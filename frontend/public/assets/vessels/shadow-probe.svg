@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="probeBody" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#3a3a45"/>
+      <stop offset="100%" style="stop-color:#1a1a22"/>
+    </radialGradient>
+    <radialGradient id="probeSensor" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#5a7a9a"/>
+      <stop offset="100%" style="stop-color:#2a4a6a"/>
+    </radialGradient>
+  </defs>
+  <!-- Main body - spherical -->
+  <circle cx="32" cy="32" r="16" fill="url(#probeBody)" stroke="#4a4a55" stroke-width="1"/>
+  <!-- Sensor array -->
+  <circle cx="32" cy="24" r="6" fill="url(#probeSensor)" stroke="#5a7a9a" stroke-width="0.5"/>
+  <circle cx="32" cy="24" r="2" fill="#7a9aba"/>
+  <!-- Antenna -->
+  <line x1="32" y1="16" x2="32" y2="8" stroke="#4a4a55" stroke-width="1"/>
+  <circle cx="32" cy="6" r="2" fill="#4a5a6a"/>
+  <!-- Solar panels -->
+  <rect x="10" y="28" width="8" height="8" fill="#2a2a35" stroke="#3a3a45" stroke-width="0.5"/>
+  <rect x="46" y="28" width="8" height="8" fill="#2a2a35" stroke="#3a3a45" stroke-width="0.5"/>
+  <!-- Panel lines -->
+  <line x1="12" y1="32" x2="16" y2="32" stroke="#3a3a45" stroke-width="0.5"/>
+  <line x1="48" y1="32" x2="52" y2="32" stroke="#3a3a45" stroke-width="0.5"/>
+  <!-- Thruster -->
+  <ellipse cx="32" cy="48" rx="4" ry="2" fill="#4a6a7a" opacity="0.6"/>
+</svg>

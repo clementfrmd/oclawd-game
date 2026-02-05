@@ -12,7 +12,7 @@ export function Landing() {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4">
         {/* Animated Ring */}
-        <div className="absolute w-[600px] h-[600px] border border-cyan-500/20 rounded-full animate-rotate-slow" />
+        <div className="absolute w-[600px] h-[600px] border border-sky-600/20 rounded-full animate-rotate-slow" />
         <div className="absolute w-[500px] h-[500px] border border-purple-500/20 rounded-full animate-rotate-slow" style={{ animationDirection: 'reverse', animationDuration: '30s' }} />
         
         <div className="text-center z-10 max-w-4xl">
@@ -66,8 +66,8 @@ export function Landing() {
         
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-cyan-500/50 rounded-full flex justify-center pt-2">
-            <div className="w-1 h-3 bg-cyan-500 rounded-full animate-pulse" />
+          <div className="w-6 h-10 border-2 border-sky-600/50 rounded-full flex justify-center pt-2">
+            <div className="w-1 h-3 bg-sky-600 rounded-full animate-pulse" />
           </div>
         </div>
       </section>
@@ -179,7 +179,7 @@ export function Landing() {
               
               {/* Floating Elements */}
               <div className="absolute -top-4 -right-4 w-16 h-16 bg-purple-500/20 rounded-lg animate-float" style={{ animationDelay: '0.5s' }} />
-              <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-cyan-500/20 rounded-lg animate-float" style={{ animationDelay: '1s' }} />
+              <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-sky-600/20 rounded-lg animate-float" style={{ animationDelay: '1s' }} />
             </div>
           </div>
         </div>
@@ -223,7 +223,7 @@ export function Landing() {
 
 function FeatureCard({ icon: Icon, title, description, color }) {
   const colors = {
-    cyan: 'border-cyan-500/30 hover:border-cyan-500/60',
+    cyan: 'border-sky-600/30 hover:border-sky-600/60',
     purple: 'border-purple-500/30 hover:border-purple-500/60',
     orange: 'border-orange-500/30 hover:border-orange-500/60',
     red: 'border-red-500/30 hover:border-red-500/60',

@@ -68,7 +68,7 @@ export function Galaxy() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
             <h1 className="font-display text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
-              <Globe className="w-8 h-8 text-cyan-400" />
+              <Globe className="w-8 h-8 text-sky-400" />
               GALAXY MAP
             </h1>
             <p className="text-gray-400 mt-1">
@@ -96,7 +96,7 @@ export function Galaxy() {
               <button onClick={() => navigateGalaxy(-1)} className="p-2 hover:bg-white/10 rounded" disabled={coordinates.galaxy <= 1}>
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <span className="font-mono text-cyan-400 w-8 text-center">{coordinates.galaxy}</span>
+              <span className="font-mono text-sky-400 w-8 text-center">{coordinates.galaxy}</span>
               <button onClick={() => navigateGalaxy(1)} className="p-2 hover:bg-white/10 rounded" disabled={coordinates.galaxy >= 9}>
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -113,7 +113,7 @@ export function Galaxy() {
                 type="number"
                 value={coordinates.system}
                 onChange={(e) => setCoordinates(prev => ({ ...prev, system: Math.max(1, Math.min(499, parseInt(e.target.value) || 1)) }))}
-                className="font-mono text-cyan-400 bg-black/30 border border-white/10 rounded w-16 text-center py-1"
+                className="font-mono text-sky-400 bg-black/30 border border-white/10 rounded w-16 text-center py-1"
               />
               <button onClick={() => navigateSystem(1)} className="p-2 hover:bg-white/10 rounded" disabled={coordinates.system >= 499}>
                 <ChevronRight className="w-4 h-4" />
@@ -158,7 +158,7 @@ export function Galaxy() {
           {/* Loading State */}
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+              <Loader2 className="w-8 h-8 text-sky-400 animate-spin" />
               <span className="ml-3 text-gray-400">Scanning system...</span>
             </div>
           ) : systemData.length > 0 ? (
@@ -191,7 +191,7 @@ export function Galaxy() {
             <span>Your Colony</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 bg-cyan-500 rounded-full" />
+            <span className="w-3 h-3 bg-sky-600 rounded-full" />
             <span>Colonizable</span>
           </div>
           <div className="flex items-center gap-2">
@@ -256,7 +256,7 @@ function PlanetRow({ planet, galaxy, system, userAddress }) {
       </div>
       <div className="col-span-3 flex items-center gap-2">
         <span className={`w-3 h-3 rounded-full ${
-          isYours ? 'bg-green-500' : isAI ? 'bg-purple-500' : isColonizable ? 'bg-cyan-500' : 'bg-red-500'
+          isYours ? 'bg-green-500' : isAI ? 'bg-purple-500' : isColonizable ? 'bg-sky-600' : 'bg-red-500'
         }`} />
         <span className={isYours ? 'text-green-400 font-medium' : 'text-white'}>{planet.name || 'Unknown Planet'}</span>
       </div>
@@ -283,7 +283,7 @@ function PlanetRow({ planet, galaxy, system, userAddress }) {
         {isYours ? (
           <span className="text-green-400 text-sm">Your Colony</span>
         ) : isColonizable ? (
-          <button className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 rounded hover:bg-cyan-500/30">
+          <button className="px-3 py-1 text-xs bg-sky-600/20 text-sky-400 border border-sky-600/50 rounded hover:bg-sky-600/30">
             Colonize
           </button>
         ) : (

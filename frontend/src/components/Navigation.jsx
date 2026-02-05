@@ -14,9 +14,9 @@ function ConnectWallet() {
       <div className="relative">
         <button
           onClick={() => setShowDropdown(!showDropdown)}
-          className="flex items-center gap-2 px-4 py-2 bg-green-500/20 border border-green-500/50 rounded text-green-400 hover:bg-green-500/30 transition-all"
+          className="flex items-center gap-2 px-4 py-2 bg-emerald-900/40 border border-emerald-700/50 rounded text-emerald-400 hover:bg-emerald-900/60 transition-all"
         >
-          <span className="w-2 h-2 bg-green-400 rounded-full pulse-subtle" />
+          <span className="w-2 h-2 bg-emerald-500 rounded-full" />
           <span className="font-mono text-sm">
             {address?.slice(0, 6)}...{address?.slice(-4)}
           </span>
@@ -88,9 +88,9 @@ export function Navigation() {
       <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <span className="text-3xl">🌌</span>
+            <img src="/assets/logo.svg" alt="Void Conquest" className="w-10 h-10" />
             <span className="font-display text-2xl font-bold text-white">
-              VOID <span className="text-accent">CONQUEST</span>
+              VOID <span className="text-sky-400">CONQUEST</span>
             </span>
           </Link>
           <div className="flex items-center gap-4">
@@ -107,14 +107,14 @@ export function Navigation() {
   return (
     <>
       {/* Desktop Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-cyan-500/20">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-xl border-b border-slate-700/50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
-              <span className="text-2xl">🌌</span>
+              <img src="/assets/logo.svg" alt="Void Conquest" className="w-8 h-8" />
               <span className="font-display text-xl font-bold hidden sm:block">
-                VOID <span className="text-accent">CONQUEST</span>
+                VOID <span className="text-sky-400">CONQUEST</span>
               </span>
             </Link>
 
@@ -129,8 +129,8 @@ export function Navigation() {
                     to={item.path}
                     className={`flex items-center gap-2 px-4 py-2 rounded transition-all ${
                       isActive
-                        ? 'bg-cyan-500/20 text-accent border border-cyan-500/50'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                        ? 'bg-slate-700/40 text-sky-400 border border-slate-600'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -157,7 +157,7 @@ export function Navigation() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-cyan-500/20 bg-black/95 backdrop-blur-xl">
+          <div className="lg:hidden border-t border-slate-700/50 bg-black/95 backdrop-blur-xl">
             <div className="px-4 py-4 space-y-2">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -169,8 +169,8 @@ export function Navigation() {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center gap-3 px-4 py-3 rounded transition-all ${
                       isActive
-                        ? 'bg-cyan-500/20 text-accent border border-cyan-500/50'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                        ? 'bg-slate-700/40 text-sky-400 border border-slate-600'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                     }`}
                   >
                     <Icon className="w-5 h-5" />
