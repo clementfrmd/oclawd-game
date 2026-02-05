@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Rocket, Building2, FlaskConical, Shield, Zap, Target, AlertTriangle, Clock, Loader2 } from 'lucide-react';
 import { useAccount } from 'wagmi';
-
-const API_BASE = 'https://expenditures-elimination-together-proposals.trycloudflare.com/api';
+import { ENDPOINTS, toFrontendResources } from '../config/api';
 
 // Default starter state for new players (or when API is unreachable)
 const STARTER_STATE = {
@@ -60,8 +59,8 @@ export function Dashboard() {
         setLoading(true);
         setError(null);
 
-        // Fetch dashboard data from API
-        const response = await fetch(`${API_BASE}/dashboard?address=${address}`);
+        // Fetch resources from API
+        const response = await fetch(ENDPOINTS.resources(address));
         
         if (!response.ok) {
           throw new Error(`API error: ${response.status}`);
@@ -71,23 +70,22 @@ export function Dashboard() {
         
         // Update state with real data from API
         if (data) {
+          const resources = toFrontendResources(data.resources || {});
+          const production = {
+            ore: data.productionRates?.metal || 0,
+            crystal: data.productionRates?.crystal || 0,
+            plasma: data.productionRates?.deuterium || 0,
+            energy: data.productionRates?.energyProduction || 0,
+          };
+          
           setGameState({
-            colony: data.colony || {
-              name: 'New Colony',
-              coordinates: '0:0:0',
+            colony: {
+              name: 'Colony Alpha',
+              coordinates: '1:' + Math.floor(Math.random()*500) + ':' + Math.floor(Math.random()*15),
               fields: { used: 0, total: 163 }
             },
-            resources: data.resources || {
-              ore: 0,
-              crystal: 0,
-              plasma: 0,
-              energy: 0
-            },
-            production: data.production || {
-              ore: 0,
-              crystal: 0,
-              plasma: 0,
-              energy: 0
+            resources: resources,
+            production: production
             },
             queue: data.queue || {
               building: null,
