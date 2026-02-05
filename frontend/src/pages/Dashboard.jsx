@@ -68,6 +68,26 @@ export function Dashboard() {
 
         const data = await response.json();
         
+        // Also fetch facilities to check for active construction
+        let buildingQueue = null;
+        try {
+          const facRes = await fetch(ENDPOINTS.facilities(address));
+          const facData = await facRes.json();
+          if (facData.facilities) {
+            const upgrading = facData.facilities.find(f => f.isUpgrading);
+            if (upgrading) {
+              const completesAt = new Date(upgrading.upgradeCompletesAt);
+              const now = new Date();
+              const timeLeftSec = Math.max(0, Math.floor((completesAt - now) / 1000));
+              buildingQueue = {
+                name: upgrading.facilityType.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+                level: (upgrading.level || 0) + 1,
+                timeLeft: timeLeftSec > 3600 ? `${Math.floor(timeLeftSec/3600)}h ${Math.floor((timeLeftSec%3600)/60)}m` : `${Math.floor(timeLeftSec/60)}m ${timeLeftSec%60}s`
+              };
+            }
+          }
+        } catch (e) { console.log('Could not fetch facilities:', e); }
+        
         // Update state with real data from API
         if (data) {
           const resources = toFrontendResources(data.resources || {});
@@ -86,8 +106,8 @@ export function Dashboard() {
             },
             resources: resources,
             production: production,
-            queue: data.queue || {
-              building: null,
+            queue: {
+              building: buildingQueue,
               research: null
             },
             fleet: data.fleet || {

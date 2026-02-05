@@ -45,7 +45,7 @@ export function Fleet() {
         setLoading(true);
         setError(null);
 
-        const res = await fetch(`${API_BASE}/fleet?address=${address}`);
+        const res = await fetch(`${API_BASE}/fleets?address=${address}`);
         
         if (!res.ok) {
           throw new Error(`API error: ${res.status}`);
@@ -119,7 +119,7 @@ export function Fleet() {
 
     try {
       setSubmitting(true);
-      const res = await fetch(`${API_BASE}/fleet/build`, {
+      const res = await fetch(`${API_BASE}/fleets/build`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ address, queue: queueItems })
@@ -128,7 +128,7 @@ export function Fleet() {
       if (!res.ok) throw new Error('Failed to start construction');
       
       // Refresh data
-      const fleetRes = await fetch(`${API_BASE}/fleet?address=${address}`);
+      const fleetRes = await fetch(`${API_BASE}/fleets?address=${address}`);
       if (fleetRes.ok) {
         const data = await fleetRes.json();
         setMyFleet(data.fleet || {});
