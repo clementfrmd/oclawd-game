@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ShoppingCart, TrendingUp, ArrowUpDown, Zap, Shield, Clock, Rocket, Loader2, AlertTriangle, Users, Coins } from 'lucide-react';
 import { useAccount } from 'wagmi';
 
-const API_BASE = 'http://213.246.39.151:24011/api';
+const API_BASE = 'https://expenditures-elimination-together-proposals.trycloudflare.com/api';
 
 export function Marketplace() {
   const [activeTab, setActiveTab] = useState('void');

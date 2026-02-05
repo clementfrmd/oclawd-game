@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Rocket, Shield, Zap, Target, Package, Eye, Plus, Minus, Loader2, AlertTriangle } from 'lucide-react';
 import { useAccount } from 'wagmi';
 
-const API_BASE = 'http://213.246.39.151:24011/api';
+const API_BASE = 'https://expenditures-elimination-together-proposals.trycloudflare.com/api';
 
 const VESSELS = [
   { id: 'scout_fighter', name: 'Scout Fighter', attack: 50, defense: 10, speed: 12500, cargo: 50, cost: { ore: 3000, crystal: 1000, plasma: 0 }, category: 'combat' },
