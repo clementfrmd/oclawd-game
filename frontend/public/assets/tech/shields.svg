@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="shieldMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6a7a8a"/>
+      <stop offset="100%" style="stop-color:#4a5a6a"/>
+    </linearGradient>
+    <radialGradient id="shieldField" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" style="stop-color:#4a90b8;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#2a5070;stop-opacity:0.1"/>
+    </radialGradient>
+  </defs>
+  <!-- Shield shape -->
+  <path d="M32 6 L52 14 L52 34 Q52 50 32 58 Q12 50 12 34 L12 14 Z" fill="url(#shieldMetal)" stroke="#7a8a9a" stroke-width="1.5"/>
+  <!-- Energy field -->
+  <path d="M32 10 L48 16 L48 33 Q48 46 32 54 Q16 46 16 33 L16 16 Z" fill="url(#shieldField)" stroke="#4a90b8" stroke-width="0.5" opacity="0.8"/>
+  <!-- Central emblem -->
+  <circle cx="32" cy="30" r="8" fill="#3a4a5a" stroke="#5a6a7a" stroke-width="1"/>
+  <circle cx="32" cy="30" r="4" fill="#2a3a4a"/>
+  <!-- Chevrons -->
+  <path d="M32 24 L36 30 L32 28 L28 30 Z" fill="#5a7a9a"/>
+  <path d="M32 32 L36 38 L32 36 L28 38 Z" fill="#5a7a9a"/>
+  <!-- Energy nodes -->
+  <circle cx="22" cy="20" r="2" fill="#4a90b8" opacity="0.7"/>
+  <circle cx="42" cy="20" r="2" fill="#4a90b8" opacity="0.7"/>
+  <circle cx="32" cy="48" r="2" fill="#4a90b8" opacity="0.7"/>
+</svg>

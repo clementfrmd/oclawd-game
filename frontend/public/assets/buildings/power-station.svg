@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="powerStruct" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5a7a6a"/>
+      <stop offset="100%" style="stop-color:#3a5a4a"/>
+    </linearGradient>
+    <linearGradient id="energyFlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#5a9a7a"/>
+      <stop offset="100%" style="stop-color:#3a6a5a"/>
+    </linearGradient>
+  </defs>
+  <!-- Base -->
+  <rect x="8" y="50" width="48" height="6" fill="#3a4038" stroke="#4a5048" stroke-width="1"/>
+  <!-- Main reactor building -->
+  <rect x="18" y="22" width="28" height="28" fill="url(#powerStruct)" stroke="#6a8a7a" stroke-width="1"/>
+  <!-- Solar collectors -->
+  <rect x="6" y="16" width="12" height="20" fill="#4a5a5a" stroke="#5a6a6a" stroke-width="0.5" transform="rotate(-15 12 26)"/>
+  <rect x="46" y="16" width="12" height="20" fill="#4a5a5a" stroke="#5a6a6a" stroke-width="0.5" transform="rotate(15 52 26)"/>
+  <!-- Solar panel lines -->
+  <line x1="8" y1="20" x2="16" y2="20" stroke="#3a4a4a" stroke-width="0.5" transform="rotate(-15 12 26)"/>
+  <line x1="8" y1="26" x2="16" y2="26" stroke="#3a4a4a" stroke-width="0.5" transform="rotate(-15 12 26)"/>
+  <line x1="8" y1="32" x2="16" y2="32" stroke="#3a4a4a" stroke-width="0.5" transform="rotate(-15 12 26)"/>
+  <!-- Energy core -->
+  <rect x="26" y="28" width="12" height="16" fill="#2a3a32" stroke="#4a9a6a" stroke-width="1"/>
+  <rect x="28" y="30" width="8" height="12" fill="url(#energyFlow)" opacity="0.7"/>
+  <!-- Power conduits -->
+  <rect x="24" y="44" width="4" height="6" fill="#4a6a5a"/>
+  <rect x="36" y="44" width="4" height="6" fill="#4a6a5a"/>
+  <!-- Lightning bolt symbol -->
+  <path d="M32 30 L30 36 L33 35 L31 42 L34 36 L31 37 Z" fill="#7aba9a"/>
+  <!-- Status -->
+  <circle cx="32" cy="24" r="2" fill="#5a9a7a"/>
+</svg>

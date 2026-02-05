@@ -1,8 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <circle cx="32" cy="32" r="24" fill="#553c9a" stroke="#6b46c1" stroke-width="2"/>
-  <circle cx="32" cy="32" r="16" fill="#805ad5"/>
-  <circle cx="32" cy="32" r="8" fill="#b794f4"/>
-  <circle cx="32" cy="32" r="4" fill="#e9d8fd"/>
-  <circle cx="24" cy="20" r="3" fill="#b794f4" opacity="0.5"/>
-  <circle cx="44" cy="40" r="2" fill="#b794f4" opacity="0.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <radialGradient id="plasmaGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#b89acd"/>
+      <stop offset="50%" style="stop-color:#9a7ab8"/>
+      <stop offset="100%" style="stop-color:#6a4a8a"/>
+    </radialGradient>
+    <radialGradient id="plasmaCore" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#d8baed"/>
+      <stop offset="100%" style="stop-color:#a88ac8"/>
+    </radialGradient>
+  </defs>
+  <!-- Containment vessel -->
+  <ellipse cx="16" cy="16" rx="12" ry="12" fill="none" stroke="#5a4a6a" stroke-width="1.5"/>
+  <ellipse cx="16" cy="16" rx="10" ry="10" fill="none" stroke="#4a3a5a" stroke-width="0.5"/>
+  <!-- Plasma energy -->
+  <ellipse cx="16" cy="16" rx="8" ry="8" fill="url(#plasmaGrad)" opacity="0.9"/>
+  <ellipse cx="16" cy="16" rx="4" ry="4" fill="url(#plasmaCore)" opacity="0.8"/>
+  <!-- Energy arcs -->
+  <path d="M10 12 Q8 16 10 20" fill="none" stroke="#b89acd" stroke-width="0.5" opacity="0.7"/>
+  <path d="M22 12 Q24 16 22 20" fill="none" stroke="#b89acd" stroke-width="0.5" opacity="0.7"/>
+  <path d="M12 10 Q16 8 20 10" fill="none" stroke="#b89acd" stroke-width="0.5" opacity="0.7"/>
+  <!-- Core glow -->
+  <circle cx="16" cy="16" r="2" fill="#e8cafa" opacity="0.6"/>
 </svg>

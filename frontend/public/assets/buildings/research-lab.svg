@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="labStruct" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5a6a7a"/>
+      <stop offset="100%" style="stop-color:#3a4a5a"/>
+    </linearGradient>
+    <radialGradient id="hologram" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#7a9aba;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#4a6a8a;stop-opacity:0.2"/>
+    </radialGradient>
+  </defs>
+  <!-- Base -->
+  <rect x="10" y="50" width="44" height="6" fill="#3a3a40" stroke="#4a4a50" stroke-width="1"/>
+  <!-- Main building -->
+  <rect x="14" y="26" width="36" height="24" fill="url(#labStruct)" stroke="#6a7a8a" stroke-width="1"/>
+  <!-- Dome observatory -->
+  <path d="M22 26 Q22 14 32 10 Q42 14 42 26 Z" fill="#4a5a68" stroke="#5a6a78" stroke-width="0.5"/>
+  <!-- Telescope slit -->
+  <line x1="32" y1="10" x2="32" y2="22" stroke="#2a3a4a" stroke-width="2"/>
+  <!-- Antenna array -->
+  <line x1="18" y1="26" x2="14" y2="18" stroke="#5a5a5a" stroke-width="1"/>
+  <line x1="46" y1="26" x2="50" y2="18" stroke="#5a5a5a" stroke-width="1"/>
+  <circle cx="14" cy="18" r="2" fill="#5a6a7a"/>
+  <circle cx="50" cy="18" r="2" fill="#5a6a7a"/>
+  <!-- Windows/screens -->
+  <rect x="18" y="32" width="8" height="6" fill="#1a2a3a" stroke="#4a6a8a" stroke-width="0.5"/>
+  <rect x="38" y="32" width="8" height="6" fill="#1a2a3a" stroke="#4a6a8a" stroke-width="0.5"/>
+  <!-- Data lines on screens -->
+  <line x1="20" y1="34" x2="24" y2="34" stroke="#4a90b8" stroke-width="0.5" opacity="0.8"/>
+  <line x1="20" y1="36" x2="23" y2="36" stroke="#4a90b8" stroke-width="0.5" opacity="0.8"/>
+  <line x1="40" y1="34" x2="44" y2="34" stroke="#4a90b8" stroke-width="0.5" opacity="0.8"/>
+  <line x1="40" y1="36" x2="43" y2="36" stroke="#4a90b8" stroke-width="0.5" opacity="0.8"/>
+  <!-- Holographic display -->
+  <ellipse cx="32" cy="40" rx="6" ry="3" fill="url(#hologram)"/>
+  <ellipse cx="32" cy="38" rx="4" ry="2" fill="url(#hologram)"/>
+  <!-- DNA helix symbol -->
+  <path d="M30 36 Q32 38 34 36 M30 40 Q32 38 34 40" fill="none" stroke="#6a9aba" stroke-width="0.5" opacity="0.7"/>
+</svg>

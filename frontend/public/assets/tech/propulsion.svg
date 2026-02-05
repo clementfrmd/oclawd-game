@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="engineMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6a6a70"/>
+      <stop offset="100%" style="stop-color:#4a4a50"/>
+    </linearGradient>
+    <linearGradient id="thrustGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#c67b4e"/>
+      <stop offset="50%" style="stop-color:#ff9a5a"/>
+      <stop offset="100%" style="stop-color:#8a4020"/>
+    </linearGradient>
+  </defs>
+  <!-- Engine housing -->
+  <path d="M16 18 L48 18 L52 26 L52 38 L48 46 L16 46 L12 38 L12 26 Z" fill="url(#engineMetal)" stroke="#7a7a80" stroke-width="1"/>
+  <!-- Intake -->
+  <rect x="12" y="24" width="8" height="16" fill="#3a3a40" stroke="#5a5a60" stroke-width="0.5"/>
+  <line x1="14" y1="28" x2="18" y2="28" stroke="#4a4a50" stroke-width="1"/>
+  <line x1="14" y1="32" x2="18" y2="32" stroke="#4a4a50" stroke-width="1"/>
+  <line x1="14" y1="36" x2="18" y2="36" stroke="#4a4a50" stroke-width="1"/>
+  <!-- Combustion chamber -->
+  <ellipse cx="32" cy="32" rx="10" ry="8" fill="#2a2a30" stroke="#5a5a60" stroke-width="0.5"/>
+  <!-- Nozzle -->
+  <path d="M44 22 L56 16 L60 32 L56 48 L44 42 Z" fill="#5a5a60" stroke="#6a6a70" stroke-width="0.5"/>
+  <!-- Thrust flame -->
+  <ellipse cx="62" cy="32" rx="8" ry="10" fill="url(#thrustGlow)" opacity="0.9"/>
+  <ellipse cx="64" cy="32" rx="4" ry="6" fill="#ffba7a" opacity="0.7"/>
+  <!-- Internal details -->
+  <circle cx="32" cy="32" r="4" fill="#4a4a50"/>
+  <circle cx="32" cy="32" r="2" fill="#c67b4e" opacity="0.6"/>
+  <!-- Power coupling -->
+  <rect x="24" y="12" width="16" height="4" fill="#4a4a50"/>
+  <rect x="24" y="48" width="16" height="4" fill="#4a4a50"/>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="weaponMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7a7080"/>
+      <stop offset="100%" style="stop-color:#4a4550"/>
+    </linearGradient>
+    <linearGradient id="weaponGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#b84a4a"/>
+      <stop offset="100%" style="stop-color:#8a3030"/>
+    </linearGradient>
+  </defs>
+  <!-- Turret base -->
+  <ellipse cx="32" cy="50" rx="18" ry="6" fill="#3a3840"/>
+  <rect x="22" y="36" width="20" height="14" fill="#4a4850" stroke="#5a5860" stroke-width="0.5"/>
+  <!-- Turret housing -->
+  <rect x="18" y="26" width="28" height="14" rx="2" fill="url(#weaponMetal)" stroke="#6a6870" stroke-width="1"/>
+  <!-- Barrel -->
+  <rect x="44" y="30" width="16" height="6" fill="#5a5860" stroke="#6a6870" stroke-width="0.5"/>
+  <rect x="56" y="31" width="4" height="4" fill="#4a4850"/>
+  <!-- Targeting array -->
+  <circle cx="24" cy="32" r="4" fill="#2a2830" stroke="#4a4850" stroke-width="0.5"/>
+  <circle cx="24" cy="32" r="2" fill="#b84a4a" opacity="0.7"/>
+  <!-- Energy conduit -->
+  <rect x="8" y="28" width="10" height="3" fill="url(#weaponGlow)" opacity="0.8"/>
+  <rect x="8" y="34" width="10" height="3" fill="url(#weaponGlow)" opacity="0.8"/>
+  <!-- Details -->
+  <line x1="32" y1="28" x2="32" y2="38" stroke="#5a5860" stroke-width="0.5"/>
+  <circle cx="38" cy="32" r="1.5" fill="#3a3840"/>
+</svg>

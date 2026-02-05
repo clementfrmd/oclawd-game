@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="plasmaStruct" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6a5a7a"/>
+      <stop offset="100%" style="stop-color:#4a3a5a"/>
+    </linearGradient>
+    <radialGradient id="plasmaCore" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#9a7ab8"/>
+      <stop offset="100%" style="stop-color:#5a4a6a"/>
+    </radialGradient>
+  </defs>
+  <!-- Base platform -->
+  <ellipse cx="32" cy="54" rx="26" ry="6" fill="#3a3a40"/>
+  <!-- Main dome -->
+  <path d="M10 50 Q10 20 32 12 Q54 20 54 50 Z" fill="url(#plasmaStruct)" stroke="#7a6a8a" stroke-width="1"/>
+  <!-- Containment rings -->
+  <ellipse cx="32" cy="26" rx="16" ry="4" fill="none" stroke="#5a4a6a" stroke-width="1"/>
+  <ellipse cx="32" cy="36" rx="20" ry="5" fill="none" stroke="#5a4a6a" stroke-width="1"/>
+  <!-- Plasma core -->
+  <circle cx="32" cy="32" r="8" fill="url(#plasmaCore)" opacity="0.9"/>
+  <circle cx="32" cy="32" r="4" fill="#b89acd" opacity="0.7"/>
+  <!-- Energy conduits -->
+  <line x1="32" y1="40" x2="32" y2="50" stroke="#7a6a9a" stroke-width="2"/>
+  <line x1="20" y1="44" x2="16" y2="50" stroke="#7a6a9a" stroke-width="1.5"/>
+  <line x1="44" y1="44" x2="48" y2="50" stroke="#7a6a9a" stroke-width="1.5"/>
+  <!-- Antenna -->
+  <line x1="32" y1="12" x2="32" y2="4" stroke="#5a5a6a" stroke-width="1"/>
+  <circle cx="32" cy="4" r="2" fill="#7a6a9a"/>
+  <!-- Status lights -->
+  <circle cx="18" cy="44" r="1.5" fill="#9a7ab8" opacity="0.8"/>
+  <circle cx="46" cy="44" r="1.5" fill="#9a7ab8" opacity="0.8"/>
+</svg>

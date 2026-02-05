@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="freightHull" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6a6a5a"/>
+      <stop offset="50%" style="stop-color:#4a4a3a"/>
+      <stop offset="100%" style="stop-color:#3a3a2a"/>
+    </linearGradient>
+    <linearGradient id="cargo" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#5a5a4a"/>
+      <stop offset="100%" style="stop-color:#3a3a2a"/>
+    </linearGradient>
+  </defs>
+  <!-- Cargo hold -->
+  <rect x="16" y="14" width="32" height="40" rx="2" fill="url(#freightHull)" stroke="#7a7a6a" stroke-width="1"/>
+  <!-- Bridge -->
+  <path d="M24 14 L40 14 L42 8 L32 4 L22 8 Z" fill="#3a4048" stroke="#5a6068" stroke-width="0.5"/>
+  <rect x="28" y="6" width="8" height="6" fill="#1a2a3a" stroke="#4a90b8" stroke-width="0.5"/>
+  <!-- Cargo containers -->
+  <rect x="20" y="20" width="10" height="8" fill="url(#cargo)" stroke="#5a5a4a" stroke-width="0.5"/>
+  <rect x="34" y="20" width="10" height="8" fill="url(#cargo)" stroke="#5a5a4a" stroke-width="0.5"/>
+  <rect x="20" y="32" width="10" height="8" fill="url(#cargo)" stroke="#5a5a4a" stroke-width="0.5"/>
+  <rect x="34" y="32" width="10" height="8" fill="url(#cargo)" stroke="#5a5a4a" stroke-width="0.5"/>
+  <!-- Engine pods -->
+  <rect x="10" y="40" width="6" height="14" fill="#4a4a4a" stroke="#5a5a5a" stroke-width="0.5"/>
+  <rect x="48" y="40" width="6" height="14" fill="#4a4a4a" stroke="#5a5a5a" stroke-width="0.5"/>
+  <!-- Engines -->
+  <ellipse cx="13" cy="56" rx="2" ry="1.5" fill="#4a8a6a" opacity="0.8"/>
+  <ellipse cx="51" cy="56" rx="2" ry="1.5" fill="#4a8a6a" opacity="0.8"/>
+  <ellipse cx="32" cy="56" rx="3" ry="2" fill="#4a8a6a" opacity="0.8"/>
+</svg>

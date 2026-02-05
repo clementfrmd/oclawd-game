@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { Rocket, Shield, Zap, Target, Package, Eye, Plus, Minus } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Rocket, Shield, Zap, Target, Package, Eye, Plus, Minus, Loader2, AlertTriangle } from 'lucide-react';
+import { useAccount } from 'wagmi';
+
+const API_BASE = 'http://213.246.39.151:24011/api';
 
 const VESSELS = [
   { id: 'scout_fighter', name: 'Scout Fighter', attack: 50, defense: 10, speed: 12500, cargo: 50, cost: { ore: 3000, crystal: 1000, plasma: 0 }, category: 'combat' },
@@ -19,20 +22,50 @@ const VESSELS = [
 ];
 
 export function Fleet() {
+  const { address, isConnected } = useAccount();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [buildQueue, setBuildQueue] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
   
-  // Mock fleet data
-  const [myFleet, setMyFleet] = useState({
-    scout_fighter: 45,
-    assault_fighter: 28,
-    strike_cruiser: 32,
-    dreadnought: 12,
-    vanguard: 5,
-    courier: 20,
-    freighter: 15,
-    shadow_probe: 50,
-  });
+  // Start with empty fleet - no mock data
+  const [myFleet, setMyFleet] = useState({});
+  const [resources, setResources] = useState({ ore: 0, crystal: 0, plasma: 0 });
+
+  // Fetch fleet data from API
+  useEffect(() => {
+    async function fetchFleetData() {
+      if (!isConnected || !address) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError(null);
+
+        const res = await fetch(`${API_BASE}/fleet?address=${address}`);
+        
+        if (!res.ok) {
+          throw new Error(`API error: ${res.status}`);
+        }
+
+        const data = await res.json();
+        
+        // Set fleet from API response
+        setMyFleet(data.fleet || {});
+        setResources(data.resources || { ore: 0, crystal: 0, plasma: 0 });
+      } catch (err) {
+        console.error('Failed to fetch fleet data:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchFleetData();
+  }, [isConnected, address]);
 
   const categories = [
     { id: 'all', label: 'All Vessels' },
@@ -50,6 +83,8 @@ export function Fleet() {
     return acc + (vessel ? vessel.attack * count : 0);
   }, 0);
 
+  const totalShips = Object.values(myFleet).reduce((a, b) => a + b, 0);
+
   const updateBuildQueue = (id, delta) => {
     setBuildQueue(prev => ({
       ...prev,
@@ -57,12 +92,102 @@ export function Fleet() {
     }));
   };
 
+  // Calculate total cost of build queue
+  const buildQueueCost = Object.entries(buildQueue).reduce((acc, [id, count]) => {
+    if (count <= 0) return acc;
+    const vessel = VESSELS.find(v => v.id === id);
+    if (!vessel) return acc;
+    return {
+      ore: acc.ore + (vessel.cost.ore * count),
+      crystal: acc.crystal + (vessel.cost.crystal * count),
+      plasma: acc.plasma + (vessel.cost.plasma * count),
+    };
+  }, { ore: 0, crystal: 0, plasma: 0 });
+
+  const canAfford = resources.ore >= buildQueueCost.ore && 
+                    resources.crystal >= buildQueueCost.crystal && 
+                    resources.plasma >= buildQueueCost.plasma;
+
+  const handleStartConstruction = async () => {
+    if (!isConnected || !canAfford) return;
+    
+    const queueItems = Object.entries(buildQueue)
+      .filter(([_, count]) => count > 0)
+      .map(([id, count]) => ({ vesselId: id, count }));
+    
+    if (queueItems.length === 0) return;
+
+    try {
+      setSubmitting(true);
+      const res = await fetch(`${API_BASE}/fleet/build`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address, queue: queueItems })
+      });
+
+      if (!res.ok) throw new Error('Failed to start construction');
+      
+      // Refresh data
+      const fleetRes = await fetch(`${API_BASE}/fleet?address=${address}`);
+      if (fleetRes.ok) {
+        const data = await fleetRes.json();
+        setMyFleet(data.fleet || {});
+        setResources(data.resources || { ore: 0, crystal: 0, plasma: 0 });
+      }
+      
+      // Clear queue
+      setBuildQueue({});
+    } catch (err) {
+      console.error('Construction error:', err);
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen relative flex items-center justify-center">
+        <div className="stars-bg" />
+        <div className="nebula" />
+        <div className="relative text-center">
+          <Loader2 className="w-12 h-12 text-cyan-400 animate-spin mx-auto mb-4" />
+          <p className="text-gray-400">Loading fleet data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Not connected state
+  if (!isConnected) {
+    return (
+      <div className="min-h-screen relative flex items-center justify-center">
+        <div className="stars-bg" />
+        <div className="nebula" />
+        <div className="relative text-center panel p-8">
+          <Rocket className="w-16 h-16 text-orange-400 mx-auto mb-4" />
+          <h2 className="font-display text-2xl text-white mb-2">Connect Your Wallet</h2>
+          <p className="text-gray-400 mb-4">Connect your wallet to access Fleet Command</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen relative">
       <div className="stars-bg" />
       <div className="nebula" />
       
       <div className="relative max-w-7xl mx-auto px-4 py-8">
+        {/* Error Banner */}
+        {error && (
+          <div className="mb-4 p-4 bg-red-500/20 border border-red-500/50 rounded text-red-400 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            {error}
+          </div>
+        )}
+
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
@@ -78,12 +203,24 @@ export function Fleet() {
           {/* Fleet Stats */}
           <div className="flex gap-6">
             <div className="text-center">
-              <div className="font-mono text-2xl text-white">{Object.values(myFleet).reduce((a, b) => a + b, 0)}</div>
+              <div className="font-mono text-2xl text-white">{totalShips}</div>
               <div className="text-gray-400 text-sm">Total Ships</div>
             </div>
             <div className="text-center">
               <div className="font-mono text-2xl text-orange-400">{totalPower.toLocaleString()}</div>
               <div className="text-gray-400 text-sm">Fleet Power</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Resources Available */}
+        <div className="panel p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <span className="text-gray-400">Available Resources:</span>
+            <div className="flex gap-4">
+              <span className="text-amber-400">⛏️ {resources.ore.toLocaleString()}</span>
+              <span className="text-blue-400">💎 {resources.crystal.toLocaleString()}</span>
+              <span className="text-purple-400">🔮 {resources.plasma.toLocaleString()}</span>
             </div>
           </div>
         </div>
@@ -96,7 +233,7 @@ export function Fleet() {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-4 py-2 rounded font-medium whitespace-nowrap transition-all ${
                 selectedCategory === cat.id
-                  ? 'bg-cyan-500/20 text-accent border border-cyan-500/50'
+                  ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50'
                   : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10'
               }`}
             >
@@ -105,8 +242,19 @@ export function Fleet() {
           ))}
         </div>
 
+        {/* Empty Fleet Message */}
+        {totalShips === 0 && (
+          <div className="panel p-6 mb-6 text-center">
+            <Rocket className="w-12 h-12 text-gray-500 mx-auto mb-3 opacity-50" />
+            <h3 className="text-white text-lg mb-2">No Vessels Yet</h3>
+            <p className="text-gray-400">
+              Build facilities to produce resources, then construct your first ships!
+            </p>
+          </div>
+        )}
+
         {/* Vessel Grid */}
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4 pb-24">
           {filteredVessels.map((vessel) => (
             <VesselCard
               key={vessel.id}
@@ -114,6 +262,7 @@ export function Fleet() {
               owned={myFleet[vessel.id] || 0}
               buildCount={buildQueue[vessel.id] || 0}
               onBuildChange={(delta) => updateBuildQueue(vessel.id, delta)}
+              resources={resources}
             />
           ))}
         </div>
@@ -121,24 +270,53 @@ export function Fleet() {
         {/* Build Summary */}
         {Object.values(buildQueue).some(v => v > 0) && (
           <div className="fixed bottom-0 left-0 right-0 bg-black/90 border-t border-cyan-500/30 p-4 backdrop-blur-xl">
-            <div className="max-w-7xl mx-auto flex items-center justify-between">
-              <div>
-                <span className="text-gray-400">Build Queue: </span>
-                {Object.entries(buildQueue)
-                  .filter(([_, count]) => count > 0)
-                  .map(([id, count]) => {
-                    const vessel = VESSELS.find(v => v.id === id);
-                    return (
-                      <span key={id} className="mr-4">
-                        <span className="text-white">{count}x</span>{' '}
-                        <span className="text-accent">{vessel?.name}</span>
-                      </span>
-                    );
-                  })}
+            <div className="max-w-7xl mx-auto">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex-1">
+                  <div className="text-gray-400 mb-1">Build Queue:</div>
+                  <div className="flex flex-wrap gap-2">
+                    {Object.entries(buildQueue)
+                      .filter(([_, count]) => count > 0)
+                      .map(([id, count]) => {
+                        const vessel = VESSELS.find(v => v.id === id);
+                        return (
+                          <span key={id} className="bg-white/10 px-2 py-1 rounded text-sm">
+                            <span className="text-white">{count}x</span>{' '}
+                            <span className="text-cyan-400">{vessel?.name}</span>
+                          </span>
+                        );
+                      })}
+                  </div>
+                  <div className="flex gap-4 mt-2 text-sm">
+                    <span className={buildQueueCost.ore > resources.ore ? 'text-red-400' : 'text-amber-400'}>
+                      ⛏️ {buildQueueCost.ore.toLocaleString()}
+                    </span>
+                    <span className={buildQueueCost.crystal > resources.crystal ? 'text-red-400' : 'text-blue-400'}>
+                      💎 {buildQueueCost.crystal.toLocaleString()}
+                    </span>
+                    <span className={buildQueueCost.plasma > resources.plasma ? 'text-red-400' : 'text-purple-400'}>
+                      🔮 {buildQueueCost.plasma.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+                <button 
+                  onClick={handleStartConstruction}
+                  disabled={!canAfford || submitting}
+                  className={`py-2 px-6 rounded font-medium ${
+                    canAfford 
+                      ? 'btn-primary' 
+                      : 'bg-gray-500/20 text-gray-500 border border-gray-500/30 cursor-not-allowed'
+                  }`}
+                >
+                  {submitting ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : canAfford ? (
+                    'Start Construction'
+                  ) : (
+                    'Insufficient Resources'
+                  )}
+                </button>
               </div>
-              <button className="btn-primary py-2 px-6">
-                Start Construction
-              </button>
             </div>
           </div>
         )}
@@ -147,7 +325,7 @@ export function Fleet() {
   );
 }
 
-function VesselCard({ vessel, owned, buildCount, onBuildChange }) {
+function VesselCard({ vessel, owned, buildCount, onBuildChange, resources }) {
   const categoryColors = {
     combat: 'border-red-500/30 hover:border-red-500/50',
     support: 'border-blue-500/30 hover:border-blue-500/50',
@@ -159,6 +337,11 @@ function VesselCard({ vessel, owned, buildCount, onBuildChange }) {
     support: <Package className="w-5 h-5 text-blue-400" />,
     expedition: <Eye className="w-5 h-5 text-purple-400" />,
   };
+
+  // Check if player can afford at least one
+  const canAffordOne = resources.ore >= vessel.cost.ore && 
+                       resources.crystal >= vessel.cost.crystal && 
+                       resources.plasma >= vessel.cost.plasma;
 
   return (
     <div className={`panel ${categoryColors[vessel.category]} p-4 transition-all`}>
@@ -185,7 +368,7 @@ function VesselCard({ vessel, owned, buildCount, onBuildChange }) {
           <div className="text-gray-500 text-xs">DEF</div>
         </div>
         <div className="text-center p-2 bg-black/30 rounded">
-          <div className="text-accent font-mono">{vessel.speed >= 1000000 ? 'MAX' : vessel.speed}</div>
+          <div className="text-cyan-400 font-mono">{vessel.speed >= 1000000 ? 'MAX' : vessel.speed}</div>
           <div className="text-gray-500 text-xs">SPD</div>
         </div>
         <div className="text-center p-2 bg-black/30 rounded">
@@ -197,13 +380,19 @@ function VesselCard({ vessel, owned, buildCount, onBuildChange }) {
       {/* Cost */}
       <div className="flex gap-3 mb-4 text-sm">
         {vessel.cost.ore > 0 && (
-          <span className="text-amber-400">⛏️ {vessel.cost.ore.toLocaleString()}</span>
+          <span className={vessel.cost.ore > resources.ore ? 'text-red-400' : 'text-amber-400'}>
+            ⛏️ {vessel.cost.ore.toLocaleString()}
+          </span>
         )}
         {vessel.cost.crystal > 0 && (
-          <span className="text-blue-400">💎 {vessel.cost.crystal.toLocaleString()}</span>
+          <span className={vessel.cost.crystal > resources.crystal ? 'text-red-400' : 'text-blue-400'}>
+            💎 {vessel.cost.crystal.toLocaleString()}
+          </span>
         )}
         {vessel.cost.plasma > 0 && (
-          <span className="text-purple-400">🔮 {vessel.cost.plasma.toLocaleString()}</span>
+          <span className={vessel.cost.plasma > resources.plasma ? 'text-red-400' : 'text-purple-400'}>
+            🔮 {vessel.cost.plasma.toLocaleString()}
+          </span>
         )}
       </div>
 
@@ -211,7 +400,7 @@ function VesselCard({ vessel, owned, buildCount, onBuildChange }) {
       <div className="flex items-center gap-2">
         <button
           onClick={() => onBuildChange(-1)}
-          className="p-2 bg-white/10 rounded hover:bg-white/20 transition-colors"
+          className="p-2 bg-white/10 rounded hover:bg-white/20 transition-colors disabled:opacity-30"
           disabled={buildCount === 0}
         >
           <Minus className="w-4 h-4" />
@@ -225,13 +414,19 @@ function VesselCard({ vessel, owned, buildCount, onBuildChange }) {
         />
         <button
           onClick={() => onBuildChange(1)}
-          className="p-2 bg-white/10 rounded hover:bg-white/20 transition-colors"
+          className={`p-2 rounded transition-colors ${canAffordOne ? 'bg-white/10 hover:bg-white/20' : 'bg-white/5 opacity-30 cursor-not-allowed'}`}
+          disabled={!canAffordOne}
         >
           <Plus className="w-4 h-4" />
         </button>
         <button
           onClick={() => onBuildChange(10)}
-          className="px-3 py-2 bg-cyan-500/20 text-accent border border-cyan-500/50 rounded hover:bg-cyan-500/30 text-sm"
+          className={`px-3 py-2 border rounded text-sm ${
+            canAffordOne 
+              ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/50 hover:bg-cyan-500/30' 
+              : 'bg-white/5 text-gray-500 border-white/10 cursor-not-allowed'
+          }`}
+          disabled={!canAffordOne}
         >
           +10
         </button>

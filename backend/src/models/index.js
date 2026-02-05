@@ -1,11 +1,21 @@
+const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-// Import models
-const Station = require('./Station');
-const Resource = require('./Resource');
-const Marketplace = require('./Marketplace');
-const Fleet = require('./Fleet');
-const Contract = require('./Contract');
+// Import model definitions
+const StationModel = require('./Station');
+const ResourceModel = require('./Resource');
+const MarketplaceModel = require('./Marketplace');
+const FleetModel = require('./Fleet');
+const ContractModel = require('./Contract');
+const AgentModel = require('./Agent');
+
+// Initialize models
+const Station = StationModel(sequelize, DataTypes);
+const Resource = ResourceModel(sequelize, DataTypes);
+const Marketplace = MarketplaceModel(sequelize, DataTypes);
+const Fleet = FleetModel(sequelize, DataTypes);
+const Contract = ContractModel(sequelize, DataTypes);
+const Agent = AgentModel(sequelize, DataTypes);
 
 // Define relationships
 Station.hasMany(Resource, { foreignKey: 'stationId', as: 'resources' });
@@ -20,11 +30,17 @@ Contract.belongsTo(Resource, { foreignKey: 'resourceId', as: 'resource' });
 Station.hasMany(Fleet, { foreignKey: 'stationId', as: 'fleets' });
 Fleet.belongsTo(Station, { foreignKey: 'stationId', as: 'station' });
 
+// Agent relationships
+Agent.belongsTo(Station, { foreignKey: 'stationId', as: 'homeStation' });
+Station.hasOne(Agent, { foreignKey: 'stationId', as: 'agent' });
+
 module.exports = {
   sequelize,
+  Sequelize,
   Station,
   Resource,
   Marketplace,
   Fleet,
-  Contract
+  Contract,
+  Agent
 };

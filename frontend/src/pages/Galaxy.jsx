@@ -1,27 +1,43 @@
-import React, { useState } from 'react';
-import { Search, ChevronLeft, ChevronRight, Globe, User, Shield, Rocket } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, ChevronLeft, ChevronRight, Globe, User, Shield, Rocket, Loader2, AlertTriangle, RefreshCw } from 'lucide-react';
+import { useAccount } from 'wagmi';
+
+const API_BASE = 'http://213.246.39.151:24011/api';
 
 export function Galaxy() {
-  const [coordinates, setCoordinates] = useState({ galaxy: 1, system: 45, position: null });
-  
-  // Mock galaxy data
-  const systemData = [
-    { position: 1, type: 'planet', owner: null, name: 'Desolate World' },
-    { position: 2, type: 'empty', owner: null },
-    { position: 3, type: 'planet', owner: 'Commander_X', name: 'Nova Prime', alliance: 'VDC' },
-    { position: 4, type: 'planet', owner: null, name: 'Rocky Outpost' },
-    { position: 5, type: 'empty', owner: null },
-    { position: 6, type: 'planet', owner: null, name: 'Gas Giant IV' },
-    { position: 7, type: 'planet', owner: 'YOU', name: 'Alpha Prime', isYours: true },
-    { position: 8, type: 'planet', owner: 'Zerg_Rush', name: 'Hive World', alliance: 'SWM' },
-    { position: 9, type: 'debris', owner: null },
-    { position: 10, type: 'planet', owner: null, name: 'Frozen Moon' },
-    { position: 11, type: 'empty', owner: null },
-    { position: 12, type: 'planet', owner: 'AI_Agent_7', name: 'Neural Hub', isAI: true },
-    { position: 13, type: 'planet', owner: null, name: 'Desert World' },
-    { position: 14, type: 'empty', owner: null },
-    { position: 15, type: 'planet', owner: 'WarLord99', name: 'Fortress Prime', alliance: 'DRK' },
-  ];
+  const { address, isConnected } = useAccount();
+  const [coordinates, setCoordinates] = useState({ galaxy: 1, system: 1, position: null });
+  const [systemData, setSystemData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch system data from API
+  useEffect(() => {
+    async function fetchSystemData() {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const res = await fetch(`${API_BASE}/galaxy?galaxy=${coordinates.galaxy}&system=${coordinates.system}`);
+        
+        if (!res.ok) {
+          throw new Error(`API error: ${res.status}`);
+        }
+        
+        const data = await res.json();
+        setSystemData(data.planets || []);
+      } catch (err) {
+        console.error('Failed to fetch galaxy data:', err);
+        setError(err.message);
+        // Set empty data on error
+        setSystemData([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchSystemData();
+  }, [coordinates.galaxy, coordinates.system]);
 
   const navigateSystem = (delta) => {
     setCoordinates(prev => ({
@@ -37,6 +53,11 @@ export function Galaxy() {
     }));
   };
 
+  const refreshData = () => {
+    // Trigger re-fetch by updating a dependency
+    setCoordinates(prev => ({ ...prev }));
+  };
+
   return (
     <div className="min-h-screen relative">
       <div className="stars-bg" />
@@ -47,7 +68,7 @@ export function Galaxy() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
             <h1 className="font-display text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
-              <Globe className="w-8 h-8 text-accent" />
+              <Globe className="w-8 h-8 text-cyan-400" />
               GALAXY MAP
             </h1>
             <p className="text-gray-400 mt-1">
@@ -72,11 +93,11 @@ export function Galaxy() {
             {/* Galaxy Selector */}
             <div className="flex items-center gap-2">
               <span className="text-gray-400 text-sm">Galaxy:</span>
-              <button onClick={() => navigateGalaxy(-1)} className="p-2 hover:bg-white/10 rounded">
+              <button onClick={() => navigateGalaxy(-1)} className="p-2 hover:bg-white/10 rounded" disabled={coordinates.galaxy <= 1}>
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <span className="font-mono text-accent w-8 text-center">{coordinates.galaxy}</span>
-              <button onClick={() => navigateGalaxy(1)} className="p-2 hover:bg-white/10 rounded">
+              <span className="font-mono text-cyan-400 w-8 text-center">{coordinates.galaxy}</span>
+              <button onClick={() => navigateGalaxy(1)} className="p-2 hover:bg-white/10 rounded" disabled={coordinates.galaxy >= 9}>
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -84,27 +105,44 @@ export function Galaxy() {
             {/* System Selector */}
             <div className="flex items-center gap-2">
               <span className="text-gray-400 text-sm">System:</span>
-              <button onClick={() => navigateSystem(-10)} className="p-2 hover:bg-white/10 rounded text-xs">-10</button>
-              <button onClick={() => navigateSystem(-1)} className="p-2 hover:bg-white/10 rounded">
+              <button onClick={() => navigateSystem(-10)} className="p-2 hover:bg-white/10 rounded text-xs" disabled={coordinates.system <= 10}>-10</button>
+              <button onClick={() => navigateSystem(-1)} className="p-2 hover:bg-white/10 rounded" disabled={coordinates.system <= 1}>
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <input
                 type="number"
                 value={coordinates.system}
                 onChange={(e) => setCoordinates(prev => ({ ...prev, system: Math.max(1, Math.min(499, parseInt(e.target.value) || 1)) }))}
-                className="font-mono text-accent bg-black/30 border border-white/10 rounded w-16 text-center py-1"
+                className="font-mono text-cyan-400 bg-black/30 border border-white/10 rounded w-16 text-center py-1"
               />
-              <button onClick={() => navigateSystem(1)} className="p-2 hover:bg-white/10 rounded">
+              <button onClick={() => navigateSystem(1)} className="p-2 hover:bg-white/10 rounded" disabled={coordinates.system >= 499}>
                 <ChevronRight className="w-4 h-4" />
               </button>
-              <button onClick={() => navigateSystem(10)} className="p-2 hover:bg-white/10 rounded text-xs">+10</button>
+              <button onClick={() => navigateSystem(10)} className="p-2 hover:bg-white/10 rounded text-xs" disabled={coordinates.system >= 489}>+10</button>
             </div>
             
             <div className="font-mono text-white">
               [{coordinates.galaxy}:{coordinates.system}]
             </div>
+
+            {/* Refresh Button */}
+            <button 
+              onClick={refreshData}
+              className="p-2 hover:bg-white/10 rounded text-gray-400 hover:text-white transition-colors"
+              disabled={loading}
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            </button>
           </div>
         </div>
+
+        {/* Error Banner */}
+        {error && (
+          <div className="mb-4 p-4 bg-red-500/20 border border-red-500/50 rounded text-red-400 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            Failed to load galaxy data: {error}
+          </div>
+        )}
 
         {/* System View */}
         <div className="panel overflow-hidden">
@@ -117,17 +155,33 @@ export function Galaxy() {
             <div className="col-span-4 text-right">Actions</div>
           </div>
           
-          {/* Planet Rows */}
-          <div className="divide-y divide-white/5">
-            {systemData.map((planet) => (
-              <PlanetRow
-                key={planet.position}
-                planet={planet}
-                galaxy={coordinates.galaxy}
-                system={coordinates.system}
-              />
-            ))}
-          </div>
+          {/* Loading State */}
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+              <span className="ml-3 text-gray-400">Scanning system...</span>
+            </div>
+          ) : systemData.length > 0 ? (
+            /* Planet Rows */
+            <div className="divide-y divide-white/5">
+              {systemData.map((planet) => (
+                <PlanetRow
+                  key={planet.position}
+                  planet={planet}
+                  galaxy={coordinates.galaxy}
+                  system={coordinates.system}
+                  userAddress={address}
+                />
+              ))}
+            </div>
+          ) : (
+            /* Empty State */
+            <div className="text-center py-12 text-gray-500">
+              <Globe className="w-12 h-12 mx-auto mb-3 opacity-30" />
+              <p>No planets found in this system</p>
+              <p className="text-sm">Try exploring a different system</p>
+            </div>
+          )}
         </div>
 
         {/* Legend */}
@@ -158,7 +212,7 @@ export function Galaxy() {
   );
 }
 
-function PlanetRow({ planet, galaxy, system }) {
+function PlanetRow({ planet, galaxy, system, userAddress }) {
   if (planet.type === 'empty') {
     return (
       <div className="grid grid-cols-12 gap-2 p-4 text-gray-500 items-center">
@@ -186,8 +240,10 @@ function PlanetRow({ planet, galaxy, system }) {
     );
   }
 
-  const isYours = planet.isYours;
-  const isEnemy = planet.owner && !planet.isYours;
+  // Check ownership
+  const isYours = planet.ownerAddress && userAddress && 
+    planet.ownerAddress.toLowerCase() === userAddress.toLowerCase();
+  const isEnemy = planet.owner && !isYours;
   const isAI = planet.isAI;
   const isColonizable = !planet.owner;
 
@@ -202,7 +258,7 @@ function PlanetRow({ planet, galaxy, system }) {
         <span className={`w-3 h-3 rounded-full ${
           isYours ? 'bg-green-500' : isAI ? 'bg-purple-500' : isColonizable ? 'bg-cyan-500' : 'bg-red-500'
         }`} />
-        <span className={isYours ? 'text-green-400 font-medium' : 'text-white'}>{planet.name}</span>
+        <span className={isYours ? 'text-green-400 font-medium' : 'text-white'}>{planet.name || 'Unknown Planet'}</span>
       </div>
       <div className="col-span-2 flex items-center gap-2">
         {planet.owner ? (
@@ -227,7 +283,7 @@ function PlanetRow({ planet, galaxy, system }) {
         {isYours ? (
           <span className="text-green-400 text-sm">Your Colony</span>
         ) : isColonizable ? (
-          <button className="px-3 py-1 text-xs bg-cyan-500/20 text-accent border border-cyan-500/50 rounded hover:bg-cyan-500/30">
+          <button className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 rounded hover:bg-cyan-500/30">
             Colonize
           </button>
         ) : (
