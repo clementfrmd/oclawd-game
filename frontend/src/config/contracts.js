@@ -1,20 +1,16 @@
-// Oclawd Smart Contract Addresses - Base Sepolia
+// Void Conquest Contract Addresses - Base Sepolia
 export const CONTRACTS = {
-  OclawdNFT: "0xE7aeC0BB5bB4A60e48629300d3b09318327f0210",
-  OclawdGame: "0x53298c20D3E29F9854A077AfB97dB9b0F713E4DD",
-  chainId: 84532,
-  network: "Base Sepolia"
+  voidToken: "0x7c010025DD07414E447de1958BfEfE3d1DE553e3",
+  voidGame: "0x2E93692fD8a859A8882B5B0fc3753D97A29b92Ea",
+  voidBoosts: "0x0ebC3201aaD226f933e256c6FDC0c55Ed9290934",
 };
 
-export const CHAIN_CONFIG = {
-  id: 84532,
-  name: "Base Sepolia",
-  network: "base-sepolia",
-  rpcUrls: {
-    default: { http: ["https://sepolia.base.org"] },
-  },
-  blockExplorers: {
-    default: { name: "BaseScan", url: "https://sepolia.basescan.org" },
-  },
-  testnet: true,
-};
+export const CHAIN_ID = 84532; // Base Sepolia
+
+// Block explorer
+export const EXPLORER_URL = "https://sepolia.basescan.org";
+
+// Contract links
+export const getTokenUrl = () => `${EXPLORER_URL}/token/${CONTRACTS.voidToken}`;
+export const getGameUrl = () => `${EXPLORER_URL}/address/${CONTRACTS.voidGame}`;
+export const getBoostsUrl = () => `${EXPLORER_URL}/address/${CONTRACTS.voidBoosts}`;
