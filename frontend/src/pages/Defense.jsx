@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Shield, Crosshair, Clock, Plus, Lock, Info, Zap, Target } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Shield, Crosshair, Clock, Plus, Lock, Info, Zap, Target, Loader2, CheckCircle } from 'lucide-react';
 import { useAccount } from 'wagmi';
+import { ENDPOINTS } from '../config/api';
 
 // Defense definitions from game design
 const DEFENSES = [
@@ -31,36 +32,88 @@ const CATEGORIES = [
   { id: 'missiles', name: 'Missiles', icon: <Zap className="w-4 h-4" /> },
 ];
 
+// Map frontend resource names to backend names for cost display
+const RESOURCE_DISPLAY = {
+  ore: 'metal',
+  crystal: 'crystal',
+  plasma: 'deuterium',
+};
+
 export function Defense() {
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const [selectedCategory, setSelectedCategory] = useState('light');
   const [selectedDefense, setSelectedDefense] = useState(null);
   const [buildAmount, setBuildAmount] = useState(1);
   
-  // Mock player defenses
-  const [playerDefenses] = useState({
-    'pulse-turret': 0,
-    'laser-battery': 0,
-    'small-shield': 0,
-  });
+  // State for backend data
+  const [playerDefenses, setPlayerDefenses] = useState({});
+  const [resources, setResources] = useState({ metal: 0, crystal: 0, deuterium: 0, energy: 0 });
+  const [loading, setLoading] = useState(true);
+  const [building, setBuilding] = useState(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [buildingDefenses, setBuildingDefenses] = useState([]);
   
-  // Mock resources
-  const [resources] = useState({ ore: 500, crystal: 300, plasma: 100, energy: 50 });
+  // Fetch defense data and resources on mount
+  useEffect(() => {
+    if (!isConnected || !address) {
+      setLoading(false);
+      return;
+    }
+
+    async function fetchData() {
+      try {
+        setLoading(true);
+        
+        // Fetch defenses
+        const defRes = await fetch(ENDPOINTS.defense(address));
+        const defData = await defRes.json();
+        
+        // Fetch resources
+        const resRes = await fetch(ENDPOINTS.resources(address));
+        const resData = await resRes.json();
+        
+        if (defData.defenses) {
+          // Convert array to map by defense type
+          const defenseMap = {};
+          const buildingList = [];
+          defData.defenses.forEach(d => {
+            defenseMap[d.defenseType] = d.quantity || 0;
+            if (d.isBuilding) {
+              buildingList.push(d.defenseType);
+            }
+          });
+          setPlayerDefenses(defenseMap);
+          setBuildingDefenses(buildingList);
+        }
+        
+        if (resData.resources) {
+          setResources(resData.resources);
+        }
+      } catch (err) {
+        console.error('Failed to fetch defense data:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
+  }, [isConnected, address]);
   
-  // Mock facilities check
-  const [facilities] = useState({
-    'defense-platform': 0,
-  });
-  
-  const hasDefensePlatform = (facilities['defense-platform'] || 0) > 0;
+  // Check if player has defense platform (missile_silo facility)
+  const hasDefensePlatform = true; // TODO: Check from facilities if needed
   
   const filteredDefenses = DEFENSES.filter(d => d.category === selectedCategory);
   
   const canAfford = (defense, amount = 1) => {
     if (!defense.baseCost) return true;
-    return Object.entries(defense.baseCost).every(([resource, cost]) => 
-      resources[resource] >= cost * amount
-    );
+    return Object.entries(defense.baseCost).every(([resource, cost]) => {
+      const backendResource = RESOURCE_DISPLAY[resource] || resource;
+      return (resources[backendResource] || 0) >= cost * amount;
+    });
   };
   
   const buildTime = (defense, amount = 1) => {
@@ -80,6 +133,59 @@ export function Defense() {
     return costs;
   };
 
+  const handleBuild = async (defense, amount) => {
+    if (!address || building) return;
+    
+    setBuilding(defense.id);
+    setError(null);
+    setSuccess(null);
+    
+    try {
+      const response = await fetch(ENDPOINTS.buildDefense(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          playerAddress: address,
+          defenseType: defense.id,
+          quantity: amount,
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to build defense');
+      }
+      
+      setSuccess(`Building ${amount}x ${defense.name}!`);
+      
+      // Refresh data
+      const defRes = await fetch(ENDPOINTS.defense(address));
+      const defData = await defRes.json();
+      if (defData.defenses) {
+        const defenseMap = {};
+        const buildingList = [];
+        defData.defenses.forEach(d => {
+          defenseMap[d.defenseType] = d.quantity || 0;
+          if (d.isBuilding) {
+            buildingList.push(d.defenseType);
+          }
+        });
+        setPlayerDefenses(defenseMap);
+        setBuildingDefenses(buildingList);
+      }
+      
+      const resRes = await fetch(ENDPOINTS.resources(address));
+      const resData = await resRes.json();
+      if (resData.resources) setResources(resData.resources);
+      
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBuilding(null);
+    }
+  };
+
   if (!isConnected) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -92,6 +198,14 @@ export function Defense() {
     );
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-red-400" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen p-6">
       {/* Header */}
@@ -100,18 +214,38 @@ export function Defense() {
         <p className="text-slate-400">Build defensive structures to protect your colony</p>
       </div>
       
-      {/* Requirement Notice */}
-      {!hasDefensePlatform && (
-        <div className="bg-amber-900/30 border border-amber-700/50 rounded-lg p-4 mb-6">
-          <div className="flex items-start gap-3">
-            <Lock className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-amber-300 font-medium">Defense Platform Required</p>
-              <p className="text-amber-400/80 text-sm mt-1">
-                Build a <strong>Defense Platform</strong> in the Facilities tab to construct defensive structures.
-              </p>
-            </div>
+      {/* Resources Bar */}
+      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 mb-6">
+        <div className="grid grid-cols-4 gap-4 text-center">
+          <div>
+            <div className="text-sm text-slate-400">Metal</div>
+            <div className="text-lg font-bold text-orange-400">{Math.floor(resources.metal || 0).toLocaleString()}</div>
           </div>
+          <div>
+            <div className="text-sm text-slate-400">Crystal</div>
+            <div className="text-lg font-bold text-cyan-400">{Math.floor(resources.crystal || 0).toLocaleString()}</div>
+          </div>
+          <div>
+            <div className="text-sm text-slate-400">Deuterium</div>
+            <div className="text-lg font-bold text-purple-400">{Math.floor(resources.deuterium || 0).toLocaleString()}</div>
+          </div>
+          <div>
+            <div className="text-sm text-slate-400">Energy</div>
+            <div className="text-lg font-bold text-yellow-400">{Math.floor(resources.energy || 0).toLocaleString()}</div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Success/Error Messages */}
+      {success && (
+        <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-4 mb-6 flex items-center gap-3">
+          <CheckCircle className="w-5 h-5 text-green-400" />
+          <span className="text-green-300">{success}</span>
+        </div>
+      )}
+      {error && (
+        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-4 mb-6">
+          <span className="text-red-300">{error}</span>
         </div>
       )}
       
@@ -154,6 +288,8 @@ export function Defense() {
           const affordable = canAfford(defense, buildAmount);
           const canBuild = affordable && hasDefensePlatform;
           const atLimit = defense.limit && count >= defense.limit;
+          const isBuilding = building === defense.id;
+          const isCurrentlyBuilding = buildingDefenses.includes(defense.id);
           
           return (
             <div
@@ -174,6 +310,11 @@ export function Defense() {
                     </span>
                   </div>
                 </div>
+                {isCurrentlyBuilding && (
+                  <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded">
+                    Building...
+                  </span>
+                )}
               </div>
               
               {/* Description */}
@@ -197,18 +338,22 @@ export function Defense() {
               
               {/* Cost */}
               <div className="flex flex-wrap gap-2 mb-3">
-                {Object.entries(totalCost(defense, buildAmount)).map(([resource, amount]) => (
-                  <span
-                    key={resource}
-                    className={`text-xs px-2 py-1 rounded ${
-                      resources[resource] >= amount
-                        ? 'bg-slate-700 text-slate-300'
-                        : 'bg-red-900/30 text-red-400'
-                    }`}
-                  >
-                    {resource}: {amount.toLocaleString()}
-                  </span>
-                ))}
+                {Object.entries(totalCost(defense, buildAmount)).map(([resource, amount]) => {
+                  const backendResource = RESOURCE_DISPLAY[resource] || resource;
+                  const hasEnough = (resources[backendResource] || 0) >= amount;
+                  return (
+                    <span
+                      key={resource}
+                      className={`text-xs px-2 py-1 rounded ${
+                        hasEnough
+                          ? 'bg-slate-700 text-slate-300'
+                          : 'bg-red-900/30 text-red-400'
+                      }`}
+                    >
+                      {backendResource}: {amount.toLocaleString()}
+                    </span>
+                  );
+                })}
               </div>
               
               {/* Amount & Build */}
@@ -233,14 +378,22 @@ export function Defense() {
                   )}
                 </div>
                 <button
-                  disabled={!canBuild || atLimit}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleBuild(defense, defense.limit ? 1 : buildAmount);
+                  }}
+                  disabled={!canBuild || atLimit || isBuilding}
                   className={`flex items-center gap-1 px-3 py-1.5 rounded text-sm font-medium transition ${
                     canBuild && !atLimit
                       ? 'bg-red-600 hover:bg-red-500 text-white'
                       : 'bg-slate-700 text-slate-500 cursor-not-allowed'
                   }`}
                 >
-                  <Plus className="w-4 h-4" />
+                  {isBuilding ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Plus className="w-4 h-4" />
+                  )}
                   {atLimit ? 'Max' : 'Build'}
                 </button>
               </div>
