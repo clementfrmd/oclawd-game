@@ -23,9 +23,11 @@ export const ENDPOINTS = {
   buildDefense: () => `${API_BASE}/defense/build`,
   cancelDefense: () => `${API_BASE}/defense/cancel`,
   
-  // Fleet
-  fleet: (address) => `${API_BASE}/fleet?address=${address}`,
-  buildFleet: () => `${API_BASE}/fleet/build`,
+  // Fleet/Ships
+  fleet: (address) => `${API_BASE}/fleets?address=${address}`,
+  ships: (address) => `${API_BASE}/ships/${address}`,
+  buildShip: () => `${API_BASE}/ships/build`,
+  fleetPower: (address) => `${API_BASE}/ships/${address}/power`,
   
   // Galaxy
   galaxy: (galaxy, system) => `${API_BASE}/galaxy?galaxy=${galaxy}&system=${system}`,

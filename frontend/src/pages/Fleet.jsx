@@ -1,450 +1,318 @@
 import React, { useState, useEffect } from 'react';
-import { Rocket, Shield, Zap, Target, Package, Eye, Plus, Minus, Loader2, AlertTriangle } from 'lucide-react';
+import { Rocket, Shield, Crosshair, Gauge, Package, Clock, Loader2, CheckCircle, Info } from 'lucide-react';
 import { useAccount } from 'wagmi';
+import { ENDPOINTS } from '../config/api';
 
 const API_BASE = 'https://expenditures-elimination-together-proposals.trycloudflare.com/api';
 
-const VESSELS = [
-  { id: 'scout_fighter', name: 'Scout Fighter', attack: 50, defense: 10, speed: 12500, cargo: 50, cost: { ore: 3000, crystal: 1000, plasma: 0 }, category: 'combat' },
-  { id: 'assault_fighter', name: 'Assault Fighter', attack: 150, defense: 25, speed: 10000, cargo: 100, cost: { ore: 6000, crystal: 4000, plasma: 0 }, category: 'combat' },
-  { id: 'strike_cruiser', name: 'Strike Cruiser', attack: 400, defense: 50, speed: 15000, cargo: 800, cost: { ore: 20000, crystal: 7000, plasma: 2000 }, category: 'combat' },
-  { id: 'dreadnought', name: 'Dreadnought', attack: 1000, defense: 200, speed: 10000, cargo: 1500, cost: { ore: 45000, crystal: 15000, plasma: 0 }, category: 'combat' },
-  { id: 'vanguard', name: 'Vanguard', attack: 700, defense: 400, speed: 10000, cargo: 750, cost: { ore: 30000, crystal: 40000, plasma: 15000 }, category: 'combat' },
-  { id: 'siege_bomber', name: 'Siege Bomber', attack: 1000, defense: 500, speed: 4000, cargo: 500, cost: { ore: 50000, crystal: 25000, plasma: 15000 }, category: 'combat' },
-  { id: 'annihilator', name: 'Annihilator', attack: 2000, defense: 500, speed: 5000, cargo: 2000, cost: { ore: 60000, crystal: 50000, plasma: 15000 }, category: 'combat' },
-  { id: 'titan', name: 'Titan', attack: 200000, defense: 900000, speed: 100, cargo: 1000000, cost: { ore: 5000000, crystal: 4000000, plasma: 1000000 }, category: 'combat' },
-  { id: 'courier', name: 'Courier', attack: 5, defense: 10, speed: 5000, cargo: 5000, cost: { ore: 2000, crystal: 2000, plasma: 0 }, category: 'support' },
-  { id: 'freighter', name: 'Freighter', attack: 5, defense: 25, speed: 7500, cargo: 25000, cost: { ore: 6000, crystal: 6000, plasma: 0 }, category: 'support' },
-  { id: 'pioneer', name: 'Pioneer', attack: 50, defense: 100, speed: 2500, cargo: 7500, cost: { ore: 10000, crystal: 20000, plasma: 10000 }, category: 'support' },
-  { id: 'salvager', name: 'Salvager', attack: 1, defense: 16, speed: 2000, cargo: 20000, cost: { ore: 10000, crystal: 6000, plasma: 2000 }, category: 'support' },
-  { id: 'shadow_probe', name: 'Shadow Probe', attack: 0, defense: 1, speed: 100000000, cargo: 5, cost: { ore: 0, crystal: 1000, plasma: 0 }, category: 'support' },
-  { id: 'voidrunner', name: 'Voidrunner', attack: 200, defense: 100, speed: 12000, cargo: 10000, cost: { ore: 8000, crystal: 15000, plasma: 8000 }, category: 'expedition' },
-];
-
 export function Fleet() {
   const { address, isConnected } = useAccount();
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [buildQueue, setBuildQueue] = useState({});
+  const [ships, setShips] = useState([]);
+  const [resources, setResources] = useState({ metal: 0, crystal: 0, deuterium: 0 });
   const [loading, setLoading] = useState(true);
+  const [building, setBuilding] = useState(null);
+  const [buildQty, setBuildQty] = useState(1);
   const [error, setError] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
-  
-  // Start with empty fleet - no mock data
-  const [myFleet, setMyFleet] = useState({});
-  const [resources, setResources] = useState({ ore: 0, crystal: 0, plasma: 0 });
+  const [success, setSuccess] = useState(null);
 
-  // Fetch fleet data from API
   useEffect(() => {
-    async function fetchFleetData() {
-      if (!isConnected || !address) {
-        setLoading(false);
-        return;
-      }
+    if (!isConnected || !address) {
+      setLoading(false);
+      return;
+    }
 
+    async function fetchData() {
       try {
         setLoading(true);
-        setError(null);
-
-        const res = await fetch(`${API_BASE}/fleets?address=${address}`);
         
-        if (!res.ok) {
-          throw new Error(`API error: ${res.status}`);
-        }
-
-        const data = await res.json();
+        // Fetch ships
+        const shipRes = await fetch(`${API_BASE}/ships/${address}`);
+        const shipData = await shipRes.json();
+        if (shipData.ships) setShips(shipData.ships);
         
-        // Set fleet from API response
-        setMyFleet(data.fleet || {});
-        setResources(data.resources || { ore: 0, crystal: 0, plasma: 0 });
+        // Fetch resources
+        const resRes = await fetch(ENDPOINTS.resources(address));
+        const resData = await resRes.json();
+        if (resData.resources) setResources(resData.resources);
+        
       } catch (err) {
-        console.error('Failed to fetch fleet data:', err);
+        console.error('Failed to fetch:', err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchFleetData();
+    fetchData();
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
   }, [isConnected, address]);
 
-  const categories = [
-    { id: 'all', label: 'All Vessels' },
-    { id: 'combat', label: 'Combat' },
-    { id: 'support', label: 'Support' },
-    { id: 'expedition', label: 'Expedition' },
-  ];
-
-  const filteredVessels = selectedCategory === 'all' 
-    ? VESSELS 
-    : VESSELS.filter(v => v.category === selectedCategory);
-
-  const totalPower = Object.entries(myFleet).reduce((acc, [id, count]) => {
-    const vessel = VESSELS.find(v => v.id === id);
-    return acc + (vessel ? vessel.attack * count : 0);
-  }, 0);
-
-  const totalShips = Object.values(myFleet).reduce((a, b) => a + b, 0);
-
-  const updateBuildQueue = (id, delta) => {
-    setBuildQueue(prev => ({
-      ...prev,
-      [id]: Math.max(0, (prev[id] || 0) + delta)
-    }));
-  };
-
-  // Calculate total cost of build queue
-  const buildQueueCost = Object.entries(buildQueue).reduce((acc, [id, count]) => {
-    if (count <= 0) return acc;
-    const vessel = VESSELS.find(v => v.id === id);
-    if (!vessel) return acc;
-    return {
-      ore: acc.ore + (vessel.cost.ore * count),
-      crystal: acc.crystal + (vessel.cost.crystal * count),
-      plasma: acc.plasma + (vessel.cost.plasma * count),
-    };
-  }, { ore: 0, crystal: 0, plasma: 0 });
-
-  const canAfford = resources.ore >= buildQueueCost.ore && 
-                    resources.crystal >= buildQueueCost.crystal && 
-                    resources.plasma >= buildQueueCost.plasma;
-
-  const handleStartConstruction = async () => {
-    if (!isConnected || !canAfford) return;
+  const handleBuild = async (ship) => {
+    if (!address || building) return;
     
-    const queueItems = Object.entries(buildQueue)
-      .filter(([_, count]) => count > 0)
-      .map(([id, count]) => ({ vesselId: id, count }));
+    setBuilding(ship.shipType);
+    setError(null);
+    setSuccess(null);
     
-    if (queueItems.length === 0) return;
-
     try {
-      setSubmitting(true);
-      const res = await fetch(`${API_BASE}/fleets/build`, {
+      const response = await fetch(`${API_BASE}/ships/build`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address, queue: queueItems })
+        body: JSON.stringify({
+          playerAddress: address,
+          shipType: ship.shipType,
+          quantity: buildQty,
+        }),
       });
-
-      if (!res.ok) throw new Error('Failed to start construction');
       
-      // Refresh data
-      const fleetRes = await fetch(`${API_BASE}/fleets?address=${address}`);
-      if (fleetRes.ok) {
-        const data = await fleetRes.json();
-        setMyFleet(data.fleet || {});
-        setResources(data.resources || { ore: 0, crystal: 0, plasma: 0 });
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to build');
       }
       
-      // Clear queue
-      setBuildQueue({});
+      setSuccess(`Building ${buildQty}x ${ship.name}!`);
+      setBuildQty(1);
+      
+      // Refresh data
+      const shipRes = await fetch(`${API_BASE}/ships/${address}`);
+      const shipData = await shipRes.json();
+      if (shipData.ships) setShips(shipData.ships);
+      
+      const resRes = await fetch(ENDPOINTS.resources(address));
+      const resData = await resRes.json();
+      if (resData.resources) setResources(resData.resources);
+      
     } catch (err) {
-      console.error('Construction error:', err);
       setError(err.message);
     } finally {
-      setSubmitting(false);
+      setBuilding(null);
     }
   };
 
-  // Loading state
-  if (loading) {
+  const canAfford = (ship, qty = 1) => {
+    if (!ship.cost) return false;
     return (
-      <div className="min-h-screen relative flex items-center justify-center">
-        <div className="stars-bg" />
-        <div className="nebula" />
-        <div className="relative text-center">
-          <Loader2 className="w-12 h-12 text-sky-400 animate-spin mx-auto mb-4" />
-          <p className="text-gray-400">Loading fleet data...</p>
+      (resources.metal || 0) >= (ship.cost.metal || 0) * qty &&
+      (resources.crystal || 0) >= (ship.cost.crystal || 0) * qty &&
+      (resources.deuterium || 0) >= (ship.cost.deuterium || 0) * qty
+    );
+  };
+
+  const formatTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    if (hours > 0) return `${hours}h ${minutes}m`;
+    return `${minutes}m`;
+  };
+
+  const getTimeRemaining = (completesAt) => {
+    if (!completesAt) return null;
+    const remaining = Math.max(0, Math.floor((new Date(completesAt) - Date.now()) / 1000));
+    return formatTime(remaining);
+  };
+
+  // Calculate fleet summary
+  const totalShips = ships.reduce((sum, s) => sum + (s.quantity || 0), 0);
+  const totalAttack = ships.reduce((sum, s) => sum + (s.stats?.attack || 0) * (s.quantity || 0), 0);
+  const totalShields = ships.reduce((sum, s) => sum + (s.stats?.shields || 0) * (s.quantity || 0), 0);
+
+  if (!isConnected) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Rocket className="w-16 h-16 mx-auto mb-4 text-slate-500" />
+          <h2 className="text-xl font-bold text-slate-300">Connect Wallet</h2>
+          <p className="text-slate-500 mt-2">Connect your wallet to manage your fleet</p>
         </div>
       </div>
     );
   }
 
-  // Not connected state
-  if (!isConnected) {
+  if (loading) {
     return (
-      <div className="min-h-screen relative flex items-center justify-center">
-        <div className="stars-bg" />
-        <div className="nebula" />
-        <div className="relative text-center panel p-8">
-          <Rocket className="w-16 h-16 text-orange-400 mx-auto mb-4" />
-          <h2 className="font-display text-2xl text-white mb-2">Connect Your Wallet</h2>
-          <p className="text-gray-400 mb-4">Connect your wallet to access Fleet Command</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-sky-400" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen relative">
-      <div className="stars-bg" />
-      <div className="nebula" />
-      
-      <div className="relative max-w-7xl mx-auto px-4 py-8">
-        {/* Error Banner */}
-        {error && (
-          <div className="mb-4 p-4 bg-red-500/20 border border-red-500/50 rounded text-red-400 flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" />
-            {error}
-          </div>
-        )}
+    <div className="min-h-screen p-6">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-slate-100">Shipyard</h1>
+        <p className="text-slate-400">Build and manage your fleet</p>
+      </div>
 
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      {/* Resources Bar */}
+      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 mb-6">
+        <div className="grid grid-cols-4 gap-4 text-center">
           <div>
-            <h1 className="font-display text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
-              <Rocket className="w-8 h-8 text-orange-400" />
-              FLEET COMMAND
-            </h1>
-            <p className="text-gray-400 mt-1">
-              Build and manage your armada
+            <div className="text-sm text-slate-400">Metal</div>
+            <div className="text-lg font-bold text-orange-400">{Math.floor(resources.metal || 0).toLocaleString()}</div>
+          </div>
+          <div>
+            <div className="text-sm text-slate-400">Crystal</div>
+            <div className="text-lg font-bold text-cyan-400">{Math.floor(resources.crystal || 0).toLocaleString()}</div>
+          </div>
+          <div>
+            <div className="text-sm text-slate-400">Deuterium</div>
+            <div className="text-lg font-bold text-purple-400">{Math.floor(resources.deuterium || 0).toLocaleString()}</div>
+          </div>
+          <div>
+            <div className="text-sm text-slate-400">Fleet Power</div>
+            <div className="text-lg font-bold text-red-400">{(totalAttack + totalShields).toLocaleString()}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Fleet Summary */}
+      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 mb-6">
+        <h2 className="text-lg font-bold text-slate-100 mb-3">Fleet Summary</h2>
+        <div className="grid grid-cols-3 gap-4 text-center">
+          <div>
+            <Rocket className="w-6 h-6 mx-auto mb-1 text-sky-400" />
+            <div className="text-2xl font-bold text-slate-100">{totalShips}</div>
+            <div className="text-sm text-slate-500">Total Ships</div>
+          </div>
+          <div>
+            <Crosshair className="w-6 h-6 mx-auto mb-1 text-red-400" />
+            <div className="text-2xl font-bold text-slate-100">{totalAttack.toLocaleString()}</div>
+            <div className="text-sm text-slate-500">Attack Power</div>
+          </div>
+          <div>
+            <Shield className="w-6 h-6 mx-auto mb-1 text-blue-400" />
+            <div className="text-2xl font-bold text-slate-100">{totalShields.toLocaleString()}</div>
+            <div className="text-sm text-slate-500">Shield Power</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Messages */}
+      {success && (
+        <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-4 mb-6 flex items-center gap-3">
+          <CheckCircle className="w-5 h-5 text-green-400" />
+          <span className="text-green-300">{success}</span>
+        </div>
+      )}
+      {error && (
+        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-4 mb-6">
+          <span className="text-red-300">{error}</span>
+        </div>
+      )}
+
+      {/* Info Box */}
+      <div className="bg-sky-900/20 border border-sky-700/50 rounded-lg p-4 mb-6">
+        <div className="flex items-start gap-3">
+          <Info className="w-5 h-5 text-sky-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sky-300 font-medium">Building Ships</p>
+            <p className="text-sky-400/80 text-sm mt-1">
+              Ships require a Shipyard facility. Higher shipyard levels unlock more ship types and reduce build times.
+              Ships consume deuterium when traveling.
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* Ship Grid */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {ships.map(ship => {
+          const affordable = canAfford(ship, buildQty);
+          const isBuilding = building === ship.shipType;
+          const timeRemaining = getTimeRemaining(ship.buildCompletesAt);
           
-          {/* Fleet Stats */}
-          <div className="flex gap-6">
-            <div className="text-center">
-              <div className="font-mono text-2xl text-white">{totalShips}</div>
-              <div className="text-gray-400 text-sm">Total Ships</div>
-            </div>
-            <div className="text-center">
-              <div className="font-mono text-2xl text-orange-400">{totalPower.toLocaleString()}</div>
-              <div className="text-gray-400 text-sm">Fleet Power</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Resources Available */}
-        <div className="panel p-4 mb-6">
-          <div className="flex items-center justify-between">
-            <span className="text-gray-400">Available Resources:</span>
-            <div className="flex gap-4">
-              <span className="flex items-center gap-1 text-amber-500">
-                <img src="/assets/resources/ore.svg" alt="Ore" className="w-5 h-5" />
-                {resources.ore.toLocaleString()}
-              </span>
-              <span className="flex items-center gap-1 text-sky-500">
-                <img src="/assets/resources/crystal.svg" alt="Crystal" className="w-5 h-5" />
-                {resources.crystal.toLocaleString()}
-              </span>
-              <span className="flex items-center gap-1 text-violet-500">
-                <img src="/assets/resources/plasma.svg" alt="Plasma" className="w-5 h-5" />
-                {resources.plasma.toLocaleString()}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Category Tabs */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`px-4 py-2 rounded font-medium whitespace-nowrap transition-all ${
-                selectedCategory === cat.id
-                  ? 'bg-sky-600/20 text-sky-400 border border-sky-600/50'
-                  : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10'
-              }`}
+          return (
+            <div
+              key={ship.id}
+              className="bg-slate-800/50 border border-slate-700 rounded-lg p-4"
             >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Empty Fleet Message */}
-        {totalShips === 0 && (
-          <div className="panel p-6 mb-6 text-center">
-            <Rocket className="w-12 h-12 text-gray-500 mx-auto mb-3 opacity-50" />
-            <h3 className="text-white text-lg mb-2">No Vessels Yet</h3>
-            <p className="text-gray-400">
-              Build facilities to produce resources, then construct your first ships!
-            </p>
-          </div>
-        )}
-
-        {/* Vessel Grid */}
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4 pb-24">
-          {filteredVessels.map((vessel) => (
-            <VesselCard
-              key={vessel.id}
-              vessel={vessel}
-              owned={myFleet[vessel.id] || 0}
-              buildCount={buildQueue[vessel.id] || 0}
-              onBuildChange={(delta) => updateBuildQueue(vessel.id, delta)}
-              resources={resources}
-            />
-          ))}
-        </div>
-
-        {/* Build Summary */}
-        {Object.values(buildQueue).some(v => v > 0) && (
-          <div className="fixed bottom-0 left-0 right-0 bg-black/90 border-t border-sky-600/30 p-4 backdrop-blur-xl">
-            <div className="max-w-7xl mx-auto">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex-1">
-                  <div className="text-gray-400 mb-1">Build Queue:</div>
-                  <div className="flex flex-wrap gap-2">
-                    {Object.entries(buildQueue)
-                      .filter(([_, count]) => count > 0)
-                      .map(([id, count]) => {
-                        const vessel = VESSELS.find(v => v.id === id);
-                        return (
-                          <span key={id} className="bg-white/10 px-2 py-1 rounded text-sm">
-                            <span className="text-white">{count}x</span>{' '}
-                            <span className="text-sky-400">{vessel?.name}</span>
-                          </span>
-                        );
-                      })}
-                  </div>
-                  <div className="flex gap-4 mt-2 text-sm">
-                    <span className={`flex items-center gap-1 ${buildQueueCost.ore > resources.ore ? 'text-red-400' : 'text-amber-500'}`}>
-                      <img src="/assets/resources/ore.svg" alt="Ore" className="w-4 h-4" />
-                      {buildQueueCost.ore.toLocaleString()}
-                    </span>
-                    <span className={`flex items-center gap-1 ${buildQueueCost.crystal > resources.crystal ? 'text-red-400' : 'text-sky-500'}`}>
-                      <img src="/assets/resources/crystal.svg" alt="Crystal" className="w-4 h-4" />
-                      {buildQueueCost.crystal.toLocaleString()}
-                    </span>
-                    <span className={`flex items-center gap-1 ${buildQueueCost.plasma > resources.plasma ? 'text-red-400' : 'text-violet-500'}`}>
-                      <img src="/assets/resources/plasma.svg" alt="Plasma" className="w-4 h-4" />
-                      {buildQueueCost.plasma.toLocaleString()}
-                    </span>
-                  </div>
+              {/* Header */}
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h3 className="font-bold text-slate-100">{ship.name}</h3>
+                  <span className="text-sm text-slate-500">Owned: {ship.quantity}</span>
                 </div>
-                <button 
-                  onClick={handleStartConstruction}
-                  disabled={!canAfford || submitting}
-                  className={`py-2 px-6 rounded font-medium ${
-                    canAfford 
-                      ? 'btn-primary' 
-                      : 'bg-gray-500/20 text-gray-500 border border-gray-500/30 cursor-not-allowed'
+                {ship.isBuilding && (
+                  <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded flex items-center gap-1">
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                    {ship.building}x ({timeRemaining})
+                  </span>
+                )}
+              </div>
+              
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-2 mb-3 text-xs">
+                <div className="bg-slate-700/50 rounded p-2 text-center">
+                  <Crosshair className="w-4 h-4 mx-auto mb-1 text-red-400" />
+                  <div className="text-slate-300">{ship.stats?.attack}</div>
+                </div>
+                <div className="bg-slate-700/50 rounded p-2 text-center">
+                  <Shield className="w-4 h-4 mx-auto mb-1 text-blue-400" />
+                  <div className="text-slate-300">{ship.stats?.shields}</div>
+                </div>
+                <div className="bg-slate-700/50 rounded p-2 text-center">
+                  <Package className="w-4 h-4 mx-auto mb-1 text-green-400" />
+                  <div className="text-slate-300">{ship.stats?.cargo}</div>
+                </div>
+              </div>
+              
+              {/* Cost */}
+              <div className="flex flex-wrap gap-2 mb-3">
+                {ship.cost && Object.entries(ship.cost).filter(([,v]) => v > 0).map(([resource, amount]) => (
+                  <span
+                    key={resource}
+                    className={`text-xs px-2 py-1 rounded ${
+                      (resources[resource] || 0) >= amount * buildQty
+                        ? 'bg-slate-700 text-slate-300'
+                        : 'bg-red-900/30 text-red-400'
+                    }`}
+                  >
+                    {resource}: {(amount * buildQty).toLocaleString()}
+                  </span>
+                ))}
+              </div>
+              
+              {/* Build Controls */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-slate-500 flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    {formatTime((ship.buildTime || 60) * buildQty)}
+                  </span>
+                  <select
+                    value={buildQty}
+                    onChange={(e) => setBuildQty(parseInt(e.target.value))}
+                    className="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-xs text-slate-300"
+                  >
+                    <option value={1}>×1</option>
+                    <option value={5}>×5</option>
+                    <option value={10}>×10</option>
+                    <option value={25}>×25</option>
+                  </select>
+                </div>
+                <button
+                  onClick={() => handleBuild(ship)}
+                  disabled={!affordable || isBuilding || ship.isBuilding}
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded text-sm font-medium transition ${
+                    affordable && !ship.isBuilding
+                      ? 'bg-sky-600 hover:bg-sky-500 text-white'
+                      : 'bg-slate-700 text-slate-500 cursor-not-allowed'
                   }`}
                 >
-                  {submitting ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : canAfford ? (
-                    'Start Construction'
+                  {isBuilding ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    'Insufficient Resources'
+                    <Rocket className="w-4 h-4" />
                   )}
+                  Build
                 </button>
               </div>
             </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function VesselCard({ vessel, owned, buildCount, onBuildChange, resources }) {
-  const categoryColors = {
-    combat: 'border-red-500/30 hover:border-red-500/50',
-    support: 'border-blue-500/30 hover:border-blue-500/50',
-    expedition: 'border-purple-500/30 hover:border-purple-500/50',
-  };
-
-  const categoryIcons = {
-    combat: <Target className="w-5 h-5 text-red-400" />,
-    support: <Package className="w-5 h-5 text-blue-400" />,
-    expedition: <Eye className="w-5 h-5 text-purple-400" />,
-  };
-
-  // Check if player can afford at least one
-  const canAffordOne = resources.ore >= vessel.cost.ore && 
-                       resources.crystal >= vessel.cost.crystal && 
-                       resources.plasma >= vessel.cost.plasma;
-
-  return (
-    <div className={`panel ${categoryColors[vessel.category]} p-4 transition-all`}>
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-2">
-          {categoryIcons[vessel.category]}
-          <h3 className="font-display text-lg text-white">{vessel.name}</h3>
-        </div>
-        {owned > 0 && (
-          <span className="px-2 py-1 bg-green-500/20 text-green-400 text-sm font-mono rounded">
-            {owned}
-          </span>
-        )}
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-4 gap-2 mb-4 text-sm">
-        <div className="text-center p-2 bg-black/30 rounded">
-          <div className="text-red-400 font-mono">{vessel.attack}</div>
-          <div className="text-gray-500 text-xs">ATK</div>
-        </div>
-        <div className="text-center p-2 bg-black/30 rounded">
-          <div className="text-blue-400 font-mono">{vessel.defense}</div>
-          <div className="text-gray-500 text-xs">DEF</div>
-        </div>
-        <div className="text-center p-2 bg-black/30 rounded">
-          <div className="text-sky-400 font-mono">{vessel.speed >= 1000000 ? 'MAX' : vessel.speed}</div>
-          <div className="text-gray-500 text-xs">SPD</div>
-        </div>
-        <div className="text-center p-2 bg-black/30 rounded">
-          <div className="text-yellow-400 font-mono">{vessel.cargo >= 1000 ? `${Math.floor(vessel.cargo/1000)}k` : vessel.cargo}</div>
-          <div className="text-gray-500 text-xs">CARGO</div>
-        </div>
-      </div>
-
-      {/* Cost */}
-      <div className="flex gap-3 mb-4 text-sm">
-        {vessel.cost.ore > 0 && (
-          <span className={`flex items-center gap-1 ${vessel.cost.ore > resources.ore ? 'text-red-400' : 'text-amber-500'}`}>
-            <img src="/assets/resources/ore.svg" alt="Ore" className="w-4 h-4" />
-            {vessel.cost.ore.toLocaleString()}
-          </span>
-        )}
-        {vessel.cost.crystal > 0 && (
-          <span className={`flex items-center gap-1 ${vessel.cost.crystal > resources.crystal ? 'text-red-400' : 'text-sky-500'}`}>
-            <img src="/assets/resources/crystal.svg" alt="Crystal" className="w-4 h-4" />
-            {vessel.cost.crystal.toLocaleString()}
-          </span>
-        )}
-        {vessel.cost.plasma > 0 && (
-          <span className={`flex items-center gap-1 ${vessel.cost.plasma > resources.plasma ? 'text-red-400' : 'text-violet-500'}`}>
-            <img src="/assets/resources/plasma.svg" alt="Plasma" className="w-4 h-4" />
-            {vessel.cost.plasma.toLocaleString()}
-          </span>
-        )}
-      </div>
-
-      {/* Build Controls */}
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => onBuildChange(-1)}
-          className="p-2 bg-white/10 rounded hover:bg-white/20 transition-colors disabled:opacity-30"
-          disabled={buildCount === 0}
-        >
-          <Minus className="w-4 h-4" />
-        </button>
-        <input
-          type="number"
-          value={buildCount}
-          onChange={(e) => onBuildChange(parseInt(e.target.value) - buildCount || 0)}
-          className="flex-1 bg-black/30 border border-white/10 rounded px-3 py-2 text-center font-mono"
-          min="0"
-        />
-        <button
-          onClick={() => onBuildChange(1)}
-          className={`p-2 rounded transition-colors ${canAffordOne ? 'bg-white/10 hover:bg-white/20' : 'bg-white/5 opacity-30 cursor-not-allowed'}`}
-          disabled={!canAffordOne}
-        >
-          <Plus className="w-4 h-4" />
-        </button>
-        <button
-          onClick={() => onBuildChange(10)}
-          className={`px-3 py-2 border rounded text-sm ${
-            canAffordOne 
-              ? 'bg-sky-600/20 text-sky-400 border-sky-600/50 hover:bg-sky-600/30' 
-              : 'bg-white/5 text-gray-500 border-white/10 cursor-not-allowed'
-          }`}
-          disabled={!canAffordOne}
-        >
-          +10
-        </button>
+          );
+        })}
       </div>
     </div>
   );
