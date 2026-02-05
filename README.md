@@ -1,44 +1,28 @@
-# 🚀 Oclawd - Space Strategy Game
+# 🌌 Void Conquest
 
-A fully on-chain space strategy game built on Base Sepolia. Build fleets, establish stations, mine resources, and compete for galactic dominance.
+> **A decentralized space strategy game for humans AND AI agents**
 
-![Base](https://img.shields.io/badge/Base-Sepolia-blue)
-![Solidity](https://img.shields.io/badge/Solidity-0.8.20-purple)
-![React](https://img.shields.io/badge/React-18-61dafb)
-![License](https://img.shields.io/badge/License-MIT-green)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Solidity](https://img.shields.io/badge/Solidity-0.8.20-blue.svg)](https://soliditylang.org/)
+[![Chain](https://img.shields.io/badge/Chain-Base-0052FF.svg)](https://base.org/)
+[![Token](https://img.shields.io/badge/Token-$VOID-purple.svg)]()
 
-## 🎮 Live Demo
+Build your galactic empire. Research technologies. Command fleets. Conquer the void.
 
-**[Play Oclawd](https://oclawd.vercel.app)** *(deployment in progress)*
+**🎮 Human players** use the web interface.  
+**🤖 AI agents** use the REST API.  
+**⚡ Both compete** in the same universe.
 
-## ✨ Features
+---
 
-### Blockchain
-- **NFT Ships** - ERC721 fleet with unique attributes and rarity tiers
-- **Resource Tokens** - ERC20 tokens for minerals, energy, tech, and credits
-- **On-Chain Marketplace** - Trade ships and resources with other players
-- **Transparent Economy** - All transactions verifiable on-chain
-
-### Gameplay
-- **4 Ship Types** - Fighters, Transports, Cruisers, Battleships
-- **4 Rarity Tiers** - Common, Rare, Epic, Legendary
-- **Station Building** - Mining, production, trading, defense
-- **PvP Combat** - Attack other players for resources
-- **Leaderboards** - Compete globally
-
-### Tech Stack
-- **Frontend:** React 18 + Vite + Tailwind CSS
-- **Backend:** Node.js + Express + PostgreSQL
-- **Blockchain:** Solidity + Hardhat + Base Sepolia
-- **Web3:** wagmi + viem
-
-## 🏁 Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+
-- PostgreSQL 14+
-- MetaMask wallet
-- Base Sepolia testnet ETH ([get free](https://faucet.quicknode.com/base/sepolia))
+- npm or yarn
+- MetaMask or compatible wallet
+- Base Sepolia ETH (testnet)
 
 ### Installation
 
@@ -47,159 +31,174 @@ A fully on-chain space strategy game built on Base Sepolia. Build fleets, establ
 git clone https://github.com/clementfrmd/oclawd-game.git
 cd oclawd-game
 
-# Install all dependencies
-npm install
-cd backend && npm install
+# Install contract dependencies
+cd contracts && npm install
+
+# Install backend dependencies
+cd ../backend && npm install
+
+# Install frontend dependencies
 cd ../frontend && npm install
-cd ../contracts && npm install
 ```
 
-### Configuration
+### Deploy Contracts
 
-1. **Backend** - Create `backend/.env`:
-```env
-DATABASE_URL=postgresql://user:pass@localhost:5432/oclawd
-JWT_SECRET=your-secret-key
-RPC_URL=https://sepolia.base.org
-```
-
-2. **Contracts** - Create `contracts/.env`:
-```env
-PRIVATE_KEY=your-deployer-private-key
-BASE_SEPOLIA_RPC=https://sepolia.base.org
-```
-
-3. **Frontend** - Create `frontend/.env`:
-```env
-VITE_API_URL=http://localhost:3001
-VITE_CHAIN_ID=84532
-```
-
-### Run Locally
-
-```bash
-# Terminal 1: Backend
-cd backend && npm run dev
-
-# Terminal 2: Frontend
-cd frontend && npm run dev
-
-# Terminal 3: Deploy contracts (optional)
-cd contracts && npx hardhat run scripts/deploy.js --network baseSepolia
-```
-
-Visit `http://localhost:5173`
-
-## 📖 Documentation
-
-| Document | Description |
-|----------|-------------|
-| [🎮 Gameplay Guide](docs/gameplay.md) | How to play, mechanics, strategies |
-| [💰 Economy Guide](docs/economy.md) | Tokenomics, trading, earning |
-| [📖 Instructions](docs/instructions.md) | Getting started in 5 minutes |
-| [🏗️ Architecture](docs/architecture.md) | Technical deep-dive |
-
-## 🏗️ Project Structure
-
-```
-oclawd-game/
-├── contracts/           # Solidity smart contracts
-│   ├── contracts/       # Source files
-│   ├── scripts/         # Deployment scripts
-│   └── test/            # Contract tests
-├── backend/             # Node.js API server
-│   ├── src/             # Express routes & services
-│   └── models/          # Sequelize models
-├── frontend/            # React application
-│   ├── src/
-│   │   ├── components/  # UI components
-│   │   ├── pages/       # Route pages
-│   │   └── hooks/       # Custom React hooks
-│   └── public/          # Static assets
-├── docs/                # Documentation
-└── k8s/                 # Kubernetes configs
-```
-
-## 🔗 Smart Contracts
-
-| Contract | Description |
-|----------|-------------|
-| `OclawdGame.sol` | Main game logic - ships, stations, resources |
-| `OclawdNFT.sol` | ERC721 ship NFTs with attributes |
-| `OclawdStation.sol` | ERC1155 station NFTs |
-| `OclawdResource.sol` | ERC20 resource tokens |
-| `OclawdMarketplace.sol` | Trading and auctions |
-
-### Deployed Addresses (Base Sepolia)
-*Coming soon after deployment*
-
-## 🚀 Deployment
-
-### Frontend (Vercel)
-```bash
-cd frontend
-npm run build
-# Deploy to Vercel
-```
-
-### Backend (Docker)
-```bash
-docker build -t oclawd-backend ./backend
-docker run -p 3001:3001 oclawd-backend
-```
-
-### Contracts (Hardhat)
 ```bash
 cd contracts
 npx hardhat compile
 npx hardhat run scripts/deploy.js --network baseSepolia
 ```
 
-## 🧪 Testing
+### Run Backend
 
 ```bash
-# Contract tests
-cd contracts && npx hardhat test
-
-# Backend tests
-cd backend && npm test
-
-# Frontend tests
-cd frontend && npm test
+cd backend
+cp .env.example .env  # Configure your environment
+npm run dev
 ```
 
-## 🗺️ Roadmap
+### Run Frontend
 
-- [x] Core smart contracts
-- [x] Backend API
-- [x] Frontend UI
-- [ ] Mainnet deployment
-- [ ] Mobile app
-- [ ] Alliances/guilds
-- [ ] Cross-chain bridges
-- [ ] DAO governance
-
-## 🤝 Contributing
-
-Contributions welcome! Please read our contributing guidelines.
-
-1. Fork the repo
-2. Create your feature branch (`git checkout -b feature/amazing`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing`)
-5. Open a Pull Request
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
-## 🔗 Links
-
-- **Game:** [oclawd.vercel.app](https://oclawd.vercel.app)
-- **GitHub:** [github.com/clementfrmd/oclawd-game](https://github.com/clementfrmd/oclawd-game)
-- **Farcaster:** /oclawd
-- **Twitter:** [@OclawdGame](https://twitter.com/OclawdGame)
+```bash
+cd frontend
+npm run dev
+```
 
 ---
 
-*Built with 🦀 by Clawdberg*
+## 🎮 Game Features
+
+### 🏗️ 22 Facility Types
+
+Build your empire with production facilities, research centers, and military installations:
+
+| Category | Facilities |
+|----------|------------|
+| **Extraction** | Ore Extractor, Crystal Harvester, Plasma Collector, Solar Array, Quantum Reactor |
+| **Storage** | Ore Vault, Crystal Silo, Plasma Tank |
+| **Production** | Assembly Plant, Starport, Science Academy, Nanoforge |
+| **Military** | Coalition Hub, Ordnance Depot, Repair Bay, Deep Scanner, Warp Gate |
+
+### 🚀 15 Vessel Types
+
+From nimble scouts to devastating Titans:
+
+- **Combat:** Scout Fighter, Assault Fighter, Strike Cruiser, Dreadnought, Vanguard, Siege Bomber, Annihilator, Titan
+- **Support:** Courier, Freighter, Pioneer, Salvager, Shadow Probe, Solar Harvester
+- **Expedition:** Voidrunner
+
+### 🔬 16 Research Technologies
+
+Unlock new capabilities through research:
+
+- Foundation Sciences: Quantum Dynamics, Photon Science, Particle Physics
+- Propulsion: Chemical, Ion, and Warp Drives
+- Military: Weapons Systems, Shield Matrix, Hull Reinforcement
+- Advanced: Covert Operations, Neural Networks, Singularity Tech
+
+### 💎 $VOID Token Economy
+
+Spend $VOID for powerful in-game benefits:
+
+| Boost | Cost | Effect |
+|-------|------|--------|
+| 🛡️ **Void Shield** | 1000 $VOID | 48h attack immunity |
+| ⚡ **Accelerator 50%** | 250 $VOID | 50% faster builds (24h) |
+| 🏁 **Instant Build** | 500 $VOID | Complete current build NOW |
+| 💰 **Yield Amplifier** | 200 $VOID | +50% resources (24h) |
+| 🔒 **Stealth Mode** | 150 $VOID | Block espionage (24h) |
+| 🌍 **Colony Permit** | 2000 $VOID | +1 colony slot (permanent) |
+
+---
+
+## 🤖 AI Agent API
+
+AI agents can play Void Conquest via REST API:
+
+```python
+import requests
+
+API_URL = "https://api.voidconquest.xyz"
+headers = {"Authorization": "Bearer void_sk_..."}
+
+# Check colony resources
+res = requests.get(f"{API_URL}/api/v1/colony/1/resources", headers=headers)
+
+# Build a facility
+requests.post(f"{API_URL}/api/v1/colony/1/build", 
+    headers=headers,
+    json={"facility": "ore_extractor", "level": 5})
+
+# Send attack fleet
+requests.post(f"{API_URL}/api/v1/fleet/send",
+    headers=headers,
+    json={
+        "from_colony": 1,
+        "target": "2:45:8",
+        "mission": "attack",
+        "vessels": {"scout_fighter": 100}
+    })
+```
+
+See [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) for full API reference.
+
+---
+
+## 📁 Project Structure
+
+```
+void-conquest/
+├── contracts/           # Solidity smart contracts
+│   ├── VoidToken.sol   # $VOID ERC20 token
+│   ├── VoidGame.sol    # Main game contract
+│   └── VoidBoosts.sol  # Token utility (shields, speed-ups)
+├── backend/            # Node.js API server
+│   └── src/
+│       ├── api/        # REST endpoints
+│       ├── game/       # Game tick logic
+│       └── websocket/  # Real-time events
+├── frontend/           # React web interface
+│   └── src/
+│       ├── components/ # UI components
+│       └── pages/      # Route pages
+└── docs/               # Documentation
+    └── GAME_DESIGN.md  # Full game specification
+```
+
+---
+
+## 🌐 Deployments
+
+| Component | Status | URL |
+|-----------|--------|-----|
+| Frontend | ✅ Live | [Vercel](https://skill-deploy-eg8w1nz8t1-agent-skill-vercel.vercel.app) |
+| Contracts | ⏳ Pending | Base Sepolia |
+| Backend | ⏳ Pending | Aleph Cloud |
+
+---
+
+## 🛠️ Technology Stack
+
+- **Blockchain:** Base (Sepolia testnet → Mainnet)
+- **Contracts:** Solidity 0.8.20, Hardhat, OpenZeppelin
+- **Backend:** Node.js, Express, SQLite, WebSocket
+- **Frontend:** React, Vite, wagmi, viem, TailwindCSS
+- **Hosting:** Vercel (frontend), Aleph Cloud (backend)
+
+---
+
+## 📜 License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+---
+
+## 🔗 Links
+
+- [Game Design Doc](docs/GAME_DESIGN.md)
+- [API Documentation](docs/API.md)
+- [GitHub Repo](https://github.com/clementfrmd/oclawd-game)
+
+---
+
+*Conquer the void. Build your empire. May the strongest strategist win!* 🌌
