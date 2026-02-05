@@ -1,171 +1,246 @@
-import React, { useEffect, useState } from 'react';
-import { Users, MapPin, ArrowRight } from 'lucide-react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { Search, ChevronLeft, ChevronRight, Globe, User, Shield, Rocket } from 'lucide-react';
 
 export function Galaxy() {
-  const [stations, setStations] = useState([]);
-  const [selectedStation, setSelectedStation] = useState(null);
+  const [coordinates, setCoordinates] = useState({ galaxy: 1, system: 45, position: null });
+  
+  // Mock galaxy data
+  const systemData = [
+    { position: 1, type: 'planet', owner: null, name: 'Desolate World' },
+    { position: 2, type: 'empty', owner: null },
+    { position: 3, type: 'planet', owner: 'Commander_X', name: 'Nova Prime', alliance: 'VDC' },
+    { position: 4, type: 'planet', owner: null, name: 'Rocky Outpost' },
+    { position: 5, type: 'empty', owner: null },
+    { position: 6, type: 'planet', owner: null, name: 'Gas Giant IV' },
+    { position: 7, type: 'planet', owner: 'YOU', name: 'Alpha Prime', isYours: true },
+    { position: 8, type: 'planet', owner: 'Zerg_Rush', name: 'Hive World', alliance: 'SWM' },
+    { position: 9, type: 'debris', owner: null },
+    { position: 10, type: 'planet', owner: null, name: 'Frozen Moon' },
+    { position: 11, type: 'empty', owner: null },
+    { position: 12, type: 'planet', owner: 'AI_Agent_7', name: 'Neural Hub', isAI: true },
+    { position: 13, type: 'planet', owner: null, name: 'Desert World' },
+    { position: 14, type: 'empty', owner: null },
+    { position: 15, type: 'planet', owner: 'WarLord99', name: 'Fortress Prime', alliance: 'DRK' },
+  ];
 
-  useEffect(() => {
-    fetchStations();
-  }, []);
-
-  const fetchStations = async () => {
-    try {
-      const response = await axios.get('/api/stations');
-      setStations(response.data);
-    } catch (error) {
-      console.error('Error fetching stations:', error);
-    }
+  const navigateSystem = (delta) => {
+    setCoordinates(prev => ({
+      ...prev,
+      system: Math.max(1, Math.min(499, prev.system + delta))
+    }));
   };
 
-  const handleStationClick = (station) => {
-    setSelectedStation(station);
+  const navigateGalaxy = (delta) => {
+    setCoordinates(prev => ({
+      ...prev,
+      galaxy: Math.max(1, Math.min(9, prev.galaxy + delta))
+    }));
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold mb-2">Galaxy View</h1>
-        <p className="text-gray-400">Explore and manage your stations across the galaxy</p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 glass rounded-xl p-6">
-          <div className="h-96 bg-space-800/50 rounded-lg flex items-center justify-center relative overflow-hidden">
-            {stations.length === 0 ? (
-              <div className="text-center text-gray-500">
-                <Users className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p>No stations discovered yet</p>
-              </div>
-            ) : (
-              <div className="absolute inset-0">
-                {/* Starfield background */}
-                {[...Array(50)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-1 h-1 bg-white rounded-full opacity-50"
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                      animation: `twinkle ${2 + Math.random() * 3}s infinite alternate`
-                    }}
-                  />
-                ))}
-
-                {/* Station markers */}
-                {stations.map((station) => (
-                  <div
-                    key={station.id}
-                    className="absolute cursor-pointer transform -translate-x-1/2 -translate-y-1/2 group"
-                    style={{
-                      left: `${50 + (station.location.x / 1000) * 50}%`,
-                      top: `${50 + (station.location.y / 1000) * 50}%`
-                    }}
-                    onClick={() => handleStationClick(station)}
-                  >
-                    <div className="relative">
-                      {/* Station marker */}
-                      <div className="w-4 h-4 bg-blue-500 rounded-full glow"></div>
-                      {/* Selection ring */}
-                      <div className={`absolute inset-0 rounded-full border-2 transition-all ${
-                        selectedStation?.id === station.id
-                          ? 'border-blue-400 scale-125'
-                          : 'border-blue-500 scale-0 group-hover:scale-125'
-                      }`}></div>
-                    </div>
-                  </div>
-                ))}
-
-                {/* Animated lines between stations */}
-                {stations.length > 1 && (
-                  <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                    {stations.map((station, i) => {
-                      const nextStation = stations[(i + 1) % stations.length];
-                      return (
-                        <line
-                          key={`${station.id}-${nextStation.id}`}
-                          x1={`${50 + (station.location.x / 1000) * 50}%`}
-                          y1={`${50 + (station.location.y / 1000) * 50}%`}
-                          x2={`${50 + (nextStation.location.x / 1000) * 50}%`}
-                          y2={`${50 + (nextStation.location.y / 1000) * 50}%`}
-                          stroke="rgba(59, 130, 246, 0.2)"
-                          strokeWidth="1"
-                        />
-                      );
-                    })}
-                  </svg>
-                )}
-              </div>
-            )}
+    <div className="min-h-screen relative">
+      <div className="stars-bg" />
+      <div className="nebula" />
+      
+      <div className="relative max-w-7xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+          <div>
+            <h1 className="font-display text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
+              <Globe className="w-8 h-8 text-cyan-400" />
+              GALAXY MAP
+            </h1>
+            <p className="text-gray-400 mt-1">
+              Explore the universe and find your next conquest
+            </p>
+          </div>
+          
+          {/* Search */}
+          <div className="flex items-center gap-2 bg-black/50 border border-white/10 rounded px-4 py-2">
+            <Search className="w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search player or coordinates..."
+              className="bg-transparent text-white outline-none w-48"
+            />
           </div>
         </div>
 
-        <div className="glass rounded-xl p-6">
-          <h2 className="text-xl font-bold mb-4">Stations</h2>
-          <div className="space-y-3 max-h-80 overflow-y-auto">
-            {stations.map((station) => (
-              <div
-                key={station.id}
-                onClick={() => handleStationClick(station)}
-                className={`p-4 rounded-lg cursor-pointer transition-all ${
-                  selectedStation?.id === station.id
-                    ? 'bg-blue-500/20 border border-blue-500/50'
-                    : 'bg-white/5 hover:bg-white/10 border border-transparent'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium">{station.name}</span>
-                  <MapPin className="w-4 h-4 text-gray-500" />
-                </div>
-                <div className="text-sm text-gray-400">
-                  {station.resources?.length || 0} resources
-                </div>
-              </div>
+        {/* Navigation Controls */}
+        <div className="panel p-4 mb-6">
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            {/* Galaxy Selector */}
+            <div className="flex items-center gap-2">
+              <span className="text-gray-400 text-sm">Galaxy:</span>
+              <button onClick={() => navigateGalaxy(-1)} className="p-2 hover:bg-white/10 rounded">
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <span className="font-mono text-cyan-400 w-8 text-center">{coordinates.galaxy}</span>
+              <button onClick={() => navigateGalaxy(1)} className="p-2 hover:bg-white/10 rounded">
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+            
+            {/* System Selector */}
+            <div className="flex items-center gap-2">
+              <span className="text-gray-400 text-sm">System:</span>
+              <button onClick={() => navigateSystem(-10)} className="p-2 hover:bg-white/10 rounded text-xs">-10</button>
+              <button onClick={() => navigateSystem(-1)} className="p-2 hover:bg-white/10 rounded">
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <input
+                type="number"
+                value={coordinates.system}
+                onChange={(e) => setCoordinates(prev => ({ ...prev, system: Math.max(1, Math.min(499, parseInt(e.target.value) || 1)) }))}
+                className="font-mono text-cyan-400 bg-black/30 border border-white/10 rounded w-16 text-center py-1"
+              />
+              <button onClick={() => navigateSystem(1)} className="p-2 hover:bg-white/10 rounded">
+                <ChevronRight className="w-4 h-4" />
+              </button>
+              <button onClick={() => navigateSystem(10)} className="p-2 hover:bg-white/10 rounded text-xs">+10</button>
+            </div>
+            
+            <div className="font-mono text-white">
+              [{coordinates.galaxy}:{coordinates.system}]
+            </div>
+          </div>
+        </div>
+
+        {/* System View */}
+        <div className="panel overflow-hidden">
+          {/* Header Row */}
+          <div className="grid grid-cols-12 gap-2 p-4 bg-black/30 border-b border-white/10 text-xs text-gray-400 uppercase">
+            <div className="col-span-1">Pos</div>
+            <div className="col-span-3">Planet</div>
+            <div className="col-span-2">Owner</div>
+            <div className="col-span-2">Alliance</div>
+            <div className="col-span-4 text-right">Actions</div>
+          </div>
+          
+          {/* Planet Rows */}
+          <div className="divide-y divide-white/5">
+            {systemData.map((planet) => (
+              <PlanetRow
+                key={planet.position}
+                planet={planet}
+                galaxy={coordinates.galaxy}
+                system={coordinates.system}
+              />
             ))}
           </div>
         </div>
-      </div>
 
-      {selectedStation && (
-        <div className="glass rounded-xl p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold">{selectedStation.name}</h2>
-            <button
-              onClick={() => setSelectedStation(null)}
-              className="text-gray-400 hover:text-white"
-            >
-              Close
-            </button>
+        {/* Legend */}
+        <div className="flex flex-wrap gap-6 mt-6 text-sm text-gray-400">
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 bg-green-500 rounded-full" />
+            <span>Your Colony</span>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div>
-              <div className="text-sm text-gray-400">Balance</div>
-              <div className="text-xl font-bold text-green-400">
-                ${selectedStation.balance?.toLocaleString() || 0}
-              </div>
-            </div>
-            <div>
-              <div className="text-sm text-gray-400">Resources</div>
-              <div className="text-xl font-bold">
-                {selectedStation.resources?.length || 0}
-              </div>
-            </div>
-            <div>
-              <div className="text-sm text-gray-400">Fleets</div>
-              <div className="text-xl font-bold">
-                {selectedStation.fleets?.length || 0}
-              </div>
-            </div>
-            <div>
-              <div className="text-sm text-gray-400">Location</div>
-              <div className="text-xl font-bold">
-                Sector {selectedStation.location?.sector || 0}
-              </div>
-            </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 bg-cyan-500 rounded-full" />
+            <span>Colonizable</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 bg-red-500 rounded-full" />
+            <span>Enemy</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 bg-purple-500 rounded-full" />
+            <span>AI Agent</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 bg-yellow-500 rounded-full" />
+            <span>Debris Field</span>
           </div>
         </div>
-      )}
+      </div>
+    </div>
+  );
+}
+
+function PlanetRow({ planet, galaxy, system }) {
+  if (planet.type === 'empty') {
+    return (
+      <div className="grid grid-cols-12 gap-2 p-4 text-gray-500 items-center">
+        <div className="col-span-1 font-mono">{planet.position}</div>
+        <div className="col-span-11 text-sm italic">— Empty space —</div>
+      </div>
+    );
+  }
+
+  if (planet.type === 'debris') {
+    return (
+      <div className="grid grid-cols-12 gap-2 p-4 items-center bg-yellow-500/5">
+        <div className="col-span-1 font-mono text-yellow-400">{planet.position}</div>
+        <div className="col-span-3 flex items-center gap-2">
+          <span className="text-yellow-400">💥</span>
+          <span className="text-yellow-400">Debris Field</span>
+        </div>
+        <div className="col-span-4 text-gray-400">—</div>
+        <div className="col-span-4 text-right">
+          <button className="px-3 py-1 text-xs bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 rounded hover:bg-yellow-500/30">
+            Salvage
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const isYours = planet.isYours;
+  const isEnemy = planet.owner && !planet.isYours;
+  const isAI = planet.isAI;
+  const isColonizable = !planet.owner;
+
+  return (
+    <div className={`grid grid-cols-12 gap-2 p-4 items-center transition-colors ${
+      isYours ? 'bg-green-500/10' : isEnemy ? 'hover:bg-red-500/5' : 'hover:bg-white/5'
+    }`}>
+      <div className={`col-span-1 font-mono ${isYours ? 'text-green-400' : isAI ? 'text-purple-400' : 'text-white'}`}>
+        {planet.position}
+      </div>
+      <div className="col-span-3 flex items-center gap-2">
+        <span className={`w-3 h-3 rounded-full ${
+          isYours ? 'bg-green-500' : isAI ? 'bg-purple-500' : isColonizable ? 'bg-cyan-500' : 'bg-red-500'
+        }`} />
+        <span className={isYours ? 'text-green-400 font-medium' : 'text-white'}>{planet.name}</span>
+      </div>
+      <div className="col-span-2 flex items-center gap-2">
+        {planet.owner ? (
+          <>
+            {isAI ? <Rocket className="w-4 h-4 text-purple-400" /> : <User className="w-4 h-4 text-gray-400" />}
+            <span className={isYours ? 'text-green-400' : isAI ? 'text-purple-400' : 'text-white'}>
+              {isYours ? 'YOU' : planet.owner}
+            </span>
+          </>
+        ) : (
+          <span className="text-gray-500">—</span>
+        )}
+      </div>
+      <div className="col-span-2">
+        {planet.alliance ? (
+          <span className="px-2 py-1 text-xs bg-white/10 rounded">{planet.alliance}</span>
+        ) : (
+          <span className="text-gray-500">—</span>
+        )}
+      </div>
+      <div className="col-span-4 flex justify-end gap-2">
+        {isYours ? (
+          <span className="text-green-400 text-sm">Your Colony</span>
+        ) : isColonizable ? (
+          <button className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 rounded hover:bg-cyan-500/30">
+            Colonize
+          </button>
+        ) : (
+          <>
+            <button className="px-3 py-1 text-xs bg-white/10 text-gray-300 border border-white/20 rounded hover:bg-white/20">
+              Spy
+            </button>
+            <button className="px-3 py-1 text-xs bg-red-500/20 text-red-400 border border-red-500/50 rounded hover:bg-red-500/30">
+              Attack
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }

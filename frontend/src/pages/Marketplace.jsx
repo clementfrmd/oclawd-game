@@ -1,300 +1,267 @@
-import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Tag, Wallet, RefreshCw, ExternalLink } from 'lucide-react';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
-
-// Mock NFT ship data - in production this would come from your smart contract
-const mockShips = [
-  { id: 1, name: 'Stellar Cruiser', type: 'explorer', rarity: 'rare', price: '0.05', image: '🚀', stats: { speed: 85, cargo: 120, armor: 60 } },
-  { id: 2, name: 'Void Runner', type: 'fighter', rarity: 'epic', price: '0.12', image: '🛸', stats: { speed: 95, cargo: 40, armor: 80 } },
-  { id: 3, name: 'Cargo Hauler X', type: 'transport', rarity: 'common', price: '0.02', image: '📦', stats: { speed: 45, cargo: 300, armor: 50 } },
-  { id: 4, name: 'Mining Drone MK3', type: 'mining', rarity: 'uncommon', price: '0.03', image: '⛏️', stats: { speed: 30, cargo: 200, armor: 40 } },
-  { id: 5, name: 'Phantom Strike', type: 'fighter', rarity: 'legendary', price: '0.35', image: '⚔️', stats: { speed: 99, cargo: 20, armor: 95 } },
-  { id: 6, name: 'Deep Space Explorer', type: 'explorer', rarity: 'rare', price: '0.08', image: '🔭', stats: { speed: 75, cargo: 150, armor: 55 } },
-];
-
-const rarityColors = {
-  common: 'from-gray-400 to-gray-500',
-  uncommon: 'from-green-400 to-green-500',
-  rare: 'from-blue-400 to-blue-500',
-  epic: 'from-purple-400 to-purple-500',
-  legendary: 'from-yellow-400 to-orange-500',
-};
-
-const rarityBorders = {
-  common: 'border-gray-500/30',
-  uncommon: 'border-green-500/30',
-  rare: 'border-blue-500/30',
-  epic: 'border-purple-500/30',
-  legendary: 'border-yellow-500/30',
-};
+import React, { useState } from 'react';
+import { ShoppingCart, TrendingUp, ArrowUpDown, Zap, Shield, Clock, Rocket } from 'lucide-react';
 
 export function Marketplace() {
-  const { address, isConnected } = useAccount();
-  const { connect, connectors } = useConnect();
-  const { disconnect } = useDisconnect();
-  const [ships, setShips] = useState(mockShips);
-  const [selectedShip, setSelectedShip] = useState(null);
-  const [filter, setFilter] = useState('all');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const filteredShips = filter === 'all' 
-    ? ships 
-    : ships.filter(ship => ship.type === filter);
-
-  const handleBuy = async (ship) => {
-    if (!isConnected) {
-      alert('Please connect your wallet first');
-      return;
-    }
-    setIsLoading(true);
-    // Simulate transaction
-    setTimeout(() => {
-      alert(`Purchase initiated for ${ship.name} at ${ship.price} ETH`);
-      setIsLoading(false);
-    }, 1500);
-  };
-
-  const handleList = (ship) => {
-    if (!isConnected) {
-      alert('Please connect your wallet first');
-      return;
-    }
-    const price = prompt(`Enter listing price in ETH for ${ship.name}:`);
-    if (price) {
-      alert(`${ship.name} listed for ${price} ETH`);
-    }
-  };
-
-  if (!isConnected) {
-    return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">NFT Marketplace</h1>
-          <p className="text-gray-400">Trade your space ships on Base Sepolia</p>
-        </div>
-
-        <div className="glass rounded-xl p-12 text-center">
-          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Wallet className="w-10 h-10 text-white" />
-          </div>
-          <h2 className="text-2xl font-bold mb-3">Connect Your Wallet</h2>
-          <p className="text-gray-400 mb-8 max-w-md mx-auto">
-            Connect your wallet to browse, buy, and sell NFT ships on the marketplace.
-            We support MetaMask, Coinbase Wallet, and other injected wallets.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            {connectors.map((connector) => (
-              <button
-                key={connector.uid}
-                onClick={() => connect({ connector })}
-                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center justify-center space-x-2"
-              >
-                <Wallet className="w-5 h-5" />
-                <span>Connect {connector.name}</span>
-              </button>
-            ))}
-          </div>
-          <p className="text-sm text-gray-500 mt-6">
-            Network: Base Sepolia Testnet
-          </p>
-        </div>
-      </div>
-    );
-  }
+  const [activeTab, setActiveTab] = useState('resources');
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">NFT Marketplace</h1>
-          <p className="text-gray-400">Trade your space ships on Base Sepolia</p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <div className="glass rounded-lg px-4 py-2 flex items-center space-x-2">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-sm font-mono">
-              {address?.slice(0, 6)}...{address?.slice(-4)}
-            </span>
+    <div className="min-h-screen relative">
+      <div className="stars-bg" />
+      <div className="nebula" />
+      
+      <div className="relative max-w-7xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+          <div>
+            <h1 className="font-display text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
+              <ShoppingCart className="w-8 h-8 text-green-400" />
+              MARKETPLACE
+            </h1>
+            <p className="text-gray-400 mt-1">
+              Trade resources and purchase $VOID boosts
+            </p>
           </div>
-          <button
-            onClick={() => disconnect()}
-            className="px-3 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 text-sm"
-          >
-            Disconnect
-          </button>
         </div>
-      </div>
 
-      {/* Stats Bar */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="glass rounded-xl p-4">
-          <div className="text-sm text-gray-400">Listed Ships</div>
-          <div className="text-2xl font-bold">{ships.length}</div>
-        </div>
-        <div className="glass rounded-xl p-4">
-          <div className="text-sm text-gray-400">Floor Price</div>
-          <div className="text-2xl font-bold text-green-400">0.02 ETH</div>
-        </div>
-        <div className="glass rounded-xl p-4">
-          <div className="text-sm text-gray-400">Total Volume</div>
-          <div className="text-2xl font-bold">12.5 ETH</div>
-        </div>
-        <div className="glass rounded-xl p-4">
-          <div className="text-sm text-gray-400">Network</div>
-          <div className="text-2xl font-bold text-blue-400">Base Sepolia</div>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="glass rounded-xl p-4">
-        <div className="flex flex-wrap gap-2">
-          {['all', 'explorer', 'fighter', 'transport', 'mining'].map((type) => (
+        {/* Tabs */}
+        <div className="flex gap-2 mb-6">
+          {['resources', 'boosts', 'vessels'].map((tab) => (
             <button
-              key={type}
-              onClick={() => setFilter(type)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                filter === type
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-white/5 text-gray-300 hover:bg-white/10'
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-6 py-3 rounded font-medium capitalize transition-all ${
+                activeTab === tab
+                  ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50'
+                  : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10'
               }`}
             >
-              {type.charAt(0).toUpperCase() + type.slice(1)}
+              {tab}
             </button>
           ))}
-          <button
-            onClick={() => setShips([...mockShips])}
-            className="px-4 py-2 rounded-lg text-sm font-medium bg-white/5 text-gray-300 hover:bg-white/10 ml-auto flex items-center space-x-2"
-          >
-            <RefreshCw className="w-4 h-4" />
-            <span>Refresh</span>
-          </button>
+        </div>
+
+        {activeTab === 'resources' && <ResourceMarket />}
+        {activeTab === 'boosts' && <BoostMarket />}
+        {activeTab === 'vessels' && <VesselMarket />}
+      </div>
+    </div>
+  );
+}
+
+function ResourceMarket() {
+  const resources = [
+    { name: 'Ore', icon: '⛏️', price: 0.05, change: 2.3, volume: '1.2M' },
+    { name: 'Crystal', icon: '💎', price: 0.12, change: -1.5, volume: '890K' },
+    { name: 'Plasma', icon: '🔮', price: 0.35, change: 5.7, volume: '450K' },
+  ];
+
+  return (
+    <div className="grid lg:grid-cols-2 gap-6">
+      {/* Price Tickers */}
+      <div className="panel p-6">
+        <h2 className="font-display text-xl text-white mb-4 flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-green-400" />
+          RESOURCE PRICES
+        </h2>
+        <div className="space-y-4">
+          {resources.map((res) => (
+            <div key={res.name} className="flex items-center justify-between p-4 bg-black/30 rounded border border-white/10">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">{res.icon}</span>
+                <div>
+                  <div className="text-white font-medium">{res.name}</div>
+                  <div className="text-gray-400 text-sm">Vol: {res.volume}</div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="font-mono text-xl text-white">{res.price} ETH</div>
+                <div className={`text-sm ${res.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {res.change >= 0 ? '+' : ''}{res.change}%
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Ship Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredShips.map((ship) => (
-          <div
-            key={ship.id}
-            className={`glass rounded-xl overflow-hidden border-2 ${rarityBorders[ship.rarity]} hover:scale-[1.02] transition-transform cursor-pointer`}
-            onClick={() => setSelectedShip(ship)}
-          >
-            {/* Ship Image/Icon */}
-            <div className="h-40 bg-gradient-to-br from-space-800 to-space-900 flex items-center justify-center relative">
-              <span className="text-7xl">{ship.image}</span>
-              <div className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${rarityColors[ship.rarity]} text-white`}>
-                {ship.rarity.toUpperCase()}
-              </div>
+      {/* Trade Panel */}
+      <div className="panel p-6">
+        <h2 className="font-display text-xl text-white mb-4 flex items-center gap-2">
+          <ArrowUpDown className="w-5 h-5 text-cyan-400" />
+          TRADE
+        </h2>
+        
+        <div className="space-y-4">
+          <div>
+            <label className="text-gray-400 text-sm">Sell</label>
+            <div className="flex gap-2 mt-2">
+              <select className="flex-1 bg-black/30 border border-white/10 rounded px-4 py-3 text-white">
+                <option>⛏️ Ore</option>
+                <option>💎 Crystal</option>
+                <option>🔮 Plasma</option>
+              </select>
+              <input
+                type="number"
+                placeholder="Amount"
+                className="flex-1 bg-black/30 border border-white/10 rounded px-4 py-3 text-white"
+              />
             </div>
+          </div>
+          
+          <div className="flex justify-center">
+            <div className="w-10 h-10 bg-cyan-500/20 rounded-full flex items-center justify-center">
+              <ArrowUpDown className="w-5 h-5 text-cyan-400" />
+            </div>
+          </div>
+          
+          <div>
+            <label className="text-gray-400 text-sm">Receive</label>
+            <div className="flex gap-2 mt-2">
+              <select className="flex-1 bg-black/30 border border-white/10 rounded px-4 py-3 text-white">
+                <option>💎 Crystal</option>
+                <option>⛏️ Ore</option>
+                <option>🔮 Plasma</option>
+              </select>
+              <input
+                type="number"
+                placeholder="Amount"
+                className="flex-1 bg-black/30 border border-white/10 rounded px-4 py-3 text-white"
+                disabled
+              />
+            </div>
+          </div>
+          
+          <button className="btn-primary w-full mt-4">
+            Execute Trade
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-            {/* Ship Info */}
-            <div className="p-4">
-              <h3 className="text-lg font-bold mb-1">{ship.name}</h3>
-              <p className="text-sm text-gray-400 capitalize mb-3">{ship.type} Class</p>
+function BoostMarket() {
+  const boosts = [
+    { id: 'shield', name: 'Void Shield', description: '48h attack immunity', cost: 1000, icon: Shield, color: 'cyan' },
+    { id: 'accelerator', name: 'Accelerator 50%', description: '50% faster construction for 24h', cost: 250, icon: Zap, color: 'orange' },
+    { id: 'yield', name: 'Yield Amplifier', description: '+50% resource production for 24h', cost: 200, icon: TrendingUp, color: 'green' },
+    { id: 'instant', name: 'Instant Build', description: 'Complete current construction NOW', cost: 500, icon: Clock, color: 'purple' },
+    { id: 'colony', name: 'Colony Permit', description: '+1 permanent colony slot', cost: 2000, icon: Rocket, color: 'gold' },
+  ];
 
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-2 mb-4">
-                <div className="text-center p-2 bg-white/5 rounded-lg">
-                  <div className="text-xs text-gray-400">Speed</div>
-                  <div className="text-sm font-bold text-blue-400">{ship.stats.speed}</div>
+  const colorClasses = {
+    cyan: 'border-cyan-500/30 hover:border-cyan-500/50',
+    orange: 'border-orange-500/30 hover:border-orange-500/50',
+    green: 'border-green-500/30 hover:border-green-500/50',
+    purple: 'border-purple-500/30 hover:border-purple-500/50',
+    gold: 'border-yellow-500/30 hover:border-yellow-500/50',
+  };
+
+  const iconColorClasses = {
+    cyan: 'text-cyan-400',
+    orange: 'text-orange-400',
+    green: 'text-green-400',
+    purple: 'text-purple-400',
+    gold: 'text-yellow-400',
+  };
+
+  return (
+    <div>
+      {/* Balance Header */}
+      <div className="panel p-6 mb-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h2 className="font-display text-xl text-white mb-1">Your $VOID Balance</h2>
+            <p className="text-gray-400 text-sm">Spend $VOID for powerful in-game boosts</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <div className="font-mono text-3xl text-purple-400 text-glow-purple">2,450</div>
+              <div className="text-gray-400 text-sm">$VOID available</div>
+            </div>
+            <button className="btn-secondary py-2 px-4">
+              Buy $VOID
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Boost Cards */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {boosts.map((boost) => {
+          const Icon = boost.icon;
+          return (
+            <div key={boost.id} className={`panel ${colorClasses[boost.color]} p-6 transition-all`}>
+              <div className="flex items-start gap-4 mb-4">
+                <div className={`w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center`}>
+                  <Icon className={`w-6 h-6 ${iconColorClasses[boost.color]}`} />
                 </div>
-                <div className="text-center p-2 bg-white/5 rounded-lg">
-                  <div className="text-xs text-gray-400">Cargo</div>
-                  <div className="text-sm font-bold text-green-400">{ship.stats.cargo}</div>
-                </div>
-                <div className="text-center p-2 bg-white/5 rounded-lg">
-                  <div className="text-xs text-gray-400">Armor</div>
-                  <div className="text-sm font-bold text-purple-400">{ship.stats.armor}</div>
+                <div>
+                  <h3 className="font-display text-lg text-white">{boost.name}</h3>
+                  <p className="text-gray-400 text-sm">{boost.description}</p>
                 </div>
               </div>
-
-              {/* Price and Actions */}
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-xs text-gray-400">Price</div>
-                  <div className="text-xl font-bold text-green-400">{ship.price} ETH</div>
+                  <span className="font-mono text-xl text-purple-400">{boost.cost.toLocaleString()}</span>
+                  <span className="text-gray-400 text-sm ml-1">$VOID</span>
                 </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleBuy(ship);
-                  }}
-                  disabled={isLoading}
-                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center space-x-2"
-                >
-                  <ShoppingCart className="w-4 h-4" />
-                  <span>Buy</span>
+                <button className="btn-primary py-2 px-4 text-sm">
+                  Activate
                 </button>
               </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function VesselMarket() {
+  const listings = [
+    { seller: 'Commander_X', vessel: 'Strike Cruiser', quantity: 5, price: 0.05 },
+    { seller: 'AI_Agent_7', vessel: 'Scout Fighter', quantity: 50, price: 0.008 },
+    { seller: 'WarLord99', vessel: 'Dreadnought', quantity: 2, price: 0.15 },
+    { seller: 'Zerg_Rush', vessel: 'Assault Fighter', quantity: 20, price: 0.02 },
+  ];
+
+  return (
+    <div className="panel overflow-hidden">
+      {/* Header */}
+      <div className="grid grid-cols-12 gap-4 p-4 bg-black/30 border-b border-white/10 text-sm text-gray-400 uppercase">
+        <div className="col-span-3">Seller</div>
+        <div className="col-span-3">Vessel</div>
+        <div className="col-span-2">Quantity</div>
+        <div className="col-span-2">Price/Unit</div>
+        <div className="col-span-2">Action</div>
+      </div>
+
+      {/* Listings */}
+      <div className="divide-y divide-white/5">
+        {listings.map((listing, i) => (
+          <div key={i} className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/5 transition-colors">
+            <div className="col-span-3">
+              <span className="text-cyan-400">{listing.seller}</span>
+            </div>
+            <div className="col-span-3 text-white">{listing.vessel}</div>
+            <div className="col-span-2 font-mono text-white">{listing.quantity}</div>
+            <div className="col-span-2 font-mono text-green-400">{listing.price} ETH</div>
+            <div className="col-span-2">
+              <button className="px-4 py-2 bg-green-500/20 text-green-400 border border-green-500/50 rounded hover:bg-green-500/30 text-sm">
+                Buy
+              </button>
             </div>
           </div>
         ))}
       </div>
 
-      {filteredShips.length === 0 && (
-        <div className="glass rounded-xl p-12 text-center">
-          <p className="text-gray-400">No ships found for this filter</p>
-        </div>
-      )}
-
-      {/* Selected Ship Modal */}
-      {selectedShip && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setSelectedShip(null)}>
-          <div className="glass rounded-xl max-w-lg w-full p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h2 className="text-2xl font-bold">{selectedShip.name}</h2>
-                <p className="text-gray-400 capitalize">{selectedShip.type} Class • {selectedShip.rarity}</p>
-              </div>
-              <button onClick={() => setSelectedShip(null)} className="text-gray-400 hover:text-white">✕</button>
-            </div>
-
-            <div className="h-48 bg-gradient-to-br from-space-800 to-space-900 rounded-xl flex items-center justify-center mb-4">
-              <span className="text-8xl">{selectedShip.image}</span>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3 mb-6">
-              <div className="text-center p-3 bg-white/5 rounded-lg">
-                <div className="text-sm text-gray-400">Speed</div>
-                <div className="text-xl font-bold text-blue-400">{selectedShip.stats.speed}</div>
-              </div>
-              <div className="text-center p-3 bg-white/5 rounded-lg">
-                <div className="text-sm text-gray-400">Cargo</div>
-                <div className="text-xl font-bold text-green-400">{selectedShip.stats.cargo}</div>
-              </div>
-              <div className="text-center p-3 bg-white/5 rounded-lg">
-                <div className="text-sm text-gray-400">Armor</div>
-                <div className="text-xl font-bold text-purple-400">{selectedShip.stats.armor}</div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <div className="text-sm text-gray-400">Current Price</div>
-                <div className="text-3xl font-bold text-green-400">{selectedShip.price} ETH</div>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => handleBuy(selectedShip)}
-                disabled={isLoading}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center space-x-2"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                <span>Buy Now</span>
-              </button>
-              <button
-                onClick={() => handleList(selectedShip)}
-                className="px-6 py-3 bg-white/10 rounded-lg font-medium hover:bg-white/20 transition-colors flex items-center space-x-2"
-              >
-                <Tag className="w-5 h-5" />
-                <span>List for Sale</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Sell Your Vessels */}
+      <div className="p-4 border-t border-white/10 bg-black/20">
+        <button className="btn-secondary w-full">
+          List Your Vessels for Sale
+        </button>
+      </div>
     </div>
   );
 }
