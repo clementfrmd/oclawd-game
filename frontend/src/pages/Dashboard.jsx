@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Rocket, Building2, FlaskConical, Shield, Zap, Target, AlertTriangle, Clock, Loader2 } from 'lucide-react';
 import { useAccount } from 'wagmi';
 
-const API_BASE = 'http://213.246.39.151:24011/api';
+const API_BASE = 'https://correlation-somerset-passenger-him.trycloudflare.com/api';
 
 // Default starter state for new players (or when API is unreachable)
 const STARTER_STATE = {
