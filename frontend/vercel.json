@@ -1,3 +1,5 @@
 {
-  "name": "void-conquest"
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
 }
