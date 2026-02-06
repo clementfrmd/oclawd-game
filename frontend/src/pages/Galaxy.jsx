@@ -319,88 +319,158 @@ function PlanetRow({ planet, galaxy, system, userAddress, onColonize, colonizing
   // Empty space
   if (planet.type === 'empty') {
     return (
-      <div className="grid grid-cols-12 gap-2 p-4 text-gray-500 items-center">
-        <div className="col-span-1 font-mono">{planet.position}</div>
-        <div className="col-span-11 text-sm italic">— Empty space —</div>
-      </div>
+      <>
+        {/* Desktop view */}
+        <div className="hidden sm:grid grid-cols-12 gap-2 p-4 text-gray-500 items-center">
+          <div className="col-span-1 font-mono">{planet.position}</div>
+          <div className="col-span-11 text-sm italic">— Empty space —</div>
+        </div>
+        {/* Mobile view */}
+        <div className="sm:hidden p-3 text-gray-500 text-sm flex items-center gap-2">
+          <span className="font-mono w-6">{planet.position}</span>
+          <span className="italic">— Empty space —</span>
+        </div>
+      </>
     );
   }
 
   // Debris field
   if (planet.type === 'debris') {
     return (
-      <div className="grid grid-cols-12 gap-2 p-4 items-center bg-yellow-500/5">
-        <div className="col-span-1 font-mono text-yellow-400">{planet.position}</div>
-        <div className="col-span-3 flex items-center gap-2">
-          <span className="text-yellow-400">💥</span>
-          <span className="text-yellow-400">Debris Field</span>
+      <>
+        {/* Desktop view */}
+        <div className="hidden sm:grid grid-cols-12 gap-2 p-4 items-center bg-yellow-500/5">
+          <div className="col-span-1 font-mono text-yellow-400">{planet.position}</div>
+          <div className="col-span-3 flex items-center gap-2">
+            <span className="text-yellow-400">💥</span>
+            <span className="text-yellow-400">Debris Field</span>
+          </div>
+          <div className="col-span-2 text-gray-400">—</div>
+          <div className="col-span-2 text-xs text-yellow-400/70">
+            {planet.metal?.toLocaleString()} M / {planet.crystal?.toLocaleString()} C
+          </div>
+          <div className="col-span-4 text-right">
+            <button className="px-3 py-2 min-h-[44px] text-xs bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 rounded hover:bg-yellow-500/30">
+              Salvage
+            </button>
+          </div>
         </div>
-        <div className="col-span-2 text-gray-400">—</div>
-        <div className="col-span-2 text-xs text-yellow-400/70">
-          {planet.metal?.toLocaleString()} M / {planet.crystal?.toLocaleString()} C
+        {/* Mobile view */}
+        <div className="sm:hidden p-3 bg-yellow-500/5">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-yellow-400 w-6">{planet.position}</span>
+              <span className="text-yellow-400">💥</span>
+              <span className="text-yellow-400 text-sm">Debris Field</span>
+            </div>
+            <button className="px-3 py-2 min-h-[44px] text-xs bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 rounded active:bg-yellow-500/40">
+              Salvage
+            </button>
+          </div>
+          <div className="text-xs text-yellow-400/70 mt-1 ml-8">
+            {planet.metal?.toLocaleString()} M / {planet.crystal?.toLocaleString()} C
+          </div>
         </div>
-        <div className="col-span-4 text-right">
-          <button className="px-3 py-1 text-xs bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 rounded hover:bg-yellow-500/30">
-            Salvage
-          </button>
-        </div>
-      </div>
+      </>
     );
   }
 
   // Uninhabitable planet
   if (planet.type === 'uninhabitable') {
     return (
-      <div className="grid grid-cols-12 gap-2 p-4 text-gray-500 items-center">
-        <div className="col-span-1 font-mono">{planet.position}</div>
-        <div className="col-span-3 flex items-center gap-2">
-          <span className="w-3 h-3 bg-gray-600 rounded-full" />
-          <span>{planet.name}</span>
+      <>
+        {/* Desktop view */}
+        <div className="hidden sm:grid grid-cols-12 gap-2 p-4 text-gray-500 items-center">
+          <div className="col-span-1 font-mono">{planet.position}</div>
+          <div className="col-span-3 flex items-center gap-2">
+            <span className="w-3 h-3 bg-gray-600 rounded-full" />
+            <span>{planet.name}</span>
+          </div>
+          <div className="col-span-2">—</div>
+          <div className="col-span-2 text-xs capitalize">{planet.planetType?.replace('_', ' ')}</div>
+          <div className="col-span-4 text-right text-xs">Uninhabitable</div>
         </div>
-        <div className="col-span-2">—</div>
-        <div className="col-span-2 text-xs capitalize">{planet.planetType?.replace('_', ' ')}</div>
-        <div className="col-span-4 text-right text-xs">Uninhabitable</div>
-      </div>
+        {/* Mobile view */}
+        <div className="sm:hidden p-3 text-gray-500">
+          <div className="flex items-center gap-2">
+            <span className="font-mono w-6">{planet.position}</span>
+            <span className="w-2.5 h-2.5 bg-gray-600 rounded-full" />
+            <span className="text-sm">{planet.name}</span>
+          </div>
+          <div className="text-xs ml-8 mt-1 capitalize">
+            {planet.planetType?.replace('_', ' ')} • Uninhabitable
+          </div>
+        </div>
+      </>
     );
   }
 
   // Colonizable planet
   if (planet.type === 'colonizable') {
     return (
-      <div className="grid grid-cols-12 gap-2 p-4 items-center hover:bg-sky-500/5 transition-colors">
-        <div className="col-span-1 font-mono text-sky-400">{planet.position}</div>
-        <div className="col-span-3 flex items-center gap-2">
-          <span className="w-3 h-3 bg-sky-600 rounded-full" />
-          <span className="text-sky-300">{planet.name}</span>
+      <>
+        {/* Desktop view */}
+        <div className="hidden sm:grid grid-cols-12 gap-2 p-4 items-center hover:bg-sky-500/5 transition-colors">
+          <div className="col-span-1 font-mono text-sky-400">{planet.position}</div>
+          <div className="col-span-3 flex items-center gap-2">
+            <span className="w-3 h-3 bg-sky-600 rounded-full" />
+            <span className="text-sky-300">{planet.name}</span>
+          </div>
+          <div className="col-span-2 text-gray-500">Unclaimed</div>
+          <div className="col-span-2 text-xs text-sky-400/70 capitalize">{planet.planetType?.replace('_', ' ')}</div>
+          <div className="col-span-4 text-right">
+            {isConnected ? (
+              <button 
+                onClick={() => onColonize(planet.position)}
+                disabled={colonizing || !hasColonyShip}
+                className={`px-3 py-2 min-h-[44px] text-xs rounded transition-colors ${
+                  hasColonyShip 
+                    ? 'bg-sky-600/20 text-sky-400 border border-sky-600/50 hover:bg-sky-600/30'
+                    : 'bg-gray-500/20 text-gray-500 border border-gray-500/30 cursor-not-allowed'
+                }`}
+                title={!hasColonyShip ? 'Build a Colony Ship first' : 'Colonize this planet'}
+              >
+                {colonizing ? (
+                  <span className="flex items-center gap-1">
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                    Colonizing...
+                  </span>
+                ) : (
+                  <>🚀 Colonize</>
+                )}
+              </button>
+            ) : (
+              <span className="text-xs text-gray-500">Connect wallet to colonize</span>
+            )}
+          </div>
         </div>
-        <div className="col-span-2 text-gray-500">Unclaimed</div>
-        <div className="col-span-2 text-xs text-sky-400/70 capitalize">{planet.planetType?.replace('_', ' ')}</div>
-        <div className="col-span-4 text-right">
-          {isConnected ? (
-            <button 
-              onClick={() => onColonize(planet.position)}
-              disabled={colonizing || !hasColonyShip}
-              className={`px-3 py-1 text-xs rounded transition-colors ${
-                hasColonyShip 
-                  ? 'bg-sky-600/20 text-sky-400 border border-sky-600/50 hover:bg-sky-600/30'
-                  : 'bg-gray-500/20 text-gray-500 border border-gray-500/30 cursor-not-allowed'
-              }`}
-              title={!hasColonyShip ? 'Build a Colony Ship first' : 'Colonize this planet'}
-            >
-              {colonizing ? (
-                <span className="flex items-center gap-1">
-                  <Loader2 className="w-3 h-3 animate-spin" />
-                  Colonizing...
-                </span>
-              ) : (
-                <>🚀 Colonize</>
-              )}
-            </button>
-          ) : (
-            <span className="text-xs text-gray-500">Connect wallet to colonize</span>
-          )}
+        {/* Mobile view */}
+        <div className="sm:hidden p-3 active:bg-sky-500/10">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <span className="font-mono text-sky-400 w-6">{planet.position}</span>
+              <span className="w-2.5 h-2.5 bg-sky-600 rounded-full flex-shrink-0" />
+              <span className="text-sky-300 text-sm truncate">{planet.name}</span>
+            </div>
+            {isConnected ? (
+              <button 
+                onClick={() => onColonize(planet.position)}
+                disabled={colonizing || !hasColonyShip}
+                className={`px-3 py-2 min-h-[44px] text-xs rounded transition-colors flex-shrink-0 ${
+                  hasColonyShip 
+                    ? 'bg-sky-600/20 text-sky-400 border border-sky-600/50 active:bg-sky-600/40'
+                    : 'bg-gray-500/20 text-gray-500 border border-gray-500/30 cursor-not-allowed'
+                }`}
+              >
+                {colonizing ? <Loader2 className="w-3 h-3 animate-spin" /> : <>🚀 Colonize</>}
+              </button>
+            ) : null}
+          </div>
+          <div className="text-xs text-sky-400/70 ml-8 mt-1 capitalize">
+            {planet.planetType?.replace('_', ' ')} • Unclaimed
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -411,56 +481,103 @@ function PlanetRow({ planet, galaxy, system, userAddress, onColonize, colonizing
   const isAI = planet.isAI;
 
   return (
-    <div className={`grid grid-cols-12 gap-2 p-4 items-center transition-colors ${
-      isYours ? 'bg-green-500/10' : isEnemy ? 'hover:bg-red-500/5' : 'hover:bg-white/5'
-    }`}>
-      <div className={`col-span-1 font-mono ${isYours ? 'text-green-400' : isAI ? 'text-purple-400' : 'text-white'}`}>
-        {planet.position}
-      </div>
-      <div className="col-span-3 flex items-center gap-2">
-        <span className={`w-3 h-3 rounded-full ${
-          isYours ? 'bg-green-500' : isAI ? 'bg-purple-500' : 'bg-red-500'
-        }`} />
-        <span className={isYours ? 'text-green-400 font-medium' : 'text-white'}>
-          {planet.name || 'Unknown Colony'}
-        </span>
-        {planet.isHomeworld && (
-          <Home className="w-3 h-3 text-yellow-400" title="Homeworld" />
-        )}
-      </div>
-      <div className="col-span-2 flex items-center gap-2">
-        {planet.owner ? (
-          <>
-            {isAI ? <Rocket className="w-4 h-4 text-purple-400" /> : <User className="w-4 h-4 text-gray-400" />}
-            <span className={isYours ? 'text-green-400' : isAI ? 'text-purple-400' : 'text-white'}>
-              {isYours ? 'YOU' : planet.owner}
-            </span>
-          </>
-        ) : (
-          <span className="text-gray-500">—</span>
-        )}
-      </div>
-      <div className="col-span-2 text-xs text-gray-400 capitalize">
-        {planet.planetType?.replace('_', ' ')}
-        {planet.fields && <span className="ml-1 opacity-60">({planet.fields} fields)</span>}
-      </div>
-      <div className="col-span-4 flex justify-end gap-2">
-        {isYours ? (
-          <span className="text-green-400 text-sm flex items-center gap-1">
-            <Home className="w-4 h-4" />
-            Your Colony
+    <>
+      {/* Desktop view */}
+      <div className={`hidden sm:grid grid-cols-12 gap-2 p-4 items-center transition-colors ${
+        isYours ? 'bg-green-500/10' : isEnemy ? 'hover:bg-red-500/5' : 'hover:bg-white/5'
+      }`}>
+        <div className={`col-span-1 font-mono ${isYours ? 'text-green-400' : isAI ? 'text-purple-400' : 'text-white'}`}>
+          {planet.position}
+        </div>
+        <div className="col-span-3 flex items-center gap-2">
+          <span className={`w-3 h-3 rounded-full ${
+            isYours ? 'bg-green-500' : isAI ? 'bg-purple-500' : 'bg-red-500'
+          }`} />
+          <span className={isYours ? 'text-green-400 font-medium' : 'text-white'}>
+            {planet.name || 'Unknown Colony'}
           </span>
-        ) : (
-          <>
-            <button className="px-3 py-1 text-xs bg-white/10 text-gray-300 border border-white/20 rounded hover:bg-white/20">
-              Spy
-            </button>
-            <button className="px-3 py-1 text-xs bg-red-500/20 text-red-400 border border-red-500/50 rounded hover:bg-red-500/30">
-              Attack
-            </button>
-          </>
-        )}
+          {planet.isHomeworld && (
+            <Home className="w-3 h-3 text-yellow-400" title="Homeworld" />
+          )}
+        </div>
+        <div className="col-span-2 flex items-center gap-2">
+          {planet.owner ? (
+            <>
+              {isAI ? <Rocket className="w-4 h-4 text-purple-400" /> : <User className="w-4 h-4 text-gray-400" />}
+              <span className={isYours ? 'text-green-400' : isAI ? 'text-purple-400' : 'text-white'}>
+                {isYours ? 'YOU' : planet.owner}
+              </span>
+            </>
+          ) : (
+            <span className="text-gray-500">—</span>
+          )}
+        </div>
+        <div className="col-span-2 text-xs text-gray-400 capitalize">
+          {planet.planetType?.replace('_', ' ')}
+          {planet.fields && <span className="ml-1 opacity-60">({planet.fields} fields)</span>}
+        </div>
+        <div className="col-span-4 flex justify-end gap-2">
+          {isYours ? (
+            <span className="text-green-400 text-sm flex items-center gap-1">
+              <Home className="w-4 h-4" />
+              Your Colony
+            </span>
+          ) : (
+            <>
+              <button className="px-3 py-2 min-h-[44px] text-xs bg-white/10 text-gray-300 border border-white/20 rounded hover:bg-white/20">
+                Spy
+              </button>
+              <button className="px-3 py-2 min-h-[44px] text-xs bg-red-500/20 text-red-400 border border-red-500/50 rounded hover:bg-red-500/30">
+                Attack
+              </button>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+      {/* Mobile view */}
+      <div className={`sm:hidden p-3 ${
+        isYours ? 'bg-green-500/10' : isEnemy ? 'active:bg-red-500/10' : 'active:bg-white/5'
+      }`}>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <span className={`font-mono w-6 ${isYours ? 'text-green-400' : isAI ? 'text-purple-400' : 'text-white'}`}>
+              {planet.position}
+            </span>
+            <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${
+              isYours ? 'bg-green-500' : isAI ? 'bg-purple-500' : 'bg-red-500'
+            }`} />
+            <span className={`text-sm truncate ${isYours ? 'text-green-400 font-medium' : 'text-white'}`}>
+              {planet.name || 'Unknown Colony'}
+            </span>
+            {planet.isHomeworld && (
+              <Home className="w-3 h-3 text-yellow-400 flex-shrink-0" />
+            )}
+          </div>
+          {isYours ? (
+            <span className="text-green-400 text-xs flex items-center gap-1 flex-shrink-0">
+              <Home className="w-3 h-3" />
+              Yours
+            </span>
+          ) : (
+            <div className="flex gap-1 flex-shrink-0">
+              <button className="px-2 py-2 min-h-[44px] text-xs bg-white/10 text-gray-300 border border-white/20 rounded active:bg-white/30">
+                Spy
+              </button>
+              <button className="px-2 py-2 min-h-[44px] text-xs bg-red-500/20 text-red-400 border border-red-500/50 rounded active:bg-red-500/40">
+                Attack
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="text-xs text-gray-400 ml-8 mt-1">
+          <span className={isYours ? 'text-green-400' : isAI ? 'text-purple-400' : ''}>
+            {isYours ? 'YOU' : planet.owner}
+          </span>
+          <span className="mx-1">•</span>
+          <span className="capitalize">{planet.planetType?.replace('_', ' ')}</span>
+          {planet.fields && <span className="opacity-60"> ({planet.fields} fields)</span>}
+        </div>
+      </div>
+    </>
   );
 }
