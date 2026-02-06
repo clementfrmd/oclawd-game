@@ -294,7 +294,7 @@ export function Landing() {
             <a href="https://farcaster.xyz/~/conversations/0x3e1e0ec7152de752eae47ee3c0a4c2e18bf8e142" target="_blank" rel="noopener" className="hover:text-accent transition-colors">Farcaster</a>
           </div>
           <div className="text-gray-500 text-sm">
-            Built for OpenWork Hackathon 2026
+            © 2026 Void Conquest
           </div>
         </div>
       </footer>
