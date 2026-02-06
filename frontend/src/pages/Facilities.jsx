@@ -154,68 +154,68 @@ export function Facilities() {
   }
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen p-3 sm:p-6">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-100">Facilities</h1>
-        <p className="text-slate-400">Build and upgrade structures to increase production</p>
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-100">Facilities</h1>
+        <p className="text-slate-400 text-sm sm:text-base">Build and upgrade structures to increase production</p>
       </div>
       
       {/* Resources Bar */}
-      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 mb-6">
-        <div className="grid grid-cols-4 gap-4 text-center">
+      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-center">
           <div>
-            <div className="text-sm text-slate-400">Metal</div>
-            <div className="text-lg font-bold text-orange-400">{Math.floor(resources.metal || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Metal</div>
+            <div className="text-base sm:text-lg font-bold text-orange-400">{Math.floor(resources.metal || 0).toLocaleString()}</div>
           </div>
           <div>
-            <div className="text-sm text-slate-400">Crystal</div>
-            <div className="text-lg font-bold text-cyan-400">{Math.floor(resources.crystal || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Crystal</div>
+            <div className="text-base sm:text-lg font-bold text-cyan-400">{Math.floor(resources.crystal || 0).toLocaleString()}</div>
           </div>
           <div>
-            <div className="text-sm text-slate-400">Deuterium</div>
-            <div className="text-lg font-bold text-purple-400">{Math.floor(resources.deuterium || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Deuterium</div>
+            <div className="text-base sm:text-lg font-bold text-purple-400">{Math.floor(resources.deuterium || 0).toLocaleString()}</div>
           </div>
           <div>
-            <div className="text-sm text-slate-400">Energy</div>
-            <div className="text-lg font-bold text-yellow-400">{Math.floor(resources.energy || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Energy</div>
+            <div className="text-base sm:text-lg font-bold text-yellow-400">{Math.floor(resources.energy || 0).toLocaleString()}</div>
           </div>
         </div>
       </div>
 
       {/* Success/Error Messages */}
       {success && (
-        <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-4 mb-6 flex items-center gap-3">
-          <CheckCircle className="w-5 h-5 text-green-400" />
-          <span className="text-green-300">{success}</span>
+        <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+          <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" />
+          <span className="text-green-300 text-sm sm:text-base">{success}</span>
         </div>
       )}
       {error && (
-        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-4 mb-6">
-          <span className="text-red-300">{error}</span>
+        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+          <span className="text-red-300 text-sm sm:text-base">{error}</span>
         </div>
       )}
 
       {/* Category Tabs */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+      <div className="flex gap-2 mb-4 sm:mb-6 overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0">
         {CATEGORIES.map(cat => (
           <button
             key={cat.id}
             onClick={() => setSelectedCategory(cat.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 min-h-[44px] rounded-lg font-medium transition whitespace-nowrap text-sm sm:text-base ${
               selectedCategory === cat.id
                 ? 'bg-sky-600 text-white'
-                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                : 'bg-slate-800 text-slate-400 hover:bg-slate-700 active:bg-slate-600'
             }`}
           >
             {cat.icon}
-            {cat.name}
+            <span className="hidden xs:inline sm:inline">{cat.name}</span>
           </button>
         ))}
       </div>
 
       {/* Facility Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {filteredFacilities.map(facility => {
           const info = FACILITY_INFO[facility.facilityType] || {};
           const affordable = canAfford(facility);
@@ -225,15 +225,15 @@ export function Facilities() {
           return (
             <div
               key={facility.id}
-              className="bg-slate-800/50 border border-slate-700 rounded-lg p-4"
+              className="bg-slate-800/50 border border-slate-700 rounded-lg p-3 sm:p-4"
             >
               {/* Header */}
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl">{info.icon || '🏗️'}</span>
+              <div className="flex items-start justify-between mb-2 sm:mb-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <span className="text-2xl sm:text-3xl">{info.icon || '🏗️'}</span>
                   <div>
-                    <h3 className="font-bold text-slate-100">{info.name || facility.facilityType}</h3>
-                    <span className="text-sm text-slate-500">Level {facility.level || 0}</span>
+                    <h3 className="font-bold text-slate-100 text-sm sm:text-base">{info.name || facility.facilityType}</h3>
+                    <span className="text-xs sm:text-sm text-slate-500">Level {facility.level || 0}</span>
                   </div>
                 </div>
                 {isUpgrading && (
@@ -244,22 +244,22 @@ export function Facilities() {
               </div>
               
               {/* Description */}
-              <p className="text-sm text-slate-400 mb-3">{info.description || ''}</p>
+              <p className="text-xs sm:text-sm text-slate-400 mb-2 sm:mb-3">{info.description || ''}</p>
               
               {/* Production */}
               {facility.production && Object.keys(facility.production).length > 0 && (
-                <div className="text-sm text-green-400 mb-2">
+                <div className="text-xs sm:text-sm text-green-400 mb-2">
                   Production: {Object.entries(facility.production).map(([k, v]) => `+${v} ${k}`).join(', ')}
                 </div>
               )}
               
               {/* Upgrade Cost */}
               {facility.upgradeCost && (
-                <div className="flex flex-wrap gap-2 mb-3">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2 sm:mb-3">
                   {Object.entries(facility.upgradeCost).map(([resource, amount]) => (
                     <span
                       key={resource}
-                      className={`text-xs px-2 py-1 rounded ${
+                      className={`text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded ${
                         (resources[resource] || 0) >= amount
                           ? 'bg-slate-700 text-slate-300'
                           : 'bg-red-900/30 text-red-400'
@@ -272,7 +272,7 @@ export function Facilities() {
               )}
               
               {/* Build Button */}
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-xs text-slate-500 flex items-center gap-1">
                   <Clock className="w-3 h-3" />
                   {formatTime(facility.upgradeTime || 60)}
@@ -280,9 +280,9 @@ export function Facilities() {
                 <button
                   onClick={() => handleBuild(facility)}
                   disabled={!affordable || isBuilding || isUpgrading}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded text-sm font-medium transition ${
+                  className={`flex items-center gap-1 px-3 py-2 min-h-[44px] rounded text-sm font-medium transition ${
                     affordable && !isUpgrading
-                      ? 'bg-sky-600 hover:bg-sky-500 text-white'
+                      ? 'bg-sky-600 hover:bg-sky-500 active:bg-sky-400 text-white'
                       : 'bg-slate-700 text-slate-500 cursor-not-allowed'
                   }`}
                 >

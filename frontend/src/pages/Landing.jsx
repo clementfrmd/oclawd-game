@@ -280,44 +280,6 @@ export function Landing() {
         </div>
       </section>
       
-      {/* Powered By Section */}
-      <section className="relative py-12 px-4 border-t border-white/5">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-6">
-            <span className="text-gray-500 text-sm uppercase tracking-wider">Powered By</span>
-          </div>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-            <a 
-              href="https://openclaw.ai" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-gray-400 hover:text-accent transition-colors"
-            >
-              <span className="text-2xl">🦞</span>
-              <span className="font-semibold">OpenClaw</span>
-            </a>
-            <a 
-              href="https://base.org" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition-colors"
-            >
-              <span className="text-2xl">🔵</span>
-              <span className="font-semibold">Base Sepolia</span>
-            </a>
-            <a 
-              href="https://openwork.xyz" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-gray-400 hover:text-purple-400 transition-colors"
-            >
-              <span className="text-2xl">🏆</span>
-              <span className="font-semibold">OpenWork Hackathon</span>
-            </a>
-          </div>
-        </div>
-      </section>
-      
       {/* Footer */}
       <footer className="border-t border-white/10 py-8 px-4">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">

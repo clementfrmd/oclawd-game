@@ -207,55 +207,55 @@ export function Defense() {
   }
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen p-3 sm:p-6">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-100">Defense Systems</h1>
-        <p className="text-slate-400">Build defensive structures to protect your colony</p>
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-100">Defense Systems</h1>
+        <p className="text-slate-400 text-sm sm:text-base">Build defensive structures to protect your colony</p>
       </div>
       
       {/* Resources Bar */}
-      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 mb-6">
-        <div className="grid grid-cols-4 gap-4 text-center">
+      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-center">
           <div>
-            <div className="text-sm text-slate-400">Metal</div>
-            <div className="text-lg font-bold text-orange-400">{Math.floor(resources.metal || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Metal</div>
+            <div className="text-base sm:text-lg font-bold text-orange-400">{Math.floor(resources.metal || 0).toLocaleString()}</div>
           </div>
           <div>
-            <div className="text-sm text-slate-400">Crystal</div>
-            <div className="text-lg font-bold text-cyan-400">{Math.floor(resources.crystal || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Crystal</div>
+            <div className="text-base sm:text-lg font-bold text-cyan-400">{Math.floor(resources.crystal || 0).toLocaleString()}</div>
           </div>
           <div>
-            <div className="text-sm text-slate-400">Deuterium</div>
-            <div className="text-lg font-bold text-purple-400">{Math.floor(resources.deuterium || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Deuterium</div>
+            <div className="text-base sm:text-lg font-bold text-purple-400">{Math.floor(resources.deuterium || 0).toLocaleString()}</div>
           </div>
           <div>
-            <div className="text-sm text-slate-400">Energy</div>
-            <div className="text-lg font-bold text-yellow-400">{Math.floor(resources.energy || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Energy</div>
+            <div className="text-base sm:text-lg font-bold text-yellow-400">{Math.floor(resources.energy || 0).toLocaleString()}</div>
           </div>
         </div>
       </div>
       
       {/* Success/Error Messages */}
       {success && (
-        <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-4 mb-6 flex items-center gap-3">
-          <CheckCircle className="w-5 h-5 text-green-400" />
-          <span className="text-green-300">{success}</span>
+        <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+          <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" />
+          <span className="text-green-300 text-sm sm:text-base">{success}</span>
         </div>
       )}
       {error && (
-        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-4 mb-6">
-          <span className="text-red-300">{error}</span>
+        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+          <span className="text-red-300 text-sm sm:text-base">{error}</span>
         </div>
       )}
       
       {/* Info Box */}
-      <div className="bg-red-900/20 border border-red-700/50 rounded-lg p-4 mb-6">
-        <div className="flex items-start gap-3">
-          <Info className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+      <div className="bg-red-900/20 border border-red-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+        <div className="flex items-start gap-2 sm:gap-3">
+          <Info className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-red-300 font-medium">Defense Strategy</p>
-            <p className="text-red-400/80 text-sm mt-1">
+            <p className="text-red-300 font-medium text-sm sm:text-base">Defense Strategy</p>
+            <p className="text-red-400/80 text-xs sm:text-sm mt-1">
               Defenses protect your resources when you're attacked. A balanced mix of light and heavy defenses provides the best protection.
               Shield domes protect all defenses but you can only have one of each type.
             </p>
@@ -264,15 +264,15 @@ export function Defense() {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+      <div className="flex gap-2 mb-4 sm:mb-6 overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0">
         {CATEGORIES.map(cat => (
           <button
             key={cat.id}
             onClick={() => setSelectedCategory(cat.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 min-h-[44px] rounded-lg font-medium transition whitespace-nowrap text-sm sm:text-base ${
               selectedCategory === cat.id
                 ? 'bg-red-600 text-white'
-                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                : 'bg-slate-800 text-slate-400 hover:bg-slate-700 active:bg-slate-600'
             }`}
           >
             {cat.icon}
@@ -282,7 +282,7 @@ export function Defense() {
       </div>
 
       {/* Defense Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {filteredDefenses.map(defense => {
           const count = playerDefenses[defense.id] || 0;
           const affordable = canAfford(defense, buildAmount);
@@ -294,18 +294,18 @@ export function Defense() {
           return (
             <div
               key={defense.id}
-              className={`bg-slate-800/50 border rounded-lg p-4 cursor-pointer transition hover:border-red-600 ${
+              className={`bg-slate-800/50 border rounded-lg p-3 sm:p-4 cursor-pointer transition hover:border-red-600 ${
                 selectedDefense?.id === defense.id ? 'border-red-500' : 'border-slate-700'
               } ${!hasDefensePlatform ? 'opacity-60' : ''}`}
               onClick={() => setSelectedDefense(defense)}
             >
               {/* Header */}
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl">{defense.icon}</span>
+              <div className="flex items-start justify-between mb-2 sm:mb-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <span className="text-2xl sm:text-3xl">{defense.icon}</span>
                   <div>
-                    <h3 className="font-bold text-slate-100">{defense.name}</h3>
-                    <span className="text-sm text-slate-500">
+                    <h3 className="font-bold text-slate-100 text-sm sm:text-base">{defense.name}</h3>
+                    <span className="text-xs sm:text-sm text-slate-500">
                       Owned: {count}{defense.limit ? `/${defense.limit}` : ''}
                     </span>
                   </div>
@@ -318,33 +318,33 @@ export function Defense() {
               </div>
               
               {/* Description */}
-              <p className="text-sm text-slate-400 mb-2">{defense.description}</p>
+              <p className="text-xs sm:text-sm text-slate-400 mb-2">{defense.description}</p>
               
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-2 mb-3 text-xs">
-                <div className="bg-slate-700/50 rounded p-2 text-center">
-                  <div className="text-red-400 font-bold">{defense.attack}</div>
-                  <div className="text-slate-500">Attack</div>
+              <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mb-2 sm:mb-3 text-xs">
+                <div className="bg-slate-700/50 rounded p-1.5 sm:p-2 text-center">
+                  <div className="text-red-400 font-bold text-xs sm:text-sm">{defense.attack}</div>
+                  <div className="text-slate-500 text-[10px] sm:text-xs">Attack</div>
                 </div>
-                <div className="bg-slate-700/50 rounded p-2 text-center">
-                  <div className="text-blue-400 font-bold">{defense.shields}</div>
-                  <div className="text-slate-500">Shield</div>
+                <div className="bg-slate-700/50 rounded p-1.5 sm:p-2 text-center">
+                  <div className="text-blue-400 font-bold text-xs sm:text-sm">{defense.shields}</div>
+                  <div className="text-slate-500 text-[10px] sm:text-xs">Shield</div>
                 </div>
-                <div className="bg-slate-700/50 rounded p-2 text-center">
-                  <div className="text-slate-300 font-bold">{defense.hull}</div>
-                  <div className="text-slate-500">Hull</div>
+                <div className="bg-slate-700/50 rounded p-1.5 sm:p-2 text-center">
+                  <div className="text-slate-300 font-bold text-xs sm:text-sm">{defense.hull}</div>
+                  <div className="text-slate-500 text-[10px] sm:text-xs">Hull</div>
                 </div>
               </div>
               
               {/* Cost */}
-              <div className="flex flex-wrap gap-2 mb-3">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2 sm:mb-3">
                 {Object.entries(totalCost(defense, buildAmount)).map(([resource, amount]) => {
                   const backendResource = RESOURCE_DISPLAY[resource] || resource;
                   const hasEnough = (resources[backendResource] || 0) >= amount;
                   return (
                     <span
                       key={resource}
-                      className={`text-xs px-2 py-1 rounded ${
+                      className={`text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded ${
                         hasEnough
                           ? 'bg-slate-700 text-slate-300'
                           : 'bg-red-900/30 text-red-400'
@@ -357,7 +357,7 @@ export function Defense() {
               </div>
               
               {/* Amount & Build */}
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-slate-500 flex items-center gap-1">
                     <Clock className="w-3 h-3" />
@@ -367,7 +367,7 @@ export function Defense() {
                     <select
                       value={buildAmount}
                       onChange={(e) => setBuildAmount(parseInt(e.target.value))}
-                      className="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-xs text-slate-300"
+                      className="bg-slate-700 border border-slate-600 rounded px-2 py-1.5 min-h-[36px] text-xs text-slate-300"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <option value={1}>×1</option>
@@ -383,9 +383,9 @@ export function Defense() {
                     handleBuild(defense, defense.limit ? 1 : buildAmount);
                   }}
                   disabled={!canBuild || atLimit || isBuilding}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded text-sm font-medium transition ${
+                  className={`flex items-center gap-1 px-3 py-2 min-h-[44px] rounded text-sm font-medium transition ${
                     canBuild && !atLimit
-                      ? 'bg-red-600 hover:bg-red-500 text-white'
+                      ? 'bg-red-600 hover:bg-red-500 active:bg-red-400 text-white'
                       : 'bg-slate-700 text-slate-500 cursor-not-allowed'
                   }`}
                 >

@@ -397,3 +397,189 @@ select:focus {
   backdrop-filter: blur(8px);
   border: 1px solid var(--border-subtle);
 }
+
+/* Mobile Responsive Enhancements */
+@media (max-width: 640px) {
+  /* Smaller fonts on mobile */
+  .font-display {
+    letter-spacing: -0.01em;
+  }
+  
+  /* Touch-friendly minimum heights */
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger {
+    min-height: 44px;
+    padding: 12px 20px;
+  }
+  
+  /* Panels with less padding on mobile */
+  .panel {
+    border-radius: 6px;
+  }
+  
+  /* Readable code blocks */
+  pre, code {
+    font-size: 0.75rem;
+    word-break: break-all;
+  }
+  
+  /* Hide animated rings on mobile */
+  .animate-rotate-slow {
+    display: none;
+  }
+  
+  /* Stack stats */
+  .stat-value {
+    font-size: 1.5rem;
+  }
+  
+  /* Smaller scrollbar on mobile */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+}
+
+/* Medium screens */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .stat-value {
+    font-size: 1.5rem;
+  }
+}
+
+/* Animation - Slow rotation for rings */
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-rotate-slow {
+  animation: rotate-slow 40s linear infinite;
+}
+
+/* ==========================================
+   MOBILE RESPONSIVE STYLES
+   ========================================== */
+
+/* Touch-friendly buttons - min 44px tap targets */
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Mobile-first resource bars */
+@media (max-width: 767px) {
+  .resource-bar {
+    height: 4px;
+  }
+  
+  /* Smaller stat values on mobile */
+  .stat-value {
+    font-size: 1.25rem;
+  }
+  
+  /* Tighter panel padding on mobile */
+  .panel {
+    padding: 0.75rem;
+  }
+  
+  .panel-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Smaller fonts on mobile */
+  .font-display {
+    font-size: 0.9em;
+  }
+  
+  /* Mobile data tables - hide on small screens, show cards instead */
+  .data-table th,
+  .data-table td {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Corner brackets smaller on mobile */
+  .corner-brackets::before,
+  .corner-brackets::after {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Resource grid - responsive */
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .resource-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Mobile card layout for tables */
+.mobile-card {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .mobile-card {
+    display: none;
+  }
+}
+
+.desktop-table {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktop-table {
+    display: block;
+  }
+}
+
+/* Touch-friendly select inputs */
+select {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+}
+
+/* Ensure tap targets are adequate */
+button, 
+a, 
+input[type="button"], 
+input[type="submit"] {
+  min-height: 44px;
+}
+
+/* Small buttons exception */
+.btn-sm {
+  min-height: 36px;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+}
+
+/* Mobile spacing utilities */
+@media (max-width: 767px) {
+  .mobile-p-4 {
+    padding: 1rem;
+  }
+  
+  .mobile-gap-2 {
+    gap: 0.5rem;
+  }
+  
+  .mobile-text-sm {
+    font-size: 0.875rem;
+  }
+  
+  .mobile-text-xs {
+    font-size: 0.75rem;
+  }
+}

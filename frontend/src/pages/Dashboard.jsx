@@ -171,7 +171,7 @@ export function Dashboard() {
       <div className="stars-bg" />
       <div className="nebula" />
       
-      <div className="relative max-w-7xl mx-auto px-4 py-8">
+      <div className="relative max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
         {/* Offline/Demo Mode Banner */}
         {isOffline && (
           <div className="mb-4 p-4 bg-amber-500/20 border border-amber-500/50 rounded">
@@ -189,10 +189,10 @@ export function Dashboard() {
         )}
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4 mb-4 sm:mb-8">
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="font-display text-3xl md:text-4xl font-bold text-white">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+              <h1 className="font-display text-xl sm:text-3xl md:text-4xl font-bold text-white">
                 COMMAND CENTER
               </h1>
               <span className={`px-2 py-1 rounded text-xs font-mono ${
@@ -203,22 +203,22 @@ export function Dashboard() {
                 {isOffline ? 'DEMO' : 'ONLINE'}
               </span>
             </div>
-            <p className="text-gray-400">
+            <p className="text-gray-400 text-sm sm:text-base">
               Colony: <span className="text-sky-400 font-mono">{gameState.colony.name}</span> • 
               Coordinates: <span className="text-sky-400 font-mono">{gameState.colony.coordinates}</span>
             </p>
           </div>
           
           <div className="flex gap-2">
-            <Link to="/galaxy" className="btn-secondary py-2 px-4 text-sm">
+            <Link to="/galaxy" className="btn-secondary py-2 px-4 text-sm min-h-[44px] flex items-center">
               Galaxy Map
             </Link>
           </div>
         </div>
 
         {/* Resources Bar */}
-        <div className="panel p-4 mb-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="panel p-3 sm:p-4 mb-4 sm:mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             <ResourceDisplay
               name="Ore"
               value={gameState.resources.ore}
@@ -252,13 +252,13 @@ export function Dashboard() {
         </div>
 
         {/* Main Grid */}
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Left Column - Status */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Active Queues */}
-            <div className="panel p-6">
-              <h2 className="font-display text-xl text-white mb-4 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-sky-400" />
+            <div className="panel p-4 sm:p-6">
+              <h2 className="font-display text-base sm:text-xl text-white mb-3 sm:mb-4 flex items-center gap-2">
+                <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-sky-400" />
                 ACTIVE CONSTRUCTION
               </h2>
               <div className="space-y-3">
@@ -292,9 +292,9 @@ export function Dashboard() {
             </div>
 
             {/* Quick Actions */}
-            <div className="panel p-6">
-              <h2 className="font-display text-xl text-white mb-4">QUICK ACTIONS</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="panel p-4 sm:p-6">
+              <h2 className="font-display text-base sm:text-xl text-white mb-3 sm:mb-4">QUICK ACTIONS</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
                 <ActionCard to="/facilities" icon={Building2} label="Build" color="cyan" />
                 <ActionCard to="/research" icon={FlaskConical} label="Research" color="purple" />
                 <ActionCard to="/fleet" icon={Rocket} label="Fleet" color="orange" />
@@ -303,39 +303,39 @@ export function Dashboard() {
             </div>
 
             {/* Fleet Overview */}
-            <div className="panel p-6">
-              <h2 className="font-display text-xl text-white mb-4 flex items-center gap-2">
-                <Rocket className="w-5 h-5 text-orange-400" />
+            <div className="panel p-4 sm:p-6">
+              <h2 className="font-display text-base sm:text-xl text-white mb-3 sm:mb-4 flex items-center gap-2">
+                <Rocket className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" />
                 FLEET STATUS
               </h2>
               {gameState.fleet.total > 0 ? (
                 <>
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-2 gap-4 sm:gap-6">
                     <div>
-                      <div className="text-gray-400 text-sm mb-1">Total Vessels</div>
-                      <div className="font-mono text-3xl text-white">{gameState.fleet.total.toLocaleString()}</div>
+                      <div className="text-gray-400 text-xs sm:text-sm mb-1">Total Vessels</div>
+                      <div className="font-mono text-xl sm:text-3xl text-white">{gameState.fleet.total.toLocaleString()}</div>
                     </div>
                     <div>
-                      <div className="text-gray-400 text-sm mb-1">Fleet Power</div>
-                      <div className="font-mono text-3xl text-orange-400">{gameState.fleet.power.toLocaleString()}</div>
+                      <div className="text-gray-400 text-xs sm:text-sm mb-1">Fleet Power</div>
+                      <div className="font-mono text-xl sm:text-3xl text-orange-400">{gameState.fleet.power.toLocaleString()}</div>
                     </div>
                   </div>
                 </>
               ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <Rocket className="w-12 h-12 mx-auto mb-2 opacity-30" />
-                  <p>No vessels in fleet</p>
-                  <Link to="/fleet" className="text-sky-400 text-sm hover:underline">Build your first ship →</Link>
+                <div className="text-center py-6 sm:py-8 text-gray-500">
+                  <Rocket className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 opacity-30" />
+                  <p className="text-sm sm:text-base">No vessels in fleet</p>
+                  <Link to="/fleet" className="text-sky-400 text-sm hover:underline min-h-[44px] inline-flex items-center">Build your first ship →</Link>
                 </div>
               )}
             </div>
           </div>
 
           {/* Right Column - Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Colony Info */}
-            <div className="panel panel-purple p-6">
-              <h2 className="font-display text-lg text-white mb-4">COLONY INFO</h2>
+            <div className="panel panel-purple p-4 sm:p-6">
+              <h2 className="font-display text-base sm:text-lg text-white mb-3 sm:mb-4">COLONY INFO</h2>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400">Fields Used</span>
@@ -357,26 +357,26 @@ export function Dashboard() {
             </div>
 
             {/* $VOID Balance */}
-            <div className="panel corner-brackets p-6">
-              <h2 className="font-display text-lg text-white mb-4 flex items-center gap-2">
-                <Zap className="w-5 h-5 text-purple-400" />
+            <div className="panel corner-brackets p-4 sm:p-6">
+              <h2 className="font-display text-base sm:text-lg text-white mb-3 sm:mb-4 flex items-center gap-2">
+                <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
                 $VOID BALANCE
               </h2>
-              <div className="text-center py-4">
-                <div className="font-mono text-4xl text-purple-400 text-highlight-tertiary mb-2">
+              <div className="text-center py-3 sm:py-4">
+                <div className="font-mono text-2xl sm:text-4xl text-purple-400 text-highlight-tertiary mb-2">
                   {gameState.voidBalance.toLocaleString()}
                 </div>
-                <div className="text-gray-400 text-sm">Available for boosts</div>
+                <div className="text-gray-400 text-xs sm:text-sm">Available for boosts</div>
               </div>
-              <Link to="/marketplace" className="block w-full btn-secondary text-center text-sm mt-4">
+              <Link to="/marketplace" className="block w-full btn-secondary text-center text-sm mt-3 sm:mt-4 min-h-[44px] flex items-center justify-center">
                 Buy $VOID
               </Link>
             </div>
 
             {/* Alerts */}
-            <div className="panel panel-orange p-6">
-              <h2 className="font-display text-lg text-white mb-4 flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-orange-400" />
+            <div className="panel panel-orange p-4 sm:p-6">
+              <h2 className="font-display text-base sm:text-lg text-white mb-3 sm:mb-4 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" />
                 ALERTS
               </h2>
               <div className="space-y-2">
@@ -411,18 +411,18 @@ function ResourceDisplay({ name, value, production, color, iconSrc, isEnergy }) 
   const fillPercent = Math.min(100, (value / maxValues[color]) * 100);
 
   return (
-    <div className="flex items-center gap-3">
-      <div className="w-8 h-8 flex-shrink-0">
+    <div className="flex items-center gap-2 sm:gap-3">
+      <div className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0">
         <img src={iconSrc} alt={name} className="w-full h-full object-contain" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-baseline gap-2">
-          <span className="font-mono text-lg text-white">{value.toLocaleString()}</span>
+        <div className="flex items-baseline gap-1 sm:gap-2 flex-wrap">
+          <span className="font-mono text-sm sm:text-lg text-white">{value.toLocaleString()}</span>
           <span className={`text-xs ${isEnergy ? (production >= 0 ? 'text-emerald-500' : 'text-red-500') : 'text-emerald-500'}`}>
             {isEnergy ? (production >= 0 ? `+${production}` : production) : `+${production}/h`}
           </span>
         </div>
-        <div className={`resource-bar mt-1 resource-${color}`}>
+        <div className={`resource-bar mt-1 resource-${color} h-1 sm:h-1.5`}>
           <div className={`resource-bar-fill bg-gradient-to-r ${colors[color]}`} style={{ width: `${fillPercent}%` }} />
         </div>
       </div>
@@ -460,10 +460,10 @@ function QueueItem({ type, name, timeLeft, icon: Icon, color }) {
 
 function ActionCard({ to, icon: Icon, label, color }) {
   const colors = {
-    cyan: 'hover:border-sky-600/50 hover:bg-sky-600/10',
-    purple: 'hover:border-purple-500/50 hover:bg-purple-500/10',
-    orange: 'hover:border-orange-500/50 hover:bg-orange-500/10',
-    red: 'hover:border-red-500/50 hover:bg-red-500/10',
+    cyan: 'hover:border-sky-600/50 hover:bg-sky-600/10 active:bg-sky-600/20',
+    purple: 'hover:border-purple-500/50 hover:bg-purple-500/10 active:bg-purple-500/20',
+    orange: 'hover:border-orange-500/50 hover:bg-orange-500/10 active:bg-orange-500/20',
+    red: 'hover:border-red-500/50 hover:bg-red-500/10 active:bg-red-500/20',
   };
 
   const iconColors = {
@@ -476,10 +476,10 @@ function ActionCard({ to, icon: Icon, label, color }) {
   return (
     <Link
       to={to}
-      className={`flex flex-col items-center gap-2 p-4 border border-white/10 rounded transition-all ${colors[color]}`}
+      className={`flex flex-col items-center justify-center gap-1 sm:gap-2 p-3 sm:p-4 min-h-[80px] sm:min-h-[96px] border border-white/10 rounded transition-all ${colors[color]}`}
     >
-      <Icon className={`w-8 h-8 ${iconColors[color]}`} />
-      <span className="text-sm text-gray-300">{label}</span>
+      <Icon className={`w-6 h-6 sm:w-8 sm:h-8 ${iconColors[color]}`} />
+      <span className="text-xs sm:text-sm text-gray-300">{label}</span>
     </Link>
   );
 }

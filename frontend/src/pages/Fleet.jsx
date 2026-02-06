@@ -139,77 +139,77 @@ export function Fleet() {
   }
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen p-3 sm:p-6">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-100">Shipyard</h1>
-        <p className="text-slate-400">Build and manage your fleet</p>
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-100">Shipyard</h1>
+        <p className="text-slate-400 text-sm sm:text-base">Build and manage your fleet</p>
       </div>
 
       {/* Resources Bar */}
-      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 mb-6">
-        <div className="grid grid-cols-4 gap-4 text-center">
+      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-center">
           <div>
-            <div className="text-sm text-slate-400">Metal</div>
-            <div className="text-lg font-bold text-orange-400">{Math.floor(resources.metal || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Metal</div>
+            <div className="text-base sm:text-lg font-bold text-orange-400">{Math.floor(resources.metal || 0).toLocaleString()}</div>
           </div>
           <div>
-            <div className="text-sm text-slate-400">Crystal</div>
-            <div className="text-lg font-bold text-cyan-400">{Math.floor(resources.crystal || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Crystal</div>
+            <div className="text-base sm:text-lg font-bold text-cyan-400">{Math.floor(resources.crystal || 0).toLocaleString()}</div>
           </div>
           <div>
-            <div className="text-sm text-slate-400">Deuterium</div>
-            <div className="text-lg font-bold text-purple-400">{Math.floor(resources.deuterium || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Deuterium</div>
+            <div className="text-base sm:text-lg font-bold text-purple-400">{Math.floor(resources.deuterium || 0).toLocaleString()}</div>
           </div>
           <div>
-            <div className="text-sm text-slate-400">Fleet Power</div>
-            <div className="text-lg font-bold text-red-400">{(totalAttack + totalShields).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Fleet Power</div>
+            <div className="text-base sm:text-lg font-bold text-red-400">{(totalAttack + totalShields).toLocaleString()}</div>
           </div>
         </div>
       </div>
 
       {/* Fleet Summary */}
-      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 mb-6">
-        <h2 className="text-lg font-bold text-slate-100 mb-3">Fleet Summary</h2>
-        <div className="grid grid-cols-3 gap-4 text-center">
+      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+        <h2 className="text-base sm:text-lg font-bold text-slate-100 mb-2 sm:mb-3">Fleet Summary</h2>
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
           <div>
-            <Rocket className="w-6 h-6 mx-auto mb-1 text-sky-400" />
-            <div className="text-2xl font-bold text-slate-100">{totalShips}</div>
-            <div className="text-sm text-slate-500">Total Ships</div>
+            <Rocket className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1 text-sky-400" />
+            <div className="text-lg sm:text-2xl font-bold text-slate-100">{totalShips}</div>
+            <div className="text-xs sm:text-sm text-slate-500">Total Ships</div>
           </div>
           <div>
-            <Crosshair className="w-6 h-6 mx-auto mb-1 text-red-400" />
-            <div className="text-2xl font-bold text-slate-100">{totalAttack.toLocaleString()}</div>
-            <div className="text-sm text-slate-500">Attack Power</div>
+            <Crosshair className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1 text-red-400" />
+            <div className="text-lg sm:text-2xl font-bold text-slate-100">{totalAttack.toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-500">Attack Power</div>
           </div>
           <div>
-            <Shield className="w-6 h-6 mx-auto mb-1 text-blue-400" />
-            <div className="text-2xl font-bold text-slate-100">{totalShields.toLocaleString()}</div>
-            <div className="text-sm text-slate-500">Shield Power</div>
+            <Shield className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1 text-blue-400" />
+            <div className="text-lg sm:text-2xl font-bold text-slate-100">{totalShields.toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-500">Shield Power</div>
           </div>
         </div>
       </div>
 
       {/* Messages */}
       {success && (
-        <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-4 mb-6 flex items-center gap-3">
-          <CheckCircle className="w-5 h-5 text-green-400" />
-          <span className="text-green-300">{success}</span>
+        <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+          <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" />
+          <span className="text-green-300 text-sm sm:text-base">{success}</span>
         </div>
       )}
       {error && (
-        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-4 mb-6">
-          <span className="text-red-300">{error}</span>
+        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+          <span className="text-red-300 text-sm sm:text-base">{error}</span>
         </div>
       )}
 
       {/* Info Box */}
-      <div className="bg-sky-900/20 border border-sky-700/50 rounded-lg p-4 mb-6">
-        <div className="flex items-start gap-3">
-          <Info className="w-5 h-5 text-sky-400 flex-shrink-0 mt-0.5" />
+      <div className="bg-sky-900/20 border border-sky-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+        <div className="flex items-start gap-2 sm:gap-3">
+          <Info className="w-4 h-4 sm:w-5 sm:h-5 text-sky-400 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-sky-300 font-medium">Building Ships</p>
-            <p className="text-sky-400/80 text-sm mt-1">
+            <p className="text-sky-300 font-medium text-sm sm:text-base">Building Ships</p>
+            <p className="text-sky-400/80 text-xs sm:text-sm mt-1">
               Ships require a Shipyard facility. Higher shipyard levels unlock more ship types and reduce build times.
               Ships consume deuterium when traveling.
             </p>
@@ -218,7 +218,7 @@ export function Fleet() {
       </div>
 
       {/* Ship Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {ships.map(ship => {
           const affordable = canAfford(ship, buildQty);
           const isBuilding = building === ship.shipType;
@@ -227,13 +227,13 @@ export function Fleet() {
           return (
             <div
               key={ship.id}
-              className="bg-slate-800/50 border border-slate-700 rounded-lg p-4"
+              className="bg-slate-800/50 border border-slate-700 rounded-lg p-3 sm:p-4"
             >
               {/* Header */}
-              <div className="flex items-start justify-between mb-3">
+              <div className="flex items-start justify-between mb-2 sm:mb-3">
                 <div>
-                  <h3 className="font-bold text-slate-100">{ship.name}</h3>
-                  <span className="text-sm text-slate-500">Owned: {ship.quantity}</span>
+                  <h3 className="font-bold text-slate-100 text-sm sm:text-base">{ship.name}</h3>
+                  <span className="text-xs sm:text-sm text-slate-500">Owned: {ship.quantity}</span>
                 </div>
                 {ship.isBuilding && (
                   <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded flex items-center gap-1">
@@ -244,27 +244,27 @@ export function Fleet() {
               </div>
               
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-2 mb-3 text-xs">
-                <div className="bg-slate-700/50 rounded p-2 text-center">
-                  <Crosshair className="w-4 h-4 mx-auto mb-1 text-red-400" />
-                  <div className="text-slate-300">{ship.stats?.attack}</div>
+              <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mb-2 sm:mb-3 text-xs">
+                <div className="bg-slate-700/50 rounded p-1.5 sm:p-2 text-center">
+                  <Crosshair className="w-3 h-3 sm:w-4 sm:h-4 mx-auto mb-1 text-red-400" />
+                  <div className="text-slate-300 text-xs sm:text-sm">{ship.stats?.attack}</div>
                 </div>
-                <div className="bg-slate-700/50 rounded p-2 text-center">
-                  <Shield className="w-4 h-4 mx-auto mb-1 text-blue-400" />
-                  <div className="text-slate-300">{ship.stats?.shields}</div>
+                <div className="bg-slate-700/50 rounded p-1.5 sm:p-2 text-center">
+                  <Shield className="w-3 h-3 sm:w-4 sm:h-4 mx-auto mb-1 text-blue-400" />
+                  <div className="text-slate-300 text-xs sm:text-sm">{ship.stats?.shields}</div>
                 </div>
-                <div className="bg-slate-700/50 rounded p-2 text-center">
-                  <Package className="w-4 h-4 mx-auto mb-1 text-green-400" />
-                  <div className="text-slate-300">{ship.stats?.cargo}</div>
+                <div className="bg-slate-700/50 rounded p-1.5 sm:p-2 text-center">
+                  <Package className="w-3 h-3 sm:w-4 sm:h-4 mx-auto mb-1 text-green-400" />
+                  <div className="text-slate-300 text-xs sm:text-sm">{ship.stats?.cargo}</div>
                 </div>
               </div>
               
               {/* Cost */}
-              <div className="flex flex-wrap gap-2 mb-3">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2 sm:mb-3">
                 {ship.cost && Object.entries(ship.cost).filter(([,v]) => v > 0).map(([resource, amount]) => (
                   <span
                     key={resource}
-                    className={`text-xs px-2 py-1 rounded ${
+                    className={`text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded ${
                       (resources[resource] || 0) >= amount * buildQty
                         ? 'bg-slate-700 text-slate-300'
                         : 'bg-red-900/30 text-red-400'
@@ -276,7 +276,7 @@ export function Fleet() {
               </div>
               
               {/* Build Controls */}
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-slate-500 flex items-center gap-1">
                     <Clock className="w-3 h-3" />
@@ -285,7 +285,7 @@ export function Fleet() {
                   <select
                     value={buildQty}
                     onChange={(e) => setBuildQty(parseInt(e.target.value))}
-                    className="bg-slate-700 border border-slate-600 rounded px-2 py-1 text-xs text-slate-300"
+                    className="bg-slate-700 border border-slate-600 rounded px-2 py-1.5 min-h-[36px] text-xs text-slate-300"
                   >
                     <option value={1}>×1</option>
                     <option value={5}>×5</option>
@@ -296,9 +296,9 @@ export function Fleet() {
                 <button
                   onClick={() => handleBuild(ship)}
                   disabled={!affordable || isBuilding || ship.isBuilding}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded text-sm font-medium transition ${
+                  className={`flex items-center gap-1 px-3 py-2 min-h-[44px] rounded text-sm font-medium transition ${
                     affordable && !ship.isBuilding
-                      ? 'bg-sky-600 hover:bg-sky-500 text-white'
+                      ? 'bg-sky-600 hover:bg-sky-500 active:bg-sky-400 text-white'
                       : 'bg-slate-700 text-slate-500 cursor-not-allowed'
                   }`}
                 >

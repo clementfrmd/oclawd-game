@@ -9,6 +9,7 @@ import { Facilities } from './pages/Facilities';
 import { Research } from './pages/Research';
 import { Defense } from './pages/Defense';
 import { Marketplace } from './pages/Marketplace';
+import { ApiDocs } from './pages/ApiDocs';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/research" element={<Research />} />
           <Route path="/defense" element={<Defense />} />
           <Route path="/marketplace" element={<Marketplace />} />
+          <Route path="/api-docs" element={<ApiDocs />} />
         </Routes>
       </div>
     </Router>

@@ -144,10 +144,11 @@ export function Navigation() {
             <div className="flex items-center gap-4">
               <ConnectWallet />
               
-              {/* Mobile Menu Button */}
+              {/* Mobile Menu Button - 44px tap target */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 text-gray-400 hover:text-white"
+                className="lg:hidden p-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-gray-400 hover:text-white hover:bg-slate-800 rounded transition-colors"
+                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -157,7 +158,7 @@ export function Navigation() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-slate-700/50 bg-black/95 backdrop-blur-xl">
+          <div className="lg:hidden border-t border-slate-700/50 bg-black/95 backdrop-blur-xl max-h-[calc(100vh-64px)] overflow-y-auto">
             <div className="px-4 py-4 space-y-2">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -167,14 +168,14 @@ export function Navigation() {
                     key={item.path}
                     to={item.path}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded transition-all ${
+                    className={`flex items-center gap-3 px-4 py-4 min-h-[52px] rounded transition-all ${
                       isActive
                         ? 'bg-slate-700/40 text-sky-400 border border-slate-600'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-800/50 active:bg-slate-700/50'
                     }`}
                   >
-                    <Icon className="w-5 h-5" />
-                    <span className="font-medium">{item.label}</span>
+                    <Icon className="w-5 h-5 flex-shrink-0" />
+                    <span className="font-medium text-base">{item.label}</span>
                   </Link>
                 );
               })}

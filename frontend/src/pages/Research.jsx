@@ -294,53 +294,53 @@ export function Research() {
   const hasResearchLab = facilities.some(f => f.facilityType === 'research_lab' && f.level > 0);
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen p-3 sm:p-6">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-100">Research Lab</h1>
-        <p className="text-slate-400">Unlock technologies to gain strategic advantages</p>
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-100">Research Lab</h1>
+        <p className="text-slate-400 text-sm sm:text-base">Unlock technologies to gain strategic advantages</p>
       </div>
 
       {/* Resources Bar */}
-      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 mb-6">
-        <div className="grid grid-cols-4 gap-4 text-center">
+      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-center">
           <div>
-            <div className="text-sm text-slate-400">Metal</div>
-            <div className="text-lg font-bold text-orange-400">{Math.floor(resources.metal || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Metal</div>
+            <div className="text-base sm:text-lg font-bold text-orange-400">{Math.floor(resources.metal || 0).toLocaleString()}</div>
           </div>
           <div>
-            <div className="text-sm text-slate-400">Crystal</div>
-            <div className="text-lg font-bold text-cyan-400">{Math.floor(resources.crystal || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Crystal</div>
+            <div className="text-base sm:text-lg font-bold text-cyan-400">{Math.floor(resources.crystal || 0).toLocaleString()}</div>
           </div>
           <div>
-            <div className="text-sm text-slate-400">Deuterium</div>
-            <div className="text-lg font-bold text-purple-400">{Math.floor(resources.deuterium || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Deuterium</div>
+            <div className="text-base sm:text-lg font-bold text-purple-400">{Math.floor(resources.deuterium || 0).toLocaleString()}</div>
           </div>
           <div>
-            <div className="text-sm text-slate-400">Energy</div>
-            <div className="text-lg font-bold text-yellow-400">{Math.floor(resources.energy || 0).toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-slate-400">Energy</div>
+            <div className="text-base sm:text-lg font-bold text-yellow-400">{Math.floor(resources.energy || 0).toLocaleString()}</div>
           </div>
         </div>
       </div>
 
       {/* Active Research Banner */}
       {activeResearch && (
-        <div className="bg-purple-900/30 border border-purple-700/50 rounded-lg p-4 mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Loader2 className="w-5 h-5 text-purple-400 animate-spin" />
+        <div className="bg-purple-900/30 border border-purple-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 animate-spin flex-shrink-0" />
               <div>
-                <p className="text-purple-300 font-medium">
+                <p className="text-purple-300 font-medium text-sm sm:text-base">
                   Researching: {TECHNOLOGIES.find(t => t.id === activeResearch.techType)?.name || activeResearch.techType}
                 </p>
-                <p className="text-purple-400/80 text-sm">
+                <p className="text-purple-400/80 text-xs sm:text-sm">
                   Time remaining: {formatTime(timeRemaining)}
                 </p>
               </div>
             </div>
             <button
               onClick={handleCancel}
-              className="flex items-center gap-1 px-3 py-1.5 rounded text-sm font-medium bg-red-600/30 hover:bg-red-600/50 text-red-300 transition"
+              className="flex items-center justify-center gap-1 px-3 py-2 min-h-[44px] rounded text-sm font-medium bg-red-600/30 hover:bg-red-600/50 active:bg-red-600/60 text-red-300 transition self-end sm:self-auto"
             >
               <X className="w-4 h-4" />
               Cancel
@@ -351,12 +351,12 @@ export function Research() {
       
       {/* Requirement Notice */}
       {!hasResearchLab && (
-        <div className="bg-amber-900/30 border border-amber-700/50 rounded-lg p-4 mb-6">
-          <div className="flex items-start gap-3">
-            <Lock className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+        <div className="bg-amber-900/30 border border-amber-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+          <div className="flex items-start gap-2 sm:gap-3">
+            <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-amber-300 font-medium">Research Facilities Required</p>
-              <p className="text-amber-400/80 text-sm mt-1">
+              <p className="text-amber-300 font-medium text-sm sm:text-base">Research Facilities Required</p>
+              <p className="text-amber-400/80 text-xs sm:text-sm mt-1">
                 Build a <strong>Research Lab</strong> in the Facilities tab to unlock technologies.
               </p>
             </div>
@@ -366,24 +366,24 @@ export function Research() {
 
       {/* Success/Error Messages */}
       {success && (
-        <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-4 mb-6 flex items-center gap-3">
-          <CheckCircle className="w-5 h-5 text-green-400" />
-          <span className="text-green-300">{success}</span>
+        <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+          <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" />
+          <span className="text-green-300 text-sm sm:text-base">{success}</span>
         </div>
       )}
       {error && (
-        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-4 mb-6">
-          <span className="text-red-300">{error}</span>
+        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+          <span className="text-red-300 text-sm sm:text-base">{error}</span>
         </div>
       )}
       
       {/* Info Box */}
-      <div className="bg-purple-900/20 border border-purple-700/50 rounded-lg p-4 mb-6">
-        <div className="flex items-start gap-3">
-          <Info className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+      <div className="bg-purple-900/20 border border-purple-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+        <div className="flex items-start gap-2 sm:gap-3">
+          <Info className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-purple-300 font-medium">Research Tips</p>
-            <p className="text-purple-400/80 text-sm mt-1">
+            <p className="text-purple-300 font-medium text-sm sm:text-base">Research Tips</p>
+            <p className="text-purple-400/80 text-xs sm:text-sm mt-1">
               Technologies provide permanent bonuses. Only one research can be in progress at a time.
               Higher levels cost more resources and take longer to complete.
             </p>
@@ -392,15 +392,15 @@ export function Research() {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+      <div className="flex gap-2 mb-4 sm:mb-6 overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0">
         {CATEGORIES.map(cat => (
           <button
             key={cat.id}
             onClick={() => setSelectedCategory(cat.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 min-h-[44px] rounded-lg font-medium transition whitespace-nowrap text-sm sm:text-base ${
               selectedCategory === cat.id
                 ? 'bg-purple-600 text-white'
-                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                : 'bg-slate-800 text-slate-400 hover:bg-slate-700 active:bg-slate-600'
             }`}
           >
             {cat.icon}
@@ -410,7 +410,7 @@ export function Research() {
       </div>
 
       {/* Technology Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {filteredTech.map(tech => {
           const level = playerResearch[tech.id] || 0;
           const affordable = canAfford(tech);
@@ -422,34 +422,34 @@ export function Research() {
           return (
             <div
               key={tech.id}
-              className={`bg-slate-800/50 border rounded-lg p-4 cursor-pointer transition hover:border-purple-600 ${
+              className={`bg-slate-800/50 border rounded-lg p-3 sm:p-4 cursor-pointer transition hover:border-purple-600 ${
                 selectedTech?.id === tech.id ? 'border-purple-500' : 'border-slate-700'
               } ${!hasReqs ? 'opacity-60' : ''} ${isResearchingThis ? 'border-purple-500 bg-purple-900/20' : ''}`}
               onClick={() => setSelectedTech(tech)}
             >
               {/* Header */}
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="text-purple-400">{tech.icon}</div>
+              <div className="flex items-start justify-between mb-2 sm:mb-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="text-purple-400 scale-75 sm:scale-100">{tech.icon}</div>
                   <div>
-                    <h3 className="font-bold text-slate-100">{tech.name}</h3>
-                    <span className="text-sm text-slate-500">Level {level}/{tech.maxLevel}</span>
+                    <h3 className="font-bold text-slate-100 text-sm sm:text-base">{tech.name}</h3>
+                    <span className="text-xs sm:text-sm text-slate-500">Level {level}/{tech.maxLevel}</span>
                   </div>
                 </div>
-                {!hasReqs && <Lock className="w-5 h-5 text-slate-600" />}
+                {!hasReqs && <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-slate-600" />}
                 {isResearchingThis && (
-                  <span className="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded flex items-center gap-1">
+                  <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-purple-500/20 text-purple-400 text-xs rounded flex items-center gap-1">
                     <Loader2 className="w-3 h-3 animate-spin" />
-                    Researching
+                    <span className="hidden sm:inline">Researching</span>
                   </span>
                 )}
               </div>
               
               {/* Description */}
-              <p className="text-sm text-slate-400 mb-2">{tech.description}</p>
+              <p className="text-xs sm:text-sm text-slate-400 mb-2">{tech.description}</p>
               
               {/* Bonus */}
-              <p className="text-sm text-purple-400 mb-3">Bonus: {tech.bonus}</p>
+              <p className="text-xs sm:text-sm text-purple-400 mb-2 sm:mb-3">Bonus: {tech.bonus}</p>
               
               {/* Requirements */}
               {!hasReqs && (
@@ -457,12 +457,12 @@ export function Research() {
               )}
               
               {/* Cost */}
-              <div className="flex flex-wrap gap-2 mb-3">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2 sm:mb-3">
                 {Object.entries(tech.baseCost || {}).map(([resource, amount]) => (
                   amount > 0 && (
                     <span
                       key={resource}
-                      className={`text-xs px-2 py-1 rounded ${
+                      className={`text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded ${
                         (resources[resource] || 0) >= amount
                           ? 'bg-slate-700 text-slate-300'
                           : 'bg-red-900/30 text-red-400'
@@ -475,7 +475,7 @@ export function Research() {
               </div>
               
               {/* Research Button */}
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-xs text-slate-500 flex items-center gap-1">
                   <Clock className="w-3 h-3" />
                   {isResearchingThis ? formatTime(timeRemaining) : researchTime(tech, level)}
@@ -486,9 +486,9 @@ export function Research() {
                     handleResearch(tech);
                   }}
                   disabled={!canResearch || isStarting}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded text-sm font-medium transition ${
+                  className={`flex items-center gap-1 px-3 py-2 min-h-[44px] rounded text-sm font-medium transition ${
                     canResearch && !isStarting
-                      ? 'bg-purple-600 hover:bg-purple-500 text-white'
+                      ? 'bg-purple-600 hover:bg-purple-500 active:bg-purple-400 text-white'
                       : 'bg-slate-700 text-slate-500 cursor-not-allowed'
                   }`}
                 >
