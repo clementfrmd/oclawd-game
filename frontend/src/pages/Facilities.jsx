@@ -33,6 +33,69 @@ export function Facilities() {
   const [building, setBuilding] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [countdowns, setCountdowns] = useState({}); // Track live countdowns
+
+  // Real-time countdown timer
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdowns(prev => {
+        const newCountdowns = { ...prev };
+        let hasChanges = false;
+        
+        facilities.forEach(f => {
+          if (f.isUpgrading && f.upgradeCompletesAt) {
+            const now = Date.now();
+            const completesAt = new Date(f.upgradeCompletesAt).getTime();
+            const remaining = Math.max(0, Math.floor((completesAt - now) / 1000));
+            
+            if (newCountdowns[f.id] !== remaining) {
+              newCountdowns[f.id] = remaining;
+              hasChanges = true;
+            }
+            
+            // Refresh data when timer hits 0
+            if (remaining === 0 && prev[f.id] > 0) {
+              fetchData();
+            }
+          }
+        });
+        
+        return hasChanges ? newCountdowns : prev;
+      });
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, [facilities]);
+
+  const fetchData = async () => {
+    if (!isConnected || !address) return;
+    
+    try {
+      const facRes = await fetch(ENDPOINTS.facilities(address));
+      const facData = await facRes.json();
+      
+      const resRes = await fetch(ENDPOINTS.resources(address));
+      const resData = await resRes.json();
+      
+      if (facData.facilities) {
+        setFacilities(facData.facilities);
+        // Initialize countdowns
+        const initialCountdowns = {};
+        facData.facilities.forEach(f => {
+          if (f.isUpgrading && f.upgradeCompletesAt) {
+            const remaining = Math.max(0, Math.floor((new Date(f.upgradeCompletesAt).getTime() - Date.now()) / 1000));
+            initialCountdowns[f.id] = remaining;
+          }
+        });
+        setCountdowns(initialCountdowns);
+      }
+      if (resData.resources) {
+        setResources(resData.resources);
+      }
+    } catch (err) {
+      console.error('Failed to fetch:', err);
+    }
+  };
 
   // Fetch facilities and resources
   useEffect(() => {
@@ -41,33 +104,18 @@ export function Facilities() {
       return;
     }
 
-    async function fetchData() {
+    const doFetch = async () => {
       try {
         setLoading(true);
-        
-        // Fetch facilities
-        const facRes = await fetch(ENDPOINTS.facilities(address));
-        const facData = await facRes.json();
-        
-        // Fetch resources
-        const resRes = await fetch(ENDPOINTS.resources(address));
-        const resData = await resRes.json();
-        
-        if (facData.facilities) {
-          setFacilities(facData.facilities);
-        }
-        if (resData.resources) {
-          setResources(resData.resources);
-        }
+        await fetchData();
       } catch (err) {
-        console.error('Failed to fetch:', err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
-    }
+    };
 
-    fetchData();
+    doFetch();
     const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
   }, [isConnected, address]);
@@ -237,8 +285,9 @@ export function Facilities() {
                   </div>
                 </div>
                 {isUpgrading && (
-                  <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded">
-                    Upgrading...
+                  <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    {countdowns[facility.id] !== undefined ? formatTime(countdowns[facility.id]) : 'Upgrading...'}
                   </span>
                 )}
               </div>

@@ -43,6 +43,8 @@ export function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isOffline, setIsOffline] = useState(false);
+  const [buildingCountdown, setBuildingCountdown] = useState(null); // Live countdown
+  const [researchCountdown, setResearchCountdown] = useState(null); // Live countdown
   
   // Start with starter resources
   const [gameState, setGameState] = useState(STARTER_STATE);
@@ -135,6 +137,54 @@ export function Dashboard() {
     const interval = setInterval(fetchGameState, 30000);
     return () => clearInterval(interval);
   }, [isConnected, address]);
+
+  // Real-time countdown timer for building/research queues
+  useEffect(() => {
+    const timer = setInterval(() => {
+      // Update building countdown
+      if (gameState.queue?.building?.completesAt) {
+        const remaining = Math.max(0, Math.floor((new Date(gameState.queue.building.completesAt).getTime() - Date.now()) / 1000));
+        const timeStr = remaining > 3600 
+          ? `${Math.floor(remaining/3600)}h ${Math.floor((remaining%3600)/60)}m`
+          : `${Math.floor(remaining/60)}m ${remaining%60}s`;
+        setBuildingCountdown(timeStr);
+      } else if (gameState.queue?.building?.timeLeft) {
+        // Fallback: decrement the existing time string
+        setBuildingCountdown(prev => {
+          if (!prev) return gameState.queue.building.timeLeft;
+          // Parse and decrement
+          const match = prev.match(/(?:(\d+)h\s*)?(?:(\d+)m\s*)?(?:(\d+)s)?/);
+          if (!match) return prev;
+          let hours = parseInt(match[1] || 0);
+          let mins = parseInt(match[2] || 0);
+          let secs = parseInt(match[3] || 0);
+          let total = hours * 3600 + mins * 60 + secs - 1;
+          if (total <= 0) return '0s';
+          hours = Math.floor(total / 3600);
+          mins = Math.floor((total % 3600) / 60);
+          secs = total % 60;
+          if (hours > 0) return `${hours}h ${mins}m`;
+          if (mins > 0) return `${mins}m ${secs}s`;
+          return `${secs}s`;
+        });
+      } else {
+        setBuildingCountdown(null);
+      }
+
+      // Update research countdown (if we have research queue data)
+      if (gameState.queue?.research?.completesAt) {
+        const remaining = Math.max(0, Math.floor((new Date(gameState.queue.research.completesAt).getTime() - Date.now()) / 1000));
+        const timeStr = remaining > 3600 
+          ? `${Math.floor(remaining/3600)}h ${Math.floor((remaining%3600)/60)}m`
+          : `${Math.floor(remaining/60)}m ${remaining%60}s`;
+        setResearchCountdown(timeStr);
+      } else {
+        setResearchCountdown(null);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [gameState.queue]);
 
   // Loading state
   if (loading) {
@@ -266,7 +316,7 @@ export function Dashboard() {
                   <QueueItem
                     type="Building"
                     name={gameState.queue.building.name}
-                    timeLeft={gameState.queue.building.timeLeft}
+                    timeLeft={buildingCountdown || gameState.queue.building.timeLeft}
                     icon={Building2}
                     color="orange"
                   />
@@ -279,7 +329,7 @@ export function Dashboard() {
                   <QueueItem
                     type="Research"
                     name={gameState.queue.research.name}
-                    timeLeft={gameState.queue.research.timeLeft}
+                    timeLeft={researchCountdown || gameState.queue.research.timeLeft}
                     icon={FlaskConical}
                     color="purple"
                   />

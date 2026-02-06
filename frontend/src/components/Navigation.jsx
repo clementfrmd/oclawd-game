@@ -82,19 +82,19 @@ export function Navigation() {
     { path: '/marketplace', icon: ShoppingCart, label: 'Market' },
   ];
 
-  // Don't show nav on landing page
-  if (location.pathname === '/') {
+  // Don't show nav on landing page OR api-docs
+  if (location.pathname === '/' || location.pathname === '/api-docs') {
     return (
-      <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-4">
+      <nav className="sticky top-0 left-0 right-0 z-50 px-4 py-4 bg-black/80 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <img src="/assets/logo.svg" alt="Void Conquest" className="w-10 h-10" />
-            <span className="font-display text-2xl font-bold text-white">
+            <img src="/assets/logo.svg" alt="Void Conquest" className="w-8 h-8 sm:w-10 sm:h-10" />
+            <span className="font-display text-lg sm:text-2xl font-bold text-white">
               VOID <span className="text-sky-400">CONQUEST</span>
             </span>
           </Link>
-          <div className="flex items-center gap-4">
-            <Link to="/dashboard" className="btn-secondary py-2 px-4 text-sm hidden sm:block">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <Link to="/dashboard" className="btn-secondary py-2 px-3 sm:px-4 text-xs sm:text-sm">
               Launch Game
             </Link>
             <ConnectWallet />
